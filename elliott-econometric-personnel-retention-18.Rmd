@@ -1,0 +1,362 @@
+---
+title:        "`r DODschools::noTouch('metadata.yml')$document$title`"
+designator:   "`r DODschools::noTouch('metadata.yml')$document$designator`"
+doctype:      "`r DODschools::noTouch('metadata.yml')$document$type`"
+pages:        "`r DODschools::noTouch('metadata.yml')$document$pages`"
+abstract:     "`r DODschools::noTouch('metadata.yml')$abstract`"
+dedication:   "`r DODschools::noTouch('metadata.yml')$dedication`"
+acknowledge:  "`r DODschools::noTouch('metadata.yml')$acknowledgement`"
+vita:         "`r DODschools::noTouch('metadata.yml')$vita`"
+degree:       "`r DODschools::noTouch('metadata.yml')$degree`"
+program:      "`r DODschools::noTouch('metadata.yml')$program`"
+distro1:      "`r DODschools::noTouch('metadata.yml')$distro_thesis[1]`"
+distro2:      "`r DODschools::noTouch('metadata.yml')$distro_thesis[2]`"
+author:
+  name:       "`r DODschools::noTouch('metadata.yml')$author$fullname`"
+  dept:       "`r DODschools::noTouch('metadata.yml')$author$dept`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$author$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$author$service`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$author$currentDegree`"
+  email:      "`r DODschools::noTouch('metadata.yml')$author$email`"
+advisor:
+  name:       "`r DODschools::noTouch('metadata.yml')$advisor$name`"
+  department: "`r DODschools::noTouch('metadata.yml')$advisor$department`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$advisor$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$advisor$service`"
+  degree:     "`r DODschools::noTouch('metadata.yml')$advisor$currentDegree`"
+  phone:      "`r DODschools::noTouch('metadata.yml')$advisor$phone`"
+  email:      "`r DODschools::noTouch('metadata.yml')$advisor$email`"
+reader1:
+  name:       "`r DODschools::noTouch('metadata.yml')$reader1$name`"
+  department: "`r DODschools::noTouch('metadata.yml')$reader1$dept`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$reader1$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$reader1$service`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader1$currentDegree`"
+reader2:
+  name:       "`r DODschools::noTouch('metadata.yml')$reader2$name`"
+  department: "`r DODschools::noTouch('metadata.yml')$reader2$dept`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$reader2$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$reader2$service`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader2$currentDegree`"
+reader3:
+  name:       "`r DODschools::noTouch('metadata.yml')$reader3$name`"
+  department: "`r DODschools::noTouch('metadata.yml')$reader3$dept`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$reader3$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$reader3$service`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader3$currentDegree`"
+sf298name:    "`r DODschools::noTouch('metadata.yml')$author$sf298name`"
+contractnum:  "`r DODschools::noTouch('metadata.yml')$sf298$contractnum`"
+grantnum:     "`r DODschools::noTouch('metadata.yml')$sf298$grantnum`"
+prognum:      "`r DODschools::noTouch('metadata.yml')$sf298$programnum`"
+projnum:      "`r DODschools::noTouch('metadata.yml')$sf298$projectnum`"
+tasknum:      "`r DODschools::noTouch('metadata.yml')$sf298$tasknum`"
+worknum:      "`r DODschools::noTouch('metadata.yml')$sf298$workunitnum`"
+keywords:     "`r DODschools::noTouch('metadata.yml')$sf298$keywords`"
+sponsor:
+  title:    "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$title`"
+  subtitle: "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$subtitle`"
+  address1: "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$address1`"
+  address2: "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$address2`"
+  phone:    "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$phone`"
+  email1:   "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$email1`"
+  email2:   "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$email2`"
+  acronym:  "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$acronym`"
+  rptnum:   "`r DODschools::noTouch('metadata.yml')$sf298$sponsor$report_number`"
+graddate:   "`r DODschools::noTouch('metadata.yml')$grad_date`"
+date:       "`r format(Sys.Date(), '%B %Y')`"
+sf298_date: "`r format(Sys.Date(), '%d-%m-%Y')`"
+dissertation: "`r DODschools::noTouch('metadata.yml')$dissertation`"
+cite_style: "`r DODschools::noTouch('metadata.yml')$cite_style`"
+cite_shape: "`r DODschools::noTouch('metadata.yml')$cite_shape`"
+output: 
+  DODschools::afit_thesis:
+    highlight: tango
+    includes:
+      in_header:    scripts/tex/in_header.tex
+      before_body:  scripts/tex/before_body.tex
+      after_body:   scripts/tex/after_body.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, show = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+#check for req'd packages, will be installed automatically if not present
+list.of.packages <- c("tidyverse", "lubridate", "sas7bdat", "fpp2", "reshape2",
+                      "stargazer", "knitcitations", "RefManageR", "xtable", 
+                      "kableExtra", "zoo")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
+
+
+# source file containing functions created for this analysis
+source("~/Documents/Grad School/Thesis/elliott-econometric-personnel-retention-18/custom-functions.R")
+
+#analysis required libraries
+library(tidyverse)
+library(sas7bdat)
+library(fpp2)
+library(zoo)
+library(lubridate)
+library(reshape2)
+library(stargazer)
+library(kableExtra)
+library(knitr)
+library(gridExtra)
+
+#template req'd libraries
+library(knitcitations)
+library(RefManageR)
+library(xtable)
+source('scripts/R/setup.R')
+
+BIB <- ReadBib('references/my_bib.bib')
+knitcitations <- BIB[title = 'knitcitations']
+refmanager    <- BIB[title = 'RefManageR']
+pressure      <- BIB[key = 'randolph2016']
+cite_options(citation_format = 'pandoc')
+
+# set directory for lazy data referencing
+setwd("~/Documents/Grad School/Thesis/Data")
+
+```
+
+# Introduction
+
+## Background
+
+## Scope
+
+## Assumptions and Limitations
+
+As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force non-rated officer corps are largely transferrable to civilian labor markets (citation/justification??). This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III.
+
+## Outline
+
+This chapter introduced the retention problem investigated and discussed the foundational motivations and thoughts underpinning the thesis. The next chapter reviews the related literature in detail - the efforts used to better frame the problem and previous attempts to model it. The third chapter focuses on the methodology. It documents how and why the data was attained (i.e. sources and selection criteria), as well as any transformations necessary to conduct analysis. The chapter continues by discussing the modeling procedure in detail, including general steps and specific mathmatical formulations. Lastly, the results are examined and insights or conclusions are highlighted.
+
+\newpage
+
+# Literature Review
+
+## Chapter Overview
+
+Managing personnel and modeling retention behaviors have, appropriately, long been a concern of the Department of Defense. This chapter summarizes the retention problem, examines previous research endeavors, and finally discusses the impetus for the econometric approach used in this research. 
+
+## The Retention Problem
+
+All organizations have some problem associated with retaining their people. This is especially true of the the military, wherein members are routinely confronted with deployments, long duty hours, and frequent relocations - factors generally not found in non-military organizations. These factors produce high stress on the military members and their families, who play a significant role in a member's retention decision \cite{fugita-lakhani-1991}. Evidence suggest that individuals serving in the military are generally more tolerant of these conflicts \cite{capon-etal-2007}, but the causes of attrition involve more than just familial concerns. Kane \cite{kane-2012} argues the military suffers from a chronic personnel mismanagement problem: Members' merit is not rewarded nearly as well as it is in the private sector, in terms of personal recognition and upward movement, partly due to heavy bureaucratic restrictions. This disparity can lead to frustration and job dissatisfaction, damaging the member's commitment to the organization and incentivizing attrition \cite{capon-etal-2007}. 
+
+Compounding the internal frustrations, civilian labor markets can offer intense incentives for leaving. Barrows \cite{barrows-1993} details the mechanisms underpinning U.S. Air Force pilot attrition to civilian airlines, framing the problem with human capital theory. The military offers a unique opportunity for developing highly desired skill sets, placing member's in positions of high stress and responsibility at early stages of professional development \cite{kane-2012}. Furthermore, evidence suggests that military as an insitution is quite adept at attracting intelligent and capable individuals \cite{asch-hosek-2004}. Providing innately talented individuals with a high degree of general and specific training fosters the development of high-performers with desirable and broadly applicable skill sets. Therein lies the problem, civilian firms are typically more flexible in their ability to compensate individuals through organizational advancement and wage, often outcompeting the military \cite{kane-2012}. These phenomena are in direct contradiction to the principles for successful retention laid out by Asch \cite{asch-1993}. She explains that in order for military compensation to be attractive, it needs to be at least as great as the member's the expected wages and benefits offered by civilian labor markets. Compensation should also be contigent upon performance, reflecting the individual's value to the organization, to maintain motivation and disincentivize attrition \cite{asch-1993}. In order to best determine compensation, then, it behooves the military to develop methods for anticipating the effects of labor market conditions on military members' retention decisions. 
+
+<!--
+Additionally, Carrell [6] notes that military members are sensitive to local wage disparities between the government and private sector. Intuitively this makes sense, as members receive more exposure to the wage advantages and economic conditions in their local communities than national averages. 
+-->
+## Previous Research
+
+There have been many forays into personnel retention modeling and forecasting. Saving et al. \cite{saving-etal-1985} find a significant interaction between labor markets and military retention by analyzing individual career fields within the U.S. Air Force. Their results indicate that demographic factors such race and education level are influential to retention at early stages, but exhibit diminished effects as careers progress. Additionally, their work supports the conjecture that civilian wages, unemployment rates, and other economic variables affect retention. 
+
+In 1987, Grimes \cite{grimes-1987} investigated the retention problem by applying a variety of regression methods (ordinary multiple linear regression, with logarithmic tranformations on response and/or explanatory variables) to predict officer loss estimates 6-12 months in the future. He was unable to provide adequate effects estimates or reliable predictions, concluding that the chronological nature of the data led to serial correlation errors.
+
+Fugita and Lakhani \cite{fugita-lakhani-1991} use survey and demographic data compiled by the Defense Manpower Data Center to estimate hierarchical regression equations to describe rentention behaviors in Reservists and Guard members. Hierarchical regression models are useful when there exists some causal ordering among predictors, as is often the case with demographic and economic data. This causal relationship can lead to high multicollinearity, increasing the estimated standard error of coefficient estimates and resulting in non-significant predictors. They find that, for both officers and enlisted, retention probabilities tend to rise with increased earnings, years of service, and spousal attitude towards retention. Their work reinforces the importance of including demographic variables in retention modeling, and that wages are in the forefront of a member's mind when deciding to stay.
+
+Gass \cite{gass-1991} takes a more general view by modeling the manpower problem in three different ways: as a Markov chain with fixed transition rates between nodes, as a minimum-cost network flow problem, and as a goal-programming problem. While potentially easier to interpret, these models can present a too-sanitized picture of an enormously complex system, particularly the current military personnel system. 
+
+Barrows \cite{barrows-1993} analyzes retention, specifically for Air Force pilots, through the lens of human capital and internal labor market theories. He argues two points important to this thesis: the degree of specific training is inversely correlated with attrition, and that the Air Force personnel system suffers from the inefficiences typical of an internal labor market. 
+
+To the first point, the military offers a high degree of general and specific training. General training is conducive to attrition, as it allows the individual to more easily transfer between jobs. Specific training, on the other hand, decreases worker transferability and helps enforce retention. This effect is seen in differing retention rates between general pilots (cargo, heavies) and those with more specific skill sets (helicopters, fighters). One can imagine this would also reveal itself in the non-rated officer population; that is, career fields with transferable skill sets suffer more from attrition than those with specific skill sets, e.g. think logistics (general) versus aircraft maintenance (specific). 
+
+Regarding the second point, workers are somewhat insulated from the competition posed by outside labor markets (e.g. a Major does not have to worry about a civilian being hired to replace her), and are paid according to position as opposed to productivity. Shielding employees from outside competition can possibly remove incentive for performance; individuals who feel more secure in their jobs may not try as hard. Not paying according to performance can be damaging in two ways: high-performers can feel undervalued and motived to leave, and under-performers could be receiving more than they produce.
+
+Looking to the Navy, specifically Junior Surface Warfare Officers (SWOs), Gjurich \cite{gjurich-1999} found that one of the most important factors affecting retention was marriage. Single officers are more likely to leave than those with families. This actually may be a proxy for risk aversion, however. Those officers with dependents may be less likely to risk unemployment by leaving the military, choosing instead to keep a relatively secure job. Again, the importance of demographic factors was reinforced, but litte is said of the economic considerations.
+
+In 2002, Demirel \cite{demirel-2002} used logit regression to analyze retention behaviors for officers at the end of their initial service obligation and at ten years of service. While the focus of this endeavor was to identify any changes in retention related to commissioning source, several other demographic factors - such as marital status, education level, and sex - were found to be statistically significant. This reinforces conclusions about demographic factors drawn by previous research efforts, and shows evidence that these trends generally apply to the military population, instead of particular service branches.
+
+Ramlall \cite{ramlall-2004} takes a less technical approach and surveys the existing employee motivation theories to offer an explanation of how employee motivations affect retention, and how the disregard for the principles contained therein motivate attrition. Many causes are discussed, and a few are consistent (or at least common) amongst the spectrum of motivation theories. When wages and promotions are not seen to be tied to performance, individuals are disincentivized and do not feel as loyal to the institution. Also, a lack of flexibility within job scheduling and structure is seen as disloyal or disrepectful to the individual. Lastly, when managers fail to act as coaches or aren't seen as facilitators to employees' career's, turnover rates tend to be greater. Given that civilian labor markets are generally more flexible in both pay structure and work scheduling, this research underpins the importance of incorporating civilian labor market conditions.
+
+More recently, Schofield \cite{schofield-2015} employs a logisitic regression model to identify key demographic influencing the retention decisions of non-rated Air Force Officers. She finds that career field grouping, distinguished graduate status at commissioning source, years of prior enlistment, and several other structural variables were significant. She then utilizes these factors to generate a series of survival functions describing retention patterns and behavior. Again, the importance of demographic factors is reinforced. However, any possible effects of economic factors were unexplored.
+
+Looking at the rated officer corps, Franzen \cite{franzen-2017} takes a similar approach - again using logisitic regression to identify significant factors used to generate survival functions. However, this attempt differs from Schofield by choosing to also assess the influence of economic, demographic, and other variables exogenous to the military. She finds that marital status, number of dependents, gender, source of commissioning, prior enlisted service, and the New Orders value from the Advance Durable Goods Report were all significant. The first couple support the aforementioned notion that familial strain caused by military service affects retention, the next few (gender, source of commissioning, and prior service) reaffirm the work conducted by Schofield. The last variable, New Orders, suggests that indicators of economic health play some role in retention decisions. This last observation is a motivation for this thesis.
+
+In that vein, we look to the work conducted by Jantscher \cite{jantscher-2016} where she conducts correlation analysis to determine the relationship between a host of economic indicators and retention rates for each Air Force Specialty Code (AFSC). The results of the preliminary correlation analysis provide a subset of economic indicators shown to be significantly correlated with retention, such as unemployment rates, gross national savings, real GDP growth, etc. She then attempts to form a regression model to forecast retention, but was unable due to high multicollinearity between many indicators. Nonetheless, her correlation analysis provides a starting point from which additional modeling techniques may be applied.
+
+## Insights
+
+Based on the review of the literature, several key themes arise:
+
+- Demographic and economic factors play a significant role in a member's attitude towards retention
+- Military members are aware of and incorporate opportunities in the civilian labor market when deciding to remain in or leave military service
+- Logistic regression on demographic data yields promising results when predicting whether an individual will remain in service, but may be innappropriate for modeling aggregate trends
+- Effects estimation of economic factors through regression can be difficult, as many indicators are highly correlated
+
+What is also apparent is that there are several topics yet unexplored:
+
+- Modeling the military population with performanced-based pay structures and advancement schemes to examine effects on retention
+- Exactly how comparable the military population is to the civilian, how easily the professional skills sets exhibited by the former transfer to the latter
+- Applying other forecasting techniques (ARIMA, Exponential Smoothing, Dynamic Regression) to the retention problem
+
+This thesis focuses on the last point. We attempt to forecast Air Force Non-rated officer retention with a dynamic regression model in order to estimate the effects of different economic indicators, documenting the process in the next chapter.
+
+
+<!-- Reviewing the existing literature, several themes are apparent: demographic and economic factors play a large role in a member's decision to leave the military - skill transferability, spousal opinion, performance rewards, etc. all affect retention. This is neither new nor novel information. However, most recent technical analysis work has been focused on the demographic aspects. Though much theory points towards the influence of the economic environment, little technical analysis has focused on more than just unemployment or civilian wages. It is the aim of this thesis to expand, if only marginally, that consideration. -->
+
+
+
+\newpage
+
+# Analysis and Results
+
+```{r}
+# Here we read in all our data and combine the relevant sets for something workable
+
+# Personnel Data
+afsc_list <- read.sas7bdat("lu_ao_afs.sas7bdat")
+assigned <- read.sas7bdat("assigned_levels.sas7bdat") %>% 
+  spread(AFS, Assigned)
+attrition <- read.sas7bdat("separations_count.sas7bdat") %>% 
+  spread(AFS, Separation_Count) 
+
+# The dates in the personnel data are in total days since 1 Jan 1960 (SAS default)
+# We'll need to reformat the date into something readable and mergeable with our 
+# econ set. Also, we create a new column - the total number of separations across 
+# all AFSCs. We'll also create totals for different categories of officers: rated, 
+# non-rated, line, etc.
+attrition <- mutate(attrition, Total = rowSums(attrition[-1], na.rm = TRUE)) %>% 
+  mutate(temp = EOP_Date * 86400) %>% 
+  mutate(Date = as.POSIXct(temp, origin = "1960-01-01")) %>% 
+  within(rm(temp, EOP_Date))
+
+# repeat prodcedure for assigned data
+assigned <- mutate(assigned, Total = rowSums(assigned[-1], na.rm = TRUE)) %>% 
+  mutate(temp = EOP_Date * 86400) %>% 
+  mutate(Date = as.POSIXct(temp, origin = "1960-01-01")) %>% 
+  within(rm(temp, EOP_Date))
+
+# Econ Data
+econ_data <- list.files(pattern = "*_natl.csv") %>% 
+  # Import data sets
+  lapply(read_csv) %>% 
+  # Merge all sets 
+  Reduce(function(x,y) merge(x, y, by = "DATE"), .) %>% 
+  # Store data as tibble
+  as.tibble() 
+
+# Now, because gdp per cap is observed only on a quarterly basis, we add it separately
+# in order to handle the missing values resulting from a merge. This merge is 
+# from the previous in that it keeps all values from the existing data set, creating NAs
+# where gdp_per_cap does not match with other observations. Merging the quarterly 
+# gdp_per_cap data with the monthly indicators results in NAs in gdp_per_cap where 
+# the dates do not match. We then handle NAs by extending the quarterly records throughout 
+# their respective quarters (e.g. the GDP per cap for Q1 2014 is applied to Jan-Mar 2014).
+# Simultaneously, we will rename the variables for interpretability.
+
+# Read in GDP per capita
+gdp_per_cap <- read_csv("real09_gdp_percap.csv")
+# Combine gdp per cap with econ_data, using a left-join (all.x = TRUE) to preserve the main data set
+econ_data <- merge(econ_data, gdp_per_cap, by = "DATE", all.x = TRUE) %>%
+  as.tibble() %>%
+  # Rename column headers to something more meaningful
+  select(Unemployment.Rate.Adj = UNRATE, Unemployment.Rate.NonAdj = UNRATENSA,
+         CPI.Adj = CPIAUCSL, Nonfarm.Jobs.Adj = JTSJOL, 
+         Nonfarm.Jobs.NonAdj = JTUJOL, Labor.Force.Participation = LNS11327662, 
+         Labor.Market.Momentum = FRBKCLMCIM, Real.GDP.Per.Capita = A939RX0Q048SBEA, 
+         Nonfarm.Quits.Adj = JTSQUL, Date = DATE)
+
+# The na.locf() command below carries a value forward through NAs until the next non-empty value is met; 
+# this is how we choose to represent the gdp per capita through an entire quarter
+econ_data$Real.GDP.Per.Capita <- as.numeric(econ_data$Real.GDP.Per.Capita) %>% 
+  na.locf()
+
+# However, the date variables differ slightly between the econ and personnel sets:
+# Though both represent monthly observations, the econ set default to the first 
+# of each month, and the personnel data defaulted to the last 
+# (e.g. October 2004 is represented as 01-10-2004 in the former, and 31-10-2004 in the latter)
+# To handle this, we'll create new date variables in each set that have the days 
+# trimmed off, then merge. Merging isn't strictly necessary, but it is a convenient
+# way to only keep those observations common to both data sets.
+econ_data <- mutate(econ_data, "Date1" = paste(year(Date), month(Date)))
+attrition <- mutate(attrition, "Date1" = paste(year(Date), month(Date)))
+
+# Merge data
+df <- merge(econ_data, attrition, by = "Date1")
+
+# Next, we see many NAs within the attrition data set. Given the data's nature, 
+# our intuition was that these missing values aren't a result of encoding error 
+# or similar, but rather an indication that no separations occurred during 
+# that period (i.e. NAs indicate no separations were observed, instead of
+# indicating some sort of error). This intuition was confirmed by the data's
+# provider, HAF/A1FPX.
+df[is.na(df)] <- 0
+
+# Next we'll go ahead and drop all of our date variables. When we use df
+# to create a time series object, the date variables become redundant.
+df <- df[, !(names(df) %in% c("Date1", "Date.x", "Date.y"))]
+
+# Now we'll initialize the time series object - start = Oct 2004, freq = 12 - 
+# and create the validation and training sets. Since we're only really interested
+# in the Total column for modeling purposes
+df.ts.1 <- ts(df, start = c(2004, 10), frequency = 12)
+train.ts.1 <- subset(df.ts.1, end = 127)
+val.ts.1 <- subset(df.ts.1, start = 128)
+
+
+```
+
+
+## Data Composition
+
+### Introduction
+
+Before any predictive or descriptive analysis can begin, the data must be understood. Every data set has its idiosyncracies, its own unqiue challenges. Understanding these characteristics and the meaning of the data - what the variables represent and how they might interact with each other - is key to any successful analytic endeavor. Here, the data are described in detail - sources, meaning, and peculiarities.
+
+### HAF/A1XDX
+
+The Strategic Analysis branch of the Force Management Division (AF/A1XDX) provided the data on Air Force personnel used in this thesis. The data are extracted from the Military Personnel Data System (MilPDS), a database containing Air Force personnel data for every airman over his or her career. The data are input by trained personnelists or are automatically updated within the system (e.g. age will automatically increase annually) The data were originally split into two separate `.sas7bdat` files, one containing monthly attrition numbers for each Air Force Specialty Code (AFSC) and the other detailing monthly assigned levels for each AFSC. Each file contains information starting in October of 2004 through September of 2017, for a total of 156 observations across 67 AFSCs. 
+
+### Federal Reserve Bank of St. Louis
+
+The Federal Reserve Bank of St. Louis is one of 13 entities which comprise the United States' central bank (the others being 11 regional reserve banks and the Board of Governors). As a whole, this group is responsible for deciding on and enacting monetary policy for the U.S. They maintain expansive databases containing information about the economic environment - financial data, national employment statistics, private sector business data, etc. Fortunately, the Federal Reserve Bank of St. Louis offers public access to the Federal Reserve Economic Data (FRED) database via online interface. From here, historical data on several economic indicators were retrieved: the nation unemployment rate (both seasonally adjusted and non-adjusted), the labor force participation rate (LFPR), job openings (adjusted and not), total nonfarm job quits, the FED's labor market momentum index, real GDP per capita, and the consumer price index (CPI). Each indicator consists of monthly recordings across varying time spans (e.g. 1990-2016 vs 2001-2017).
+
+The LFPR is the percentage of the population actively employed or looking for employment. Its movement can give insight into the strength of the economy - e.g. rising participation is usually associated with growth. When paired with unemployment rates, the LFPR can also reveal people's attitude about the economy. For example, the steady decline of participation from 2010 onward (seen in Figure \@ref(fig:lfpr-unemployment)) might indicate that the decrease in unemployment over the same period is somewhat exaggerated; people seeking, but unable to find, work may become discouraged and exit the labor force, artificially decreasing the unemployment rate. It is possible that this perception of economic health affects retention decisions. In this thesis, LFPR is restricted to members of the civilian labor force with at least a baccalaureate and no younger than 25 years of age, the subset most closely related to officers.
+
+```{r lfpr-unemployment, fig.align="center", fig.cap="Participation and Unemployment", fig.width=6, fig.pos="H", fig.height=4}
+
+# subset LFPR and unemployment, then graph to reinforce a point made above
+
+# data.frame("LFPR" = combined_1[,"Labor.Force.Participation"],
+#            "Unemployment Rate" = combined_1[,"Unemployment.Rate.Adj"]) %>% 
+df[,c("Labor.Force.Participation", "Unemployment.Rate.Adj")] %>%   
+  ts(start = c(2004, 10), frequency = 12) %>% 
+  autoplot(facets = TRUE) + 
+  geom_smooth(size = .5, alpha = 0) + 
+  scale_x_continuous(limits = c(2005, 2016), name = "Year") +
+  scale_y_continuous(name = "")
+```
+
+
+It is assumed that the skillsets of our target population (non-rated line officers) are most transferrable to those jobs covered by nonfarm payrolls. Nonfarm is a category that excludes proprietors, private household employees, unincorporated self-employment, unpaid volunteers, and farm employees \cite{fred-nonfarm-2017}. Job quits are generally voluntary separations and may reflect workers' willingness to leave; it may be that the a higher propensity to volutarily leave a job translates to a positive outlook on obtaining another. 
+
+The labor market momentum index compares current labor market conditions to historical averages. A negative value indicates conditions below the long-term average, and a positive value indicates favorable conditions. The CPI examines the weighted average price of a basket of consumer goods and services; it is used to estimate the cost of living. There is some uncertainty involving employment in separation from the military, so cost of living information may be especially important to that decision as the military is excluded from CPI statistics.
+
+By including these variables in a regression model and estimating their effects, this thesis is attempting to capture military members' perceptions of economic health and job prospects, and use that information as a means to forecast attrition.
+
+### Cleaning and Preparation
+
+Perfect data is rarely found or received outside of the classroom, and such is the case here. Before exploration and modeling, several steps are taken to produce a useable data set.
+
+The personnel data is first converted from long to wide format. <!--what does this mean? elaborate--> This procedure generates missing values, and they need to be dealt with appropriately. Missing values can result from several underlying issues: data storage corruption, entry errors, communication between software, etc. Luckily, none of those apply here. Since the attrition data is a monthly count of people exiting USAF service, the intuition is that these missing values simply represent a lack of an observation (i.e. zero separations). This is confirmed by the data's provider, and so all missing values are replaced with zero.
+
+
+## Model Selection
+
+### Initial Exploration
+
+
+
+\newpage
+
+# Conclusions
+
+This is the final chapter of your thesis.
