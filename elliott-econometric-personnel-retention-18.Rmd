@@ -327,12 +327,12 @@ The LFPR is the percentage of the population actively employed or looking for em
 
 # data.frame("LFPR" = combined_1[,"Labor.Force.Participation"],
 #            "Unemployment Rate" = combined_1[,"Unemployment.Rate.Adj"]) %>% 
-df[,c("Labor.Force.Participation", "Unemployment.Rate.Adj")] %>%   
-  ts(start = c(2004, 10), frequency = 12) %>% 
+df.ts.1[,c("Labor.Force.Participation", "Unemployment.Rate.Adj")] %>%   
   autoplot(facets = TRUE) + 
   geom_smooth(size = .5, alpha = 0) + 
   scale_x_continuous(limits = c(2005, 2016), name = "Year") +
-  scale_y_continuous(name = "")
+  scale_y_continuous(name = "Percent of Population")
+
 ```
 
 
@@ -346,12 +346,132 @@ By including these variables in a regression model and estimating their effects,
 
 Perfect data is rarely found or received outside of the classroom, and such is the case here. Before exploration and modeling, several steps are taken to produce a useable data set.
 
-The personnel data is first converted from long to wide format. <!--what does this mean? elaborate--> This procedure generates missing values, and they need to be dealt with appropriately. Missing values can result from several underlying issues: data storage corruption, entry errors, communication between software, etc. Luckily, none of those apply here. Since the attrition data is a monthly count of people exiting USAF service, the intuition is that these missing values simply represent a lack of an observation (i.e. zero separations). This is confirmed by the data's provider, and so all missing values are replaced with zero.
+The personnel data is first converted from long to wide format. <!--what does this mean? elaborate--> This procedure generates missing values, and they need to be dealt with appropriately. Missing values can result from several underlying issues: data storage corruption, entry errors, miscommunication between software, etc. Luckily, none of those apply here. Since the attrition data is a monthly count of people exiting USAF service, the intuition is that these missing values simply represent a lack of an observation (i.e. zero separations). This is confirmed by the data's provider, and so all missing values are replaced with zero.
+Initially, observation dates are stored as the number of days since 1 Jan 1960 (the standard for SAS). This is transformed into YYYY-MM-DD, in order to merge with the economic data. Several columns are added, each the total separations for a specific subset of the officer corps: rated, non-rated line, non-line, etc. These sums will be the responses used for modeling.
+
+The economic data does not require much treatment, as it comes from a professionally managed database. One of the indicators, real GDP per capita, occurs in quarterly intervals - the rest are monthly. In order to combine, the observation for a quarter is carried through the quarter (e.g. the observation for Q1 2006 is applied to January, Febuary, and March 2006). Then, variables are renamed for clarity. Finally, economic data are merged with the personnel through an inner join, preserving only those observations in common. 
 
 
 ## Model Selection
 
 ### Initial Exploration
+
+Before throwing around modeling techniques, the data is visually inspected. Plotting one response, total separations over all career fields, in Figure \@ref(fig:response-plot) shows significant spikes during 2005, '06, '07, and '14. We know that during these periods, special spearation incentive programs were introduced in order to artificially downsize the air force. The effects of these periods merit investigation later on, as they could negatively affect model performance. 
+```{r response-plot, fig.align="center", fig.cap="Monthly Officer Separations", fig.pos="H", fig.width=5, fig.height=3.5}
+autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
+```
+
+No seasonality is immediately obvious in Figure \@ref(fig:response-plot). However, if each year is plotted separately, a clearer picture emerges. First, Figure \@ref(fig:response-season-plot) shows that the extreme points noticed noticed above seem to be relegated to the November-December time frame. Second, it is easier to witness the seasonality: bowing across the year, with higher counts at the beginning and end.
+
+```{r response-season-plot, fig.align="center", fig.cap="Seasonal Plot: Total Separations", fig.pos="H", fig.width=5, fig.height=3.5}
+p <- ggseasonplot(df.ts.1[,'Total'], year.labels = TRUE, year.labels.left = TRUE) +
+  ylab("Total Separations") + 
+  ggtitle("") + 
+  theme(legend.position = "none")
+p  
+
+```
+
+Considering these plots, we expect that a seasonal model performs best and that we will have to perform some alteration to accomodate the outiers. To confirm, we fit naive models to the data and examine to results. Beyond revealing seasonlity and outlier effects, fitting naive models serves to establish a baseline to compare later models against. Naive models are as simplistic as possible, so if later models perform worse or only marginally better, it implies they are not capturing much information.
+
+```{r}
+n.1 <- naive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
+sn.1 <- snaive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
+
+n.1.error <- accuracy(n.1, val.ts.1[,"Total"])
+sn.1.error <- accuracy(sn.1, val.ts.1[,"Total"])
+```
+
+Figure \@ref(fig:n-sn-forecast) gives evidence to the negative effects of outliers, notice the large confidence intervals surrounding the naive forecast and the 2014 spike carried through in the seasonal forecast.
+
+```{r n-sn-forecast, fig.align="center", fig.pos="H", fig.cap="Simple and Seasonal Naive Forecasts", fig.width=5}
+p <- autoplot(n.1) +
+  autolayer(val.ts.1[,"Total"]) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+q <- autoplot(sn.1) +
+  autolayer(val.ts.1[,"Total"]) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+grid.arrange(p, q, nrow=2)
+
+```
+
+Tables \@ref(fig:n-err) and \@ref(fig:sn-err) show different error metrics for each of the two models. By mean square error (MSE), the seasonal model generally fits the training data better, possibily indicating presence of seasonality effects. However, there is a large disparity between validation MSEs, possibly caused by the major spike in 2014 - reaffirming the earlier intuition about outlier effects.
+
+```{r n-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Naive Results"}
+kable(n.1.error[,1:6], caption = "Naive Results")
+```
+```{r sn-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Seasonal Naive Results"}
+kable(sn.1.error[,1:6], caption = 'Seasonal Naive Results')
+```
+
+It is known that during years 2005, '06, '07, and '14 special separation programs were implemented. Given the effect those years appear to have on modeling, they ought to be dealt with before continuing. Before deciding how, the explicit points in question need to be identified. To help, refer back to Figure \@ref(fig:response-season-plot). We note above that the spikes generally occur in November and December. However, the observations from 2005 are close enough to those from other years that they may have resulted naturally. We do not want to remove too much information from the data set, only that which is misleading. So, November and December observations from 2006, '07, and '14 are selected for replacement. 
+
+Given the seasonality in the data set, the replaced values should stem from matching observations in previous years, as opposed to previous observations within the same year. The outliers are replaced with the arithmetic mean of all years not being replaced (e.g. November 2006, '07, '14 is replaced with the mean separations in November for all other years).
+
+```{r}
+# To handle these, we'll calculate the average values of all other years during 
+# months and replace the current values. First, let's create slices of our
+# response containing the months we're concerned with - December and November.
+# We also want to grab the correpsonding indices for updating our series later.
+
+dec <- subset(df.ts.1[,'Total'], month = 12)
+dec.ind <- which(cycle(df.ts.1[,'Total']) == 12)
+nov <- subset(df.ts.1[,'Total'], month = 11)
+nov.ind <- which(cycle(df.ts.1[,'Total']) == 11)
+
+# oct <- subset(df.ts.1[,'Total'], month = 10)
+# sep <- subset(df.ts.1[,'Total'], month = 9)
+
+# Referring back to p, and combining the graphical insights with information
+# from the data's sponsor, we assume that 2006, '07, and '14 are the years which
+# saw the largest effects from the separation incentive programs - i.e. artificial
+# attrition. Those correspond the the 3rd, 4th, and 11th indices. So now, we 
+# replace those observations with the average of the non-aberrant years.
+
+dec[c(3,4,11)] <- mean(dec[-c(3,4,11)])
+nov[c(3,4,11)] <- mean(nov[-c(3,4,11)])
+
+# And finally, we place these values back into the original series.
+df.ts.1[dec.ind, 'Total'] <- dec
+df.ts.1[nov.ind, 'Total'] <- nov
+```
+
+Replotting the repsonse in Figure \@ref(fig:response-plot-2) shows a much better behaved data set. The data look fairly stationary, setting the stage for more forecasting complex models.
+
+```{r response-plot-2, fig.align="center", fig.cap="Separations - Outliers Removed", fig.pos="H", fig.width=5, fig.height=3.5}
+autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
+```
+
+With the outliers replaced, seasonal effects are much more apparent as well (see Figure \@ref(fig:response-season-plot-2) below), further enforcing the need for a seasonal model.
+
+```{r response-season-plot-2, fig.align="center", fig.cap="Seasonal Plot: Outliers Removed", fig.pos="H", fig.width=5, fig.height=3.5}
+ggseasonplot(df.ts.1[,'Total'], year.labels = TRUE, year.labels.left = TRUE) +
+  ylab("Total Separations") + 
+  ggtitle("Seasonal Plot: Total Separations") + 
+  theme(legend.position = "none")
+```
+
+The purpose of imputing those values was to help produce better models. That can be assessed by retraining the naive models and comparing against previous results.
+
+```{r}
+# store split index
+set.split <- 127
+# New train and val sets
+train.ts.2 <- subset(df.ts.1[,'Total'], end = set.split)
+val.ts.2 <- subset(df.ts.1[,'Total'], start = set.split+1)
+
+# Train models and generate errors
+n.2 <- naive(train.ts.2, h = length(val.ts.2))
+sn.2 <- snaive(train.ts.2, h = length(val.ts.2))
+
+n.2.error <- accuracy(n.2, val.ts.2)
+sn.2.error <- accuracy(sn.2, val.ts.2)
+```
+
 
 
 

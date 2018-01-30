@@ -21,26 +21,26 @@ advisor:
   phone: '937-255-3636 x7469'
   email: "raymond.hill@afit.edu"
 reader1:
-  name: 'Raymond R. Hill'  # First Reader
+  name: 'Thomas P. Talafuse'  # First Reader
   department: 'ENS' # Use three-letter designator
-  rank: 'Civilian'
+  rank: 'Major'
   service: 'usaf' # Use abbreviation - leave blank if NA
   currentDegree: 'PhD'
 reader2:
-  name: 'Richard L. Warr'  # Second Reader
-  department: 'ENC' # Use three-letter designator
-  rank: 'Lieutenant Colonel'
-  service: 'usaf' # Use abbreviation - leave blank if NA
-  currentDegree: 'PhD'
+  name:  # Second Reader
+  department:  # Use three-letter designator
+  rank: 
+  service:  # Use abbreviation - leave blank if NA
+  currentDegree: 
 reader3:
-  name: 'Robert Wirthlin'  # Third Reader
-  department: 'ENV' # Use three-letter designator
-  rank: 'Lieutenant Colonel'
-  service: 'usaf' # Use abbreviation - leave blank if NA
-  currentDegree: 'PhD'
+  name:   # Third Reader
+  department:  # Use three-letter designator
+  rank: 
+  service:  # Use abbreviation - leave blank if NA
+  currentDegree: 
 document:
-  title: "Non-Rated Air Force Officer Retention: An Econometric Analysis"
-  designator: 'AFIT-ENS-MS-18-J-009'
+  title: "Air Force Officer Attrition: An Econometric Analysis"
+  designator: 'AFIT-ENS-MS-18-M-118'
   pages: 30
   keywords: 'LaTeX,Thesis,typesetting'
   type: 'Thesis'
@@ -53,8 +53,8 @@ acknowledgement: >
 vita: >
   The vita.
 distribution_statement:
-  A: no        # distribution unlimited
-  B: yes       # U.S. Government agencies only
+  A: yes        # distribution unlimited
+  B: no       # U.S. Government agencies only
   C: no        # U.S. Government agencies and their Contractors
   D: no        # DOD and DOD contractors only
   E: no        # DOD components only

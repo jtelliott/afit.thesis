@@ -162,7 +162,7 @@
 {\ifnum\value{chapter}=1
 \vspace{-30pt}
 	  \begin{spacing}{1.5}
-	  \MakeUppercase{\large{Non-Rated Air Force Officer Retention: An Econometric Analysis}}
+	  \MakeUppercase{\large{Air Force Officer Attrition: An Econometric Analysis}}
 	  \end{spacing}
 	  \vspace{35pt}
 	\thechapter.
@@ -257,14 +257,14 @@
  	    \centerline{
  	      \begin{minipage}[t]{5.0in}\singlespace
  		\begin{center} 
- 		   \bf{\MakeUppercase{Non-Rated Air Force Officer Retention: An Econometric Analysis}}
+ 		   \bf{\MakeUppercase{Air Force Officer Attrition: An Econometric Analysis}}
  		\end{center}
  	      \end{minipage}
  	     }
  	     \vspace{30pt}
  	    \MakeUppercase{Thesis}\\[25pt]
  	    Jacob T Elliott, 1st Lt\\[15pt]
- 	    AFIT-ENS-MS-18-J-009\\[15pt]
+ 	    AFIT-ENS-MS-18-M-118\\[15pt]
  	    \begin{bfseries}
  		\textsf{\large\fontfamily{phv}DEPARTMENT OF THE AIR FORCE}\\[-2pt]
  		\textsf{\large\fontfamily{phv}AIR UNIVERSITY}\\[20pt]
@@ -274,8 +274,8 @@
  		\textsf{Wright-Patterson Air Force Base, Ohio}\\[15pt]
  	    \end{bfseries}
  	    \vspace{10pt}
- 	    \MakeUppercase{\textbf{distribution statement B.}}\\[-1pt]
- 	    \MakeUppercase{Distribution authorized to U.S. Government Agencies.}
+ 	    \MakeUppercase{\textbf{distribution statement A.}}\\[-1pt]
+ 	    \MakeUppercase{Approved for public release; distribution unlimited..}
  	\end{center}%
  	\vfill
  	\newpage 
@@ -303,10 +303,10 @@ United States
 %==================================================================
     \begin{titlepage}
 	\thispagestyle{empty}
-	\noindent AFIT-ENS-MS-18-J-009  
+	\noindent AFIT-ENS-MS-18-M-118  
 	\vfill
 	\begin{center}
-	    \MakeUppercase{Non-Rated Air Force Officer Retention: An Econometric Analysis}\par
+	    \MakeUppercase{Air Force Officer Attrition: An Econometric Analysis}\par
 	    \vskip 1cm
 	    \MakeUppercase{Thesis}\par
 	    \vskip 1cm
@@ -324,8 +324,8 @@ United States
 	    \vskip 1cm
 	    22 March 2018
 	    \vskip 1cm
-	    \MakeUppercase{\textbf{distribution statement B.}}\\[-8pt]
-	    \MakeUppercase{Distribution authorized to U.S. Government Agencies.}
+	    \MakeUppercase{\textbf{distribution statement A.}}\\[-8pt]
+	    \MakeUppercase{Approved for public release; distribution unlimited..}
 	    \vfill
 	\end{center}
 	\newpage 
@@ -336,10 +336,10 @@ United States
 %==================================================================
 	\thispagestyle{empty}
 	\setcounter{page}{3}
-	\noindent AFIT-ENS-MS-18-J-009
+	\noindent AFIT-ENS-MS-18-M-118
 	\vfill
 	\begin{center}
-	    \MakeUppercase{Non-Rated Air Force Officer Retention: An Econometric Analysis}\\[10pt]
+	    \MakeUppercase{Air Force Officer Attrition: An Econometric Analysis}\\[10pt]
 	    \MakeUppercase{Thesis}\\*[10pt]
 	    
 	    \begingroup
@@ -363,7 +363,7 @@ United States
   
   \begingroup
   \singlespace
-    Civilian Raymond R. Hill, PhD\\ 
+    Major Thomas P. Talafuse, PhD\\ 
     Member
     \par
   \endgroup
@@ -371,19 +371,12 @@ United States
   
   \begingroup
   \singlespace
-    Lieutenant Colonel Richard L. Warr, PhD\\ 
+    Committee Member 2 Name\\ 
     Member
     \par
   \endgroup
   \bigskip\bigskip
   
-    \begingroup
-  \singlespace
-    Lieutenant Colonel Robert Wirthlin, PhD\\ 
-    Member
-    \par
-  \endgroup
-  \bigskip\bigskip
     
     
   	\end{center}
@@ -397,7 +390,7 @@ United States
     \thispagestyle{plain}
     \addtocontents{toc}{~\hfill\textbf{Page}\par}
     \addcontentsline{toc}{chapter}{\bfseries Abstract}
-    \noindent AFIT-ENS-MS-18-J-009
+    \noindent AFIT-ENS-MS-18-M-118
     \begin{center}
 	\Large\bfseries Abstract
     \end{center}
@@ -408,7 +401,7 @@ United States
 %    		Dedication Environment              
 %==================================================================
        \noindent 
-       AFIT-ENS-MS-18-J-009
+       AFIT-ENS-MS-18-M-118
        \vfill
        \begin{center}
 	   \em{The dedication.}
@@ -821,7 +814,7 @@ of age, the subset most closely related to officers.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{figures/lfpr-unemployment-1} 
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/lfpr-unemployment-1} 
 
 }
 
@@ -851,12 +844,178 @@ effects, this thesis is attempting to capture military members'
 perceptions of economic health and job prospects, and use that
 information as a means to forecast attrition.
 
-\hypertarget{data-cleaning-and-manipulation}{%
-\section{Data Cleaning and
-Manipulation}\label{data-cleaning-and-manipulation}}
+\hypertarget{cleaning-and-preparation}{%
+\subsection{Cleaning and Preparation}\label{cleaning-and-preparation}}
+
+Perfect data is rarely found or received outside of the classroom, and
+such is the case here. Before exploration and modeling, several steps
+are taken to produce a useable data set.
+
+The personnel data is first converted from long to wide format. This
+procedure generates missing values, and they need to be dealt with
+appropriately. Missing values can result from several underlying issues:
+data storage corruption, entry errors, miscommunication between
+software, etc. Luckily, none of those apply here. Since the attrition
+data is a monthly count of people exiting USAF service, the intuition is
+that these missing values simply represent a lack of an observation
+(i.e.~zero separations). This is confirmed by the data's provider, and
+so all missing values are replaced with zero. Initially, observation
+dates are stored as the number of days since 1 Jan 1960 (the standard
+for SAS). This is transformed into YYYY-MM-DD, in order to merge with
+the economic data. Several columns are added, each the total separations
+for a specific subset of the officer corps: rated, non-rated line,
+non-line, etc. These sums will be the responses used for modeling.
+
+The economic data does not require much treatment, as it comes from a
+professionally managed database. One of the indicators, real GDP per
+capita, occurs in quarterly intervals - the rest are monthly. In order
+to combine, the observation for a quarter is carried through the quarter
+(e.g.~the observation for Q1 2006 is applied to January, Febuary, and
+March 2006). Then, variables are renamed for clarity. Finally, economic
+data are merged with the personnel through an inner join, preserving
+only those observations in common.
 
 \hypertarget{model-selection}{%
 \section{Model Selection}\label{model-selection}}
+
+\hypertarget{initial-exploration}{%
+\subsection{Initial Exploration}\label{initial-exploration}}
+
+Before throwing around modeling techniques, the data is visually
+inspected. Plotting one response, total separations over all career
+fields, in Figure \ref{fig:response-plot} shows significant spikes
+during 2005, '06, '07, and '14. We know that during these periods,
+special spearation incentive programs were introduced in order to
+artificially downsize the air force. The effects of these periods merit
+investigation later on, as they could negatively affect model
+performance.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-plot-1} 
+
+}
+
+\caption{Monthly Officer Separations}\label{fig:response-plot}
+\end{figure}
+
+No seasonality is immediately obvious in Figure \ref{fig:response-plot}.
+However, if each year is plotted separately, a clearer picture emerges.
+First, Figure \ref{fig:response-season-plot} shows that the extreme
+points noticed noticed above seem to be relegated to the
+November-December time frame. Second, it is easier to witness the
+seasonality: bowing across the year, with higher counts at the beginning
+and end.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-season-plot-1} 
+
+}
+
+\caption{Seasonal Plot: Total Separations}\label{fig:response-season-plot}
+\end{figure}
+
+Considering these plots, we expect that a seasonal model performs best
+and that we will have to perform some alteration to accomodate the
+outiers. To confirm, we fit naive models to the data and examine to
+results. Beyond revealing seasonlity and outlier effects, fitting naive
+models serves to establish a baseline to compare later models against.
+Naive models are as simplistic as possible, so if later models perform
+worse or only marginally better, it implies they are not capturing much
+information.
+
+Figure \ref{fig:n-sn-forecast} gives evidence to the negative effects of
+outliers, notice the large confidence intervals surrounding the naive
+forecast and the 2014 spike carried through in the seasonal forecast.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/n-sn-forecast-1} 
+
+}
+
+\caption{Simple and Seasonal Naive Forecasts}\label{fig:n-sn-forecast}
+\end{figure}
+
+Tables \ref{fig:n-err} and \ref{fig:sn-err} show different error metrics
+for each of the two models. By mean square error (MSE), the seasonal
+model generally fits the training data better, possibily indicating
+presence of seasonality effects. However, there is a large disparity
+between validation MSEs, possibly caused by the major spike in 2014 -
+reaffirming the earlier intuition about outlier effects.
+
+\begin{table}
+
+\caption{\label{tab:n-err}Naive Results}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r}
+\hline
+  & ME & RMSE & MAE & MPE & MAPE & MASE\\
+\hline
+Training set & -1.650794 & 312.5230 & 195.9841 & -12.53034 & 42.09254 & 1.2607358\\
+\hline
+Test set & -62.600000 & 160.6421 & 144.3000 & -37.26534 & 51.56901 & 0.9282598\\
+\hline
+\end{tabular}
+\end{table}\begin{table}
+
+\caption{\label{tab:sn-err}Seasonal Naive Results}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r}
+\hline
+  & ME & RMSE & MAE & MPE & MAPE & MASE\\
+\hline
+Training set & 16.49565 & 291.7907 & 155.4522 & -7.373817 & 30.45221 & 1.000000\\
+\hline
+Test set & -238.85000 & 454.2881 & 271.4500 & -59.852083 & 67.31547 & 1.746196\\
+\hline
+\end{tabular}
+\end{table}
+
+It is known that during years 2005, '06, '07, and '14 special separation
+programs were implemented. Given the effect those years appear to have
+on modeling, they ought to be dealt with before continuing. Before
+deciding how, the explicit points in question need to be identified. To
+help, refer back to Figure \ref{fig:response-season-plot}. We note above
+that the spikes generally occur in November and December. However, the
+observations from 2005 are close enough to those from other years that
+they may have resulted naturally. We do not want to remove too much
+information from the data set, only that which is misleading. So,
+November and December observations from 2006, '07, and '14 are selected
+for replacement.
+
+Given the seasonality in the data set, the replaced values should stem
+from matching observations in previous years, as opposed to previous
+observations within the same year. The outliers are replaced with the
+arithmetic mean of all years not being replaced (e.g.~November 2006,
+'07, '14 is replaced with the mean separations in November for all other
+years).
+
+Replotting the repsonse in Figure \ref{fig:response-plot-2} shows a much
+better behaved data set. The data look fairly stationary, setting the
+stage for more forecasting complex models.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-plot-2-1} 
+
+}
+
+\caption{Separations - Outliers Removed}\label{fig:response-plot-2}
+\end{figure}
+
+With the outliers replaced, seasonal effects are much more apparent as
+well.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-season-plot-2-1} 
+
+}
+
+\caption{Seasonal Plot: Outliers Removed}\label{fig:response-season-plot-2}
+\end{figure}
 
 \newpage
 
@@ -943,7 +1102,7 @@ This is the final chapter of your thesis.
 \parbox[][\rhIII][c]{.25\textwidth}{
 \vspace{0pt}
 \small 1. REPORT DATE (DD-MM-YYYY)\\[2pt]
-\textField[\TU{ }\V{23-01-2018}]{sf1}{.24\textwidth}{0.4cm}
+\textField[\TU{ }\V{30-01-2018}]{sf1}{.24\textwidth}{0.4cm}
 }\vrule\hspace{1pt}
 
 \parbox[][\rhIII][c]{.45\textwidth}{
@@ -967,7 +1126,7 @@ This is the final chapter of your thesis.
 \parbox[][\rhIV][c]{0.65\textwidth}{
 \vspace{-25pt}
 \small 4. TITLE AND SUBTITLE\\[2pt]
-\textField[\Ff{\FfMultiline}\textSize{11}\TU{ }\V{\uppercase{Non-Rated Air Force Officer Retention: An Econometric Analysis}}]{sf4}{.64\textwidth}{2.4cm}
+\textField[\Ff{\FfMultiline}\textSize{11}\TU{ }\V{\uppercase{Air Force Officer Attrition: An Econometric Analysis}}]{sf4}{.64\textwidth}{2.4cm}
 }} &
 
 \parbox[][0.33\rhIV][c]{0.35\textwidth}{
@@ -1032,7 +1191,7 @@ WPAFB OH 45433-7301}]{sf7}{.69\textwidth}{1.8cm}
 
 \parbox[][\rhVI][c]{0.30\textwidth}{\vspace{-10pt}
 \small \begin{spacing}{0.75}\begin{tabbing}8. \=PERFORMING ORGANIZATION \\ \>REPORT NUMBER\end{tabbing}\end{spacing}\vspace{10pt}
-\textField[\TU{ }\V{AFIT-ENS-MS-18-J-009}]{sf5f}{.29\textwidth}{.5cm}
+\textField[\TU{ }\V{AFIT-ENS-MS-18-M-118}]{sf5f}{.29\textwidth}{.5cm}
 }\\\hline
 \end{tabular}}
 %==================================================================

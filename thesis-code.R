@@ -218,7 +218,7 @@ nov[c(3,4,11)] <- mean(nov[-c(3,4,11)])
 df.ts.1[dec.ind, 'Total'] <- dec
 df.ts.1[nov.ind, 'Total'] <- nov
 
-# Revisiting the respsonse and seasonality plots, we can more easily see the 
+# Revisiting the response and seasonality plots, we can more easily see the 
 # effects of seasonality, and a much more stationary data set without any 
 # egregious outliers.
 
@@ -261,7 +261,7 @@ autoplot(n.2) +
   ylab("Total Attrition")
 
 # Here we see that the variation in the validation set is more closely followed 
-# by the forecasts. We infer that removin the outliers was beneficial.
+# by the forecasts. We infer that removing the outliers was beneficial.
 autoplot(sn.2) +
   autolayer(val.ts.2) +
   theme(legend.position = "none") +

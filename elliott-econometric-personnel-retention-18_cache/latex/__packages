@@ -21,3 +21,5 @@ xtable
 bindrcpp
 stargazer
 kableExtra
+knitr
+gridExtra
