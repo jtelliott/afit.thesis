@@ -277,7 +277,7 @@ autoplot(sn.2) +
 # multivariate regression model allows us to include outside variables (economic 
 # indicators) to help predict a response (attrition). The problem with just 
 # regression, though, is that regression assumes independent errors, and we 
-# often (see:always) find autocorrelation with time-series data. Enter the 
+# often find autocorrelation with time-series data. Enter the 
 # ARIMA: fitting an ARIMA model on our regression error, then, allows us to 
 # handle the autocorrelative nature of the data, but does not allow room for 
 # any exogeneous information (i.e. info other than the response).

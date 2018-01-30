@@ -1006,7 +1006,8 @@ stage for more forecasting complex models.
 \end{figure}
 
 With the outliers replaced, seasonal effects are much more apparent as
-well.
+well (see Figure \ref{fig:response-season-plot-2} below), further
+enforcing the need for a seasonal model.
 
 \begin{figure}[H]
 
@@ -1016,6 +1017,74 @@ well.
 
 \caption{Seasonal Plot: Outliers Removed}\label{fig:response-season-plot-2}
 \end{figure}
+
+The purpose of imputing those values was to help produce better models.
+That can be assessed by retraining the naive models and comparing
+against previous results.
+
+Table \ref{fig:season-rmse-compare} below compares the seasonal naive
+RMSEs before and after imputating the identified outliers. The results
+indicate that removing and replacing the extreme values for November and
+December improved the model's ability to capture information. This is
+further reflected by the forecast (shown in blue) in Figure
+\ref{fig:sn-forecast-2}, which follows the validation data (shown in
+orange) more closely than those in Figure \ref{fig:n-sn-forecast}.
+Overall, these results imply that imputation of the selected
+observations is a worthwhile endeavor.
+
+\begin{table}
+
+\caption{\label{tab:season-rmse-compare}Seasonal Naive RMSE Comparison}
+\centering
+\begin{tabular}[t]{l|r|r}
+\hline
+  & Raw Data & Imputed Data\\
+\hline
+Training & 291.7907 & 161.2624\\
+\hline
+Validation & 454.2881 & 186.5842\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast-2-1} 
+
+}
+
+\caption{Seasonal Naive Forecast After Imputation}\label{fig:sn-forecast-2}
+\end{figure}
+
+Though an important step in the modeling process, these naive models are
+not the end goal. Rather, they help identify initial road bumps in the
+modeling process and create a baseline against which to compare other,
+more sophisticated models.
+
+\hypertarget{model-specification}{%
+\subsection{Model Specification}\label{model-specification}}
+
+One major shortfall of the naive model is the inability to include
+exogenous information, and this is is case for many forecasting methods
+(ARIMA, Decomposition, Exponential Smoothing, etc). However, these
+methods do allow the inclusion of autoregressive information, which
+normal regression techniques do not.
+
+The solution, then, is to combine efforts with dynamic regression.
+Dynamic regression is just a multivariate regression model with an ARIMA
+model on the errors. The regression piece allows independent variables
+to be used in predicting a response, and the ARIMA portion helps capture
+and account for autoregressive information which often exists in
+time-series data (thereby helping preserve the assumption of independent
+errors). The general formulation of a dynamic regression model (with
+ARIMA(1,1,1), for example) errors is:
+
+\[ y_t = \beta_0 + \beta_1x_{1,t} + ... + \beta_kx_{k,t} + n_t\] where,
+
+\[ (1-\phi_1B)(1-B)n_t = (1+\theta_1B)e_t \] and \(e_t\) is white noise.
+
+Before fitting the dynamic regression model, several steps must be taken
+to ensure other key assumptions are not violated. First
 
 \newpage
 
