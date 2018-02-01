@@ -118,9 +118,6 @@ refmanager    <- BIB[title = 'RefManageR']
 pressure      <- BIB[key = 'randolph2016']
 cite_options(citation_format = 'pandoc')
 
-# set directory for lazy data referencing
-setwd("~/Documents/Grad School/Thesis/Data")
-
 ```
 
 # Introduction
@@ -209,13 +206,16 @@ This thesis focuses on the last point. We attempt to forecast Air Force Non-rate
 # Analysis and Results
 
 ```{r}
+# set directory for lazy data referencing
+setwd("~/Documents/Grad School/Thesis/github/afit.thesis/Data")
+
 # Here we read in all our data and combine the relevant sets for something workable
 
 # Personnel Data
-afsc_list <- read.sas7bdat("lu_ao_afs.sas7bdat")
-assigned <- read.sas7bdat("assigned_levels.sas7bdat") %>% 
+afsc_list <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/lu_ao_afs.sas7bdat")
+assigned <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/assigned_levels.sas7bdat") %>% 
   spread(AFS, Assigned)
-attrition <- read.sas7bdat("separations_count.sas7bdat") %>% 
+attrition <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/separations_count.sas7bdat") %>% 
   spread(AFS, Separation_Count) 
 
 # The dates in the personnel data are in total days since 1 Jan 1960 (SAS default)
@@ -401,7 +401,7 @@ grid.arrange(p, q, nrow=2, left = "Total Attrition", bottom = "Time")
 
 ```
 
-Tables \@ref(fig:n-err) and \@ref(fig:sn-err) show different error metrics for each of the two models. By mean square error (MSE), the seasonal model generally fits the training data better, possibily indicating presence of seasonality effects. However, there is a large disparity between validation MSEs, possibly caused by the major spike in 2014 - reaffirming the earlier intuition about outlier effects.
+Tables \@ref(tab:n-err) and \@ref(tab:sn-err) show different error metrics for each of the two models. By mean square error (MSE), the seasonal model generally fits the training data better, possibily indicating presence of seasonality effects. However, there is a large disparity between validation MSEs, possibly caused by the major spike in 2014 - reaffirming the earlier intuition about outlier effects.
 
 ```{r n-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Naive Results"}
 kable(n.1.error[,1:6], caption = "Naive Results")
@@ -474,7 +474,7 @@ n.2.error <- accuracy(n.2, val.ts.2)
 sn.2.error <- accuracy(sn.2, val.ts.2)
 ```
 
-Table \@ref(fig:season-rmse-compare) below compares the seasonal naive RMSEs before and after imputating the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model's ability to capture information. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations is a worthwhile endeavor.
+Table \@ref(tab:season-rmse-compare) below compares the seasonal naive RMSEs before and after imputating the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model's ability to capture information. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations is a worthwhile endeavor.
 
 ```{r season-rmse-compare, fig.align="center", fig.pos="H", fig.cap="Seasonal Naive Comparison - Before and After Imputation"}
 outlier.compare <- data_frame("Raw Data" = sn.1.error[,2],
@@ -505,7 +505,166 @@ where,
 $$ (1-\phi_1B)(1-B)n_t = (1+\theta_1B)e_t $$
 and $e_t$ is white noise.
 
-Before fitting the dynamic regression model, several steps must be taken to ensure other key assumptions are not violated. First
+Before fitting the dynamic regression model, several steps must be taken to ensure other key assumptions are not violated. First is the issue of collinearity. Dependence between any subset of the regressors will primarily lead to innaccurate coefficient estimates, a result contrary to the goal of this endeavor. To help avoid this pitfall, a correlation heat map of possible regressors is built. Figure \@ref(fig:heat-map-1) shows the correlation between all pair-wise combinations of variables considered in the economic data set. There are many instances of collinearity, which is expected - many economic indicators are variations or flavors of the same information. There are some independent subsets, though, and these will be the candidates for the dynamic regression model.
+
+```{r heat-map-1, fig.align="center", fig.pos="H", fig.cap="Correlation Matrix - Economic Indicators", fig.width=7, fig.height=5}
+df[which(names(econ_data) %ni% c("Date", "Date1"))] %>% 
+  cor() %>%
+  round(2) %>% 
+  reorder.cormat() %>%
+  get.upper.tri() %>% 
+  melt(na.rm = TRUE) %>% 
+  ggplot(aes(Var2, Var1, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Collinearity") +
+  theme_minimal() + # minimal theme
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                   size = 12, hjust = 1)) +
+  coord_fixed() + 
+  geom_text(aes(Var2, Var1, label = value), color = "black", size = 3) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_blank(),
+    legend.justification = c(1, 0),
+    legend.position = c(0.6, 0.7),
+    legend.direction = "horizontal") +
+  guides(fill = guide_colorbar(barwidth = 7, barheight = 1, 
+                               title.position = "top", title.hjust = 0.5))
+```
+
+For the first stab at modeling, the Unemployment Rate (Adj.), Labor Force Participation Rate, and Market Momentum Index are selected. At this point, the stationarity of the regressors must be ensured. Non-stationary regressors also produce inconsistent coefficient estimates - even if they are independent. To assess, we plot the three indicators below in Figure \@ref(econ-vars-1). 
+
+```{r econ-vars-1, fig.align="center", fig.pos="H", fig.cap="Economic Indicators - Raw", fig.height=6, fig.width=7}
+# grab index of econ vars: LFPR, Unem.Adj, LMM
+econ.vars <- which(names(df) %in% c("Labor.Force.Participation",
+                                            "Unemployment.Rate.Adj", 
+                                            "Labor.Market.Momentum"))
+
+# Now that we've selected our regressors, we need to check for stationarity. We're
+# looking for evidence of non-zero trend, seasonality, etc.
+
+autoplot(df.ts.1[,econ.vars], facets = TRUE) +
+  ylab("")
+```
+
+Each of the three indicators show evidence of a trend (i.e. are non-stationary), and to handle this the data are differenced. The resulting data are shown below in Figure \@ref(fig:econ-vars-2). 
+
+```{r econ-vars-2, fig.align="center", fig.pos="H", fig.cap="Economic Indicators - Differenced", fig.height=5, fig.width=7}
+
+econ.vars.d <- diff(df.ts.1[,econ.vars])
+
+autoplot(econ.vars.d, facets = TRUE) +
+  ylab("")
+
+```
+
+Simple differencing appears to produce the desired effects; there is no evident trend or seasonality in any of the indicators. It is important to note the regressors now show the month-to-month change, which will be important when interpreting results. <!--do I want to talk about the stationarity of the response?--> 
+
+```{r}
+# Oh, yea - way better. Differenced, these variables look useable. Now while 
+# we're looking at differencing, we should look to see if our response also
+# needs to be differenced. Remember, we have this:
+
+# autoplot(df.ts.1[,"Total"]) +
+#   ylab("Total Attrition")
+
+# Hmm, nothing too crazy, actually - is there any statistical evidence
+# for differencing?
+
+# regular differencing
+#ndiffs(df.ts.1[,"Total"])
+# seasonal differencing
+#nsdiffs(df.ts.1[,"Total"])
+
+# Neat! However, before we can build the model, we have to account for the
+# differencing performed on our regressors. With simple differencing, we lose
+# the first observation, and so we remove the first observation from our 
+# response.
+
+#head(df.ts.1[,"Total"])
+#head(econ.vars.d[,1])
+
+response.ts <- ts(df.ts.1[-1,"Total"], start = c(2004, 11), frequency = 12)
+
+#head(response.ts)
+```
+
+With stationary and independent economic indicators, we can move on from regression to the ARIMA piece of the model. Up to six parameters must be specified: the order of autoregression, degree of differencing, and order of the moving average ($p,d,$ and $q$, respectively) and their seasonal counterparts ($P,D,$ and $Q$). For the sake of time, these are not manually found; instead, a brute-force algorithm is used. A range is specified for each parameter, and a model is fit for every combination within the specified ranges; the model with the lowest corrected Akaike Information Criteria (AICc) is selected. For the first, and all subsequent, dynamic regression models in the thesis, the following ranges/values were used: 
+$p,q \in [0,5]$, $d,D = 0$, and $P, Q \in [0,2]$. 
+
+
+```{r, fig.width=4, fig.height=4}
+# We also need to split up the econ vars into training and test sets
+
+# store split index
+set.split <- 126
+
+# subset our response
+train.ts.3 <- subset(response.ts, end = set.split)
+val.ts.3 <- subset(response.ts, start = set.split+1)
+
+# subset econ variables
+econ.vars.d.train <- subset(econ.vars.d, end = set.split)
+econ.vars.d.val <- subset(econ.vars.d, start = set.split+1)
+
+# We'll utilize the auto arima function from fpp2
+dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = FALSE,
+                        stepwise = FALSE, approximation = FALSE)
+```
+
+For this first pass, the model selected was a regression model with a fourth-order moving average and first-order seasonal autoregression on the errors. More explicitly:
+
+$$ y = \beta_0 + \beta_1x_{1,t}^` + \beta_2x_{2,t}^` + \beta_3x_{3,t}^` + n_t$$
+where, $$ (1-\Phi_1 B^{12})n_t = (1 + \theta_4 B)^4e_t $$
+and, $$ x_{i,t}^` = x_{i,t} - x_{i,t-1}$$
+The coefficient estimates are:
+```{r dynreg1-coeff, fig.align="center", fig.pos="H", fig.cap="Estimated Coefficients - Model 1"}
+
+x <- data_frame()
+
+
+```
+
+```{r}
+# The first thing we'll want to check, after the model summary, is how our 
+# residuals behave. Do they appear to satisfy normality assumptions? Are there 
+# any outliers? Evidence of leftover autocorrelation? Essentially, we're 
+# checking to see if there's anything other than white noise in the error term.
+
+# No - to all of the above. ACF plots look clean, raw residuals seem 
+# noisy, and also have a roughly normal distribution. Furthermore, a Ljung-Box
+# test shows no evidence that the data aren't normal (p: 0.8121).
+checkresiduals(dyn.reg.1)
+```
+
+
+<!--
+```{r}
+# Let's generate some forecasts then
+dyn.reg.1.f <- forecast(dyn.reg.1, xreg = econ.vars.d.val, h = 20)
+
+# We'll also take a look at some accuracy measures. According to RMSE and MASE,
+# the dynamic regression model performs better than a seasonal naive estimation;
+# that's good news - we're getting closer towards accurate forecasting.
+accuracy(dyn.reg.1.f, val.ts.3)
+```
+
+```{r}
+# And then plot those forecasts over the actual data
+autoplot(dyn.reg.1.f) + 
+  autolayer(dyn.reg.1$fitted) +
+  autolayer(val.ts.3) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+```
+
+-->
 
 \newpage
 

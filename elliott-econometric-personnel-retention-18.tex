@@ -938,7 +938,7 @@ forecast and the 2014 spike carried through in the seasonal forecast.
 \caption{Simple and Seasonal Naive Forecasts}\label{fig:n-sn-forecast}
 \end{figure}
 
-Tables \ref{fig:n-err} and \ref{fig:sn-err} show different error metrics
+Tables \ref{tab:n-err} and \ref{tab:sn-err} show different error metrics
 for each of the two models. By mean square error (MSE), the seasonal
 model generally fits the training data better, possibily indicating
 presence of seasonality effects. However, there is a large disparity
@@ -1022,7 +1022,7 @@ The purpose of imputing those values was to help produce better models.
 That can be assessed by retraining the naive models and comparing
 against previous results.
 
-Table \ref{fig:season-rmse-compare} below compares the seasonal naive
+Table \ref{tab:season-rmse-compare} below compares the seasonal naive
 RMSEs before and after imputating the identified outliers. The results
 indicate that removing and replacing the extreme values for November and
 December improved the model's ability to capture information. This is
@@ -1076,15 +1076,104 @@ model on the errors. The regression piece allows independent variables
 to be used in predicting a response, and the ARIMA portion helps capture
 and account for autoregressive information which often exists in
 time-series data (thereby helping preserve the assumption of independent
-errors). The general formulation of a dynamic regression model (with
-ARIMA(1,1,1), for example) errors is:
+errors). The general formulation of a dynamic regression model with
+ARIMA(1,1,1), for example, errors is:
 
 \[ y_t = \beta_0 + \beta_1x_{1,t} + ... + \beta_kx_{k,t} + n_t\] where,
 
 \[ (1-\phi_1B)(1-B)n_t = (1+\theta_1B)e_t \] and \(e_t\) is white noise.
 
 Before fitting the dynamic regression model, several steps must be taken
-to ensure other key assumptions are not violated. First
+to ensure other key assumptions are not violated. First is the issue of
+collinearity. Dependence between any subset of the regressors will
+primarily lead to innaccurate coefficient estimates, a result contrary
+to the goal of this endeavor. To help avoid this pitfall, a correlation
+heat map of possible regressors is built. Figure \ref{fig:heat-map-1}
+shows the correlation between all pair-wise combinations of variables
+considered in the economic data set. There are many instances of
+collinearity, which is expected - many economic indicators are
+variations or flavors of the same information. There are some
+independent subsets, though, and these will be the candidates for the
+dynamic regression model.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-1} 
+
+}
+
+\caption{Correlation Matrix - Economic Indicators}\label{fig:heat-map-1}
+\end{figure}
+
+For the first stab at modeling, the Unemployment Rate (Adj.), Labor
+Force Participation Rate, and Market Momentum Index are selected. At
+this point, the stationarity of the regressors must be ensured.
+Non-stationary regressors also produce inconsistent coefficient
+estimates - even if they are independent. To assess, we plot the three
+indicators below in Figure \ref{econ-vars-1}.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1-1} 
+
+}
+
+\caption{Economic Indicators - Raw}\label{fig:econ-vars-1}
+\end{figure}
+
+Each of the three indicators show evidence of a trend (i.e.~are
+non-stationary), and to handle this the data are differenced. The
+resulting data are shown below in Figure \ref{fig:econ-vars-2}.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2-1} 
+
+}
+
+\caption{Economic Indicators - Differenced}\label{fig:econ-vars-2}
+\end{figure}
+
+Simple differencing appears to produce the desired effects; there is no
+evident trend or seasonality in any of the indicators. It is important
+to note the regressors now show the month-to-month change, which will be
+important when interpreting results.
+
+With stationary and independent economic indicators, we can move on from
+regression to the ARIMA piece of the model. Up to six parameters must be
+specified: the order of autoregression, degree of differencing, and
+order of the moving average (\(p,d,\) and \(q\), respectively) and their
+seasonal counterparts (\(P,D,\) and \(Q\)). For the sake of time, these
+are not manually found; instead, a brute-force algorithm is used. A
+range is specified for each parameter, and a model is fit for every
+combination within the specified ranges; the model with the lowest
+corrected Akaike Information Criteria (AICc) is selected. For the first,
+and all subsequent, dynamic regression models in the thesis, the
+following ranges/values were used: \[p,q \epsilon [0,5]\], \[d,D = 0\],
+and \[P, Q \epsilon [0,2]\].
+
+\begin{verbatim}
+## 
+##  Ljung-Box test
+## 
+## data:  Residuals from Regression with ARIMA(0,0,4)(1,0,0)[12] errors
+## Q* = 10.121, df = 15, p-value = 0.8121
+## 
+## Model df: 9.   Total lags used: 24
+\end{verbatim}
+
+\begin{verbatim}
+##                      ME     RMSE       MAE        MPE     MAPE      MASE
+## Training set   1.790855 130.7455 100.83598  -8.109557 24.64882 0.9359166
+## Test set     -45.581298 142.9881  97.46055 -23.881927 33.89766 0.9045873
+##                    ACF1 Theil's U
+## Training set 0.02357864        NA
+## Test set     0.01245784 0.8401352
+\end{verbatim}
+
+\includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+--\textgreater{}
 
 \newpage
 
@@ -1171,7 +1260,7 @@ This is the final chapter of your thesis.
 \parbox[][\rhIII][c]{.25\textwidth}{
 \vspace{0pt}
 \small 1. REPORT DATE (DD-MM-YYYY)\\[2pt]
-\textField[\TU{ }\V{30-01-2018}]{sf1}{.24\textwidth}{0.4cm}
+\textField[\TU{ }\V{31-01-2018}]{sf1}{.24\textwidth}{0.4cm}
 }\vrule\hspace{1pt}
 
 \parbox[][\rhIII][c]{.45\textwidth}{

@@ -414,13 +414,13 @@ dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = TRUE,
 # test shows no evidence that the data aren't normal (p: 0.8121).
 checkresiduals(dyn.reg.1)
 
+# Let's generate some forecasts then
+dyn.reg.1.f <- forecast(dyn.reg.1, xreg = econ.vars.d.val, h = 20)
+
 # We'll also take a look at some accuracy measures. According to RMSE and MASE,
 # the dynamic regression model performs better than a seasonal naive estimation;
 # that's good news - we're getting closer towards accurate forecasting.
 accuracy(dyn.reg.1.f, val.ts.3)
-
-# Let's generate some forecasts then
-dyn.reg.1.f <- forecast(dyn.reg.1, xreg = econ.vars.d.val, h = 20)
 
 # And then plot those forecasts over the actual data
 autoplot(dyn.reg.1.f) + 
