@@ -461,6 +461,21 @@ United States
 \hypertarget{scope}{%
 \section{Scope}\label{scope}}
 
+For both releasability and compatibility reasons, the personnel data has
+been aggregated to the national level, limiting the detail to which
+relationships can be explored. This was done to match the national
+economic data available, and to protect personal information of the
+individuals included in the analysis.
+
+The military personnel data concerns those serving during the 2004-2017
+time frame, and the economic data matches. Some extraordinary events
+occurred during that period, notably the Great Recession beginning in
+2008, which may have altered normal behavior and affected relationships.
+In the vein, the U.S. military is transitioning to a new retirement
+system in 2018 which may likewise alter the relationship (if any)
+between the economic environment and military members' separation
+decisions.
+
 \hypertarget{assumptions-and-limitations}{%
 \section{Assumptions and
 Limitations}\label{assumptions-and-limitations}}
@@ -476,10 +491,12 @@ factors that do influence the individual's decision. For instance,
 members may not follow the movements of the Consumer Price Index (CPI),
 but that movement should provide information on the cost of living which
 may affect the decision to stay in the military. We also assume that the
-skills held by the Air Force non-rated officer corps are largely
-transferrable to civilian labor markets (citation/justification??). This
-relationship may not hold equally across all Air Force career fields,
-however, and is investigated later in Chapter III.
+skills held by the Air Force officer corps are largely transferrable to
+civilian labor markets (citation/justification??). This relationship may
+not hold equally across all Air Force career fields, however, and is
+investigated later in Chapter III. Standard assumptions for regression
+modeling and forecasting are made (independent, normal, and
+homoscedastic errors) and are tested, as well.
 
 \hypertarget{outline}{%
 \section{Outline}\label{outline}}
@@ -1061,8 +1078,8 @@ not the end goal. Rather, they help identify initial road bumps in the
 modeling process and create a baseline against which to compare other,
 more sophisticated models.
 
-\hypertarget{model-specification}{%
-\subsection{Model Specification}\label{model-specification}}
+\hypertarget{dynamic-regression}{%
+\subsection{Dynamic Regression}\label{dynamic-regression}}
 
 One major shortfall of the naive model is the inability to include
 exogenous information, and this is is case for many forecasting methods
@@ -1077,7 +1094,7 @@ to be used in predicting a response, and the ARIMA portion helps capture
 and account for autoregressive information which often exists in
 time-series data (thereby helping preserve the assumption of independent
 errors). The general formulation of a dynamic regression model with
-ARIMA(1,1,1), for example, errors is:
+ARIMA(1,1,1) errors, for example, errors is:
 
 \[ y_t = \beta_0 + \beta_1x_{1,t} + ... + \beta_kx_{k,t} + n_t\] where,
 
@@ -1161,7 +1178,11 @@ where, \[ (1-\Phi_1 B^{12})n_t = (1 + \theta_4 B)^4e_t \] and,
 \[ x'_{i,t} = x_{i,t} - x_{i,t-1}\] The coefficient estimates are below
 in Table \ref{tab:dynreg1-coeff}:
 
-\begin{tabular}{l|r|r|r|r|r|r|r|r|r}
+\begin{table}
+
+\caption{\label{tab:dynreg1-coeff}Estimated Coefficients - Initial Model}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|r|r|r|r|r}
 \hline
   & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_4$ & $\Phi_1$ & $\beta_0$ & $\beta_1$ & $\beta_2$ & $\beta_3$\\
 \hline
@@ -1170,6 +1191,7 @@ Coeff & 0.218 & 0.145 & 0.336 & 0.260 & 0.576 & 429.875 & -13.390 & -15.949 & -2
 StdErr & 0.087 & 0.088 & 0.092 & 0.092 & 0.082 & 47.602 & 22.286 & 35.016 & 11.494\\
 \hline
 \end{tabular}
+\end{table}
 
 One of the primary sources of model assessment is analysis of the
 residuals. When inspecting the residuals, we are looking for evidence of
@@ -1201,22 +1223,122 @@ misbehavior in the model's residuals.
 \caption{Initial Attrition Model - Residual Analysis}\label{fig:dynreg1-resid}
 \end{figure}
 
-\begin{tabular}{l|r|r}
+\begin{table}
+
+\caption{\label{tab:dynreg1-boxtest}Initial Model - Autocorrelation Test}
+\centering
+\begin{tabular}[t]{l|r|r}
 \hline
 Test type & Test statistic & p-value\\
 \hline
 Box-Ljung test & 10.121 & 0.812\\
 \hline
 \end{tabular}
+\end{table}
 
---\textgreater{}
+Next, forecasts are generated from the training data and compared
+against the validation data. Figure \ref{fig:dynreg1-forecast} shows a
+model that looks to track attrition in much greater detail than the
+naive models, which is expected. Large movements are generally captured,
+even if not perfectly forecast. To get a sense of modeling progress, the
+RMSEs are from our models are compared in Table
+\ref{tab:model-compare-1}.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-forecast-1} 
+
+}
+
+\caption{Initial Model - Forecasts Against Validation Data}\label{fig:dynreg1-forecast}
+\end{figure}
+
+\begin{table}
+
+\caption{\label{tab:model-compare-1}Model RMSE Comparison}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+  & Simple Naive & Seasonal Naive & Dynamic Regression\\
+\hline
+Training & 199.8321 & 161.2624 & 130.7455\\
+\hline
+Validation & 160.6421 & 186.5842 & 142.9881\\
+\hline
+\end{tabular}
+\end{table}
+
+Dynamic regression, thankfully, demonstrates greater ability to forecast
+the attrition data than the naive models. However, all is not well. The
+high standard errors of our regression coefficients (Table
+\ref{tab:dynreg1-coeff}) indicate that none of the economic indicators
+are statistically significant, meaning the ARIMA model is handling all
+the forecasting and the regression is providing little insight.
+Essentially, no information is gained from the economic indicators as
+they have been specified. This could be for several reasons:
+
+\begin{itemize}
+\item
+  Having been differenced, the indicators represent month-to-month
+  changes. For most observations in the data set those changes are
+  marginal, resulting in an insignificant effect on attrition -
+  numerically.
+\item
+  As they are, the indicators show only the previous month's change.
+  That is, the regression coefficients represent the effects last
+  month's changes have on this month's attrition. Intuitively, this does
+  not seem correct. Voluntary separation from the military is a long,
+  bureaucratic process; as such, one would think the time-line is well
+  beyond a month.
+\item
+  The economic and personnel data are both aggregated to the national
+  level. It is possible that such a degree of aggregation includes so
+  much noise that any economic effects are being masked.
+\end{itemize}
+
+Unfortunately, there is not much that can be done about the first point.
+As mentioned earlier, the indicators must be stationary in order to
+ensure the reliability of any potential effects, and the data must be
+differenced to be stationary. The rest of the thesis, then, focuses on
+the last two points. It is simple enough to introduce lagged regressors,
+and that process is introduced next. As for aggregation, the economic
+data cannot be broken down, but the personnel data can (to an extent).
+Currently, the personnel data encompasses all AFSCs. It may be that
+different subsets of the Air Force officer corps are more sensitive to
+economic conditions than others, a possibility investigated in
+subsequent analysis.
+
+\hypertarget{lagged-indicators}{%
+\subsection{Lagged Indicators}\label{lagged-indicators}}
+
+\hypertarget{officer-subsetting}{%
+\subsection{Officer Subsetting}\label{officer-subsetting}}
 
 \newpage
 
 \hypertarget{conclusions}{%
 \chapter{Conclusions}\label{conclusions}}
 
-This is the final chapter of your thesis.
+\hypertarget{to-do}{%
+\chapter{TO-DO}\label{to-do}}
+
+\begin{itemize}
+\tightlist
+\item
+  Fix some of the Table references
+\item
+  Add complete set of lagged variable analysis
+\item
+  Introduce subsetting of officer population (total vs rated-only vs
+  non-rated line vs etc)
+\item
+  Adjust legends and coloring in some figures
+\item
+  Conclusion (\textless{}-- wait until lagged effects are fully explored
+  before drawing insights)
+\item
+  Introduction (\textless{}-- wait until end? not sure how to introduce)
+\end{itemize}
 \newpage
 %==================================================================
 %    		Bibliography              

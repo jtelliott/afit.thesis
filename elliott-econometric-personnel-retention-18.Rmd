@@ -126,9 +126,13 @@ cite_options(citation_format = 'pandoc')
 
 ## Scope
 
+For both releasability and compatibility reasons, the personnel data has been aggregated to the national level, limiting the detail to which relationships can be explored. This was done to match the national economic data available, and to protect personal information of the individuals included in the analysis. 
+
+The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal behavior and affected relationships. In the vein, the U.S. military is transitioning to a new retirement system in 2018 which may likewise alter the relationship (if any) between the economic environment and military members' separation decisions.
+
 ## Assumptions and Limitations
 
-As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force non-rated officer corps are largely transferrable to civilian labor markets (citation/justification??). This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III.
+As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force officer corps are largely transferrable to civilian labor markets (citation/justification??). This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III. Standard assumptions for regression modeling and forecasting are made (independent, normal, and homoscedastic errors) and are tested, as well. 
 
 ## Outline
 
@@ -493,11 +497,11 @@ autoplot(sn.2) +
 
 Though an important step in the modeling process, these naive models are not the end goal. Rather, they help identify initial road bumps in the modeling process and create a baseline against which to compare other, more sophisticated models.
 
-### Model Specification
+### Dynamic Regression
 
 One major shortfall of the naive model is the inability to include exogenous information, and this is is case for many forecasting methods (ARIMA, Decomposition, Exponential Smoothing, etc). However, these methods do allow the inclusion of autoregressive information, which normal regression techniques do not. 
 
-The solution, then, is to combine efforts with dynamic regression. Dynamic regression is just a multivariate regression model with an ARIMA model on the errors. The regression piece allows independent variables to be used in predicting a response, and the ARIMA portion helps capture and account for autoregressive information which often exists in time-series data (thereby helping preserve the assumption of independent errors). The general formulation of a dynamic regression model with ARIMA(1,1,1), for example, errors is:
+The solution, then, is to combine efforts with dynamic regression. Dynamic regression is just a multivariate regression model with an ARIMA model on the errors. The regression piece allows independent variables to be used in predicting a response, and the ARIMA portion helps capture and account for autoregressive information which often exists in time-series data (thereby helping preserve the assumption of independent errors). The general formulation of a dynamic regression model with ARIMA(1,1,1) errors, for example, errors is:
 
 $$ y_t = \beta_0 + \beta_1x_{1,t} + ... + \beta_kx_{k,t} + n_t$$
 where,
@@ -625,7 +629,7 @@ where, $$ (1-\Phi_1 B^{12})n_t = (1 + \theta_4 B)^4e_t $$
 and, $$ x'_{i,t} = x_{i,t} - x_{i,t-1}$$
 The coefficient estimates are below in Table \@ref(tab:dynreg1-coeff): 
 
-```{r dynreg1-coeff, fig.align="center", fig.pos="H", fig.cap="Estimated Coefficients - Model 1"}
+```{r dynreg1-coeff, fig.align="center", fig.pos="H", fig.cap="Estimated Coefficients - Initial Model"}
 
 # grab coefficients and s.e. from model
 coeffs <- round(dyn.reg.1$coef, digits = 3)
@@ -639,7 +643,7 @@ colnames(estimates) <- c("$\\theta_1$", "$\\theta_2$", "$\\theta_3$",
                          "$\\theta_4$", "$\\Phi_1$", "$\\beta_0$", 
                          "$\\beta_1$", "$\\beta_2$", "$\\beta_3$")
 
-kable(estimates, escape = FALSE)
+kable(estimates, escape = FALSE, caption = "Estimated Coefficients - Initial Model")
 ```
 
 
@@ -666,36 +670,71 @@ box.results <- data_frame("Test type" = p$method,
                           "Test statistic" = round(p$statistic, digits = 3),
                           "p-value" = round(p$p.value, digits = 3))
 
-kable(box.results)
+kable(box.results, caption = "Initial Model - Autocorrelation Test")
 
 ```
 
 
+Next, forecasts are generated from the training data and compared against the validation data.
+Figure \@ref(fig:dynreg1-forecast) shows a model that looks to track attrition in much greater detail than the naive models, which is expected. Large movements are generally captured, even if not perfectly forecast. To get a sense of modeling progress, the RMSEs are from our models are compared in Table \@ref(tab:model-compare-1).
 
-<!--
-```{r}
+
+```{r dynreg1-forecast, fig.align="center", fig.pos="H", fig.cap="Initial Model - Forecasts Against Validation Data", fig.height=3.75, fig.width=6.5}
 # Let's generate some forecasts then
 dyn.reg.1.f <- forecast(dyn.reg.1, xreg = econ.vars.d.val, h = 20)
 
-# We'll also take a look at some accuracy measures. According to RMSE and MASE,
-# the dynamic regression model performs better than a seasonal naive estimation;
-# that's good news - we're getting closer towards accurate forecasting.
-accuracy(dyn.reg.1.f, val.ts.3)
-```
-
-```{r}
 # And then plot those forecasts over the actual data
 autoplot(dyn.reg.1.f) + 
   autolayer(dyn.reg.1$fitted) +
   autolayer(val.ts.3) +
   theme(legend.position = "none") +
   ylab("Total Attrition")
+
 ```
 
--->
+
+```{r model-compare-1, fig.align="center", fig.pos="H", fig.cap="Model RMSE Comparison"}
+# We'll also take a look at some accuracy measures. According to RMSE and MASE,
+# the dynamic regression model performs better than a seasonal naive estimation;
+# that's good news - we're getting closer towards accurate forecasting.
+dyn.reg.1.error <- accuracy(dyn.reg.1.f, val.ts.3)
+
+err.compare <- data_frame("Simple Naive" = n.2.error[,2],
+           "Seasonal Naive" = sn.2.error[,2],
+           "Dynamic Regression" = dyn.reg.1.error[,2])
+
+rownames(err.compare) <- c("Training", "Validation")
+  
+kable(err.compare, caption = "Model RMSE Comparison")
+
+```
+
+Dynamic regression, thankfully, demonstrates greater ability to forecast the attrition data than the naive models. However, all is not well. The high standard errors of our regression coefficients (Table \@ref(tab:dynreg1-coeff)) indicate that none of the economic indicators are statistically significant, meaning the ARIMA model is handling all the forecasting and the regression is providing little insight. Essentially, no information is gained from the economic indicators as they have been specified. This could be for several reasons:
+
+- Having been differenced, the indicators represent month-to-month changes. For most observations in the data set those changes are marginal, resulting in an insignificant effect on attrition - numerically. 
+
+- As they are, the indicators show only the previous month's change. That is, the regression coefficients represent the effects last month's changes have on this month's attrition. Intuitively, this does not seem correct. Voluntary separation from the military is a long, bureaucratic process; as such, one would think the time-line is well beyond a month.
+
+- The economic and personnel data are both aggregated to the national level. It is possible that such a degree of aggregation includes so much noise that any economic effects are being masked.
+
+Unfortunately, there is not much that can be done about the first point. As mentioned earlier, the indicators must be stationary in order to ensure the reliability of any potential effects, and the data must be differenced to be stationary. The rest of the thesis, then, focuses on the last two points. It is simple enough to introduce lagged regressors, and that process is introduced next. As for aggregation, the economic data cannot be broken down, but the personnel data can (to an extent). Currently, the personnel data encompasses all AFSCs. It may be that different subsets of the Air Force officer corps are more sensitive to economic conditions than others, a possibility investigated in subsequent analysis.
+
+### Lagged Indicators
+
+### Officer Subsetting
+
 
 \newpage
 
 # Conclusions
 
-This is the final chapter of your thesis.
+
+
+# TO-DO
+
+- Fix some of the Table references
+- Add complete set of lagged variable analysis
+- Introduce subsetting of officer population (total vs rated-only vs non-rated line vs etc)
+- Adjust legends and coloring in some figures
+- Conclusion (<-- wait until lagged effects are fully explored before drawing insights)
+- Introduction (<-- wait until end? not sure how to introduce)
