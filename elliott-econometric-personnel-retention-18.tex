@@ -355,7 +355,7 @@ United States
 	
 	\begingroup
   \singlespace
-    Civilian Raymond R. Hill, \\ 
+    Civilian Raymond R. Hill, PhD\\ 
     Chairman
     \par
   \endgroup
@@ -1149,29 +1149,65 @@ range is specified for each parameter, and a model is fit for every
 combination within the specified ranges; the model with the lowest
 corrected Akaike Information Criteria (AICc) is selected. For the first,
 and all subsequent, dynamic regression models in the thesis, the
-following ranges/values were used: \[p,q \epsilon [0,5]\], \[d,D = 0\],
-and \[P, Q \epsilon [0,2]\].
+following ranges/values were used: \(p,q \in [0,5]\), \(d,D = 0\), and
+\(P, Q \in [0,2]\).
 
-\begin{verbatim}
-## 
-##  Ljung-Box test
-## 
-## data:  Residuals from Regression with ARIMA(0,0,4)(1,0,0)[12] errors
-## Q* = 10.121, df = 15, p-value = 0.8121
-## 
-## Model df: 9.   Total lags used: 24
-\end{verbatim}
+For this first pass, the model selected was a regression model with a
+fourth-order moving average and first-order seasonal autoregression on
+the errors. More explicitly:
 
-\begin{verbatim}
-##                      ME     RMSE       MAE        MPE     MAPE      MASE
-## Training set   1.790855 130.7455 100.83598  -8.109557 24.64882 0.9359166
-## Test set     -45.581298 142.9881  97.46055 -23.881927 33.89766 0.9045873
-##                    ACF1 Theil's U
-## Training set 0.02357864        NA
-## Test set     0.01245784 0.8401352
-\end{verbatim}
+\[ y = \beta_0 + \beta_1x'_{1,t} + \beta_2x'_{2,t} + \beta_3x'_{3,t} + n_t\]
+where, \[ (1-\Phi_1 B^{12})n_t = (1 + \theta_4 B)^4e_t \] and,
+\[ x'_{i,t} = x_{i,t} - x_{i,t-1}\] The coefficient estimates are below
+in Table \ref{tab:dynreg1-coeff}:
 
-\includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/unnamed-chunk-10-1.pdf}
+\begin{tabular}{l|r|r|r|r|r|r|r|r|r}
+\hline
+  & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_4$ & $\Phi_1$ & $\beta_0$ & $\beta_1$ & $\beta_2$ & $\beta_3$\\
+\hline
+Coeff & 0.218 & 0.145 & 0.336 & 0.260 & 0.576 & 429.875 & -13.390 & -15.949 & -2.819\\
+\hline
+StdErr & 0.087 & 0.088 & 0.092 & 0.092 & 0.082 & 47.602 & 22.286 & 35.016 & 11.494\\
+\hline
+\end{tabular}
+
+One of the primary sources of model assessment is analysis of the
+residuals. When inspecting the residuals, we are looking for evidence of
+leftover autocorrelation, satisfaction of normality assumptions
+(\(e_t \sim N(0,\sigma^2)\)), and outlier effects. Figure
+\ref{fig:dynreg1-resid} below combines a few plots to help answer those
+questions. The top subfigure plots the raw model residuals, and is used
+to identify possible trends, seasonality, or heteroscedasticity.
+Fortunately, none of those features are apparent. The bottom-left
+searches for significant autocorrelation in the residuals. Raw residuals
+are correlated with themselves in increased lags, and any significant
+correlations would indicate a possible violation of the independence of
+the residuals. The current model's results only show one lag-period with
+significant autocorrelation, which may mean that there is information
+unnaccounted for by the model. Overall autocorrelation, however, appears
+to be insignificant, as further evidenced by the results of a Ljung-Box
+test for autocorrelation (Table \ref{tab:dynreg1-boxtest}). The
+bottom-right plot shows a histogram of the residuals, comparing the raw
+distribution against the ideal normal. The plot shows slight skewness,
+but overall the data appear normal. In short, there is little - if any -
+misbehavior in the model's residuals.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-resid-1} 
+
+}
+
+\caption{Initial Attrition Model - Residual Analysis}\label{fig:dynreg1-resid}
+\end{figure}
+
+\begin{tabular}{l|r|r}
+\hline
+Test type & Test statistic & p-value\\
+\hline
+Box-Ljung test & 10.121 & 0.812\\
+\hline
+\end{tabular}
 
 --\textgreater{}
 
@@ -1260,7 +1296,7 @@ This is the final chapter of your thesis.
 \parbox[][\rhIII][c]{.25\textwidth}{
 \vspace{0pt}
 \small 1. REPORT DATE (DD-MM-YYYY)\\[2pt]
-\textField[\TU{ }\V{31-01-2018}]{sf1}{.24\textwidth}{0.4cm}
+\textField[\TU{ }\V{02-02-2018}]{sf1}{.24\textwidth}{0.4cm}
 }\vrule\hspace{1pt}
 
 \parbox[][\rhIII][c]{.45\textwidth}{

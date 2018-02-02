@@ -23,7 +23,7 @@ advisor:
   department: "`r DODschools::noTouch('metadata.yml')$advisor$department`"
   rank:       "`r DODschools::noTouch('metadata.yml')$advisor$rank`"
   service:    "`r DODschools::noTouch('metadata.yml')$advisor$service`"
-  degree:     "`r DODschools::noTouch('metadata.yml')$advisor$currentDegree`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$advisor$currentDegree`"
   phone:      "`r DODschools::noTouch('metadata.yml')$advisor$phone`"
   email:      "`r DODschools::noTouch('metadata.yml')$advisor$email`"
 reader1:
@@ -599,7 +599,7 @@ With stationary and independent economic indicators, we can move on from regress
 $p,q \in [0,5]$, $d,D = 0$, and $P, Q \in [0,2]$. 
 
 
-```{r, fig.width=4, fig.height=4}
+```{r, results="hide"}
 # We also need to split up the econ vars into training and test sets
 
 # store split index
@@ -614,24 +614,39 @@ econ.vars.d.train <- subset(econ.vars.d, end = set.split)
 econ.vars.d.val <- subset(econ.vars.d, start = set.split+1)
 
 # We'll utilize the auto arima function from fpp2
-dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = FALSE,
+dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = TRUE,
                         stepwise = FALSE, approximation = FALSE)
 ```
 
 For this first pass, the model selected was a regression model with a fourth-order moving average and first-order seasonal autoregression on the errors. More explicitly:
 
-$$ y = \beta_0 + \beta_1x_{1,t}^` + \beta_2x_{2,t}^` + \beta_3x_{3,t}^` + n_t$$
+$$ y = \beta_0 + \beta_1x'_{1,t} + \beta_2x'_{2,t} + \beta_3x'_{3,t} + n_t$$
 where, $$ (1-\Phi_1 B^{12})n_t = (1 + \theta_4 B)^4e_t $$
-and, $$ x_{i,t}^` = x_{i,t} - x_{i,t-1}$$
-The coefficient estimates are:
+and, $$ x'_{i,t} = x_{i,t} - x_{i,t-1}$$
+The coefficient estimates are below in Table \@ref(tab:dynreg1-coeff): 
+
 ```{r dynreg1-coeff, fig.align="center", fig.pos="H", fig.cap="Estimated Coefficients - Model 1"}
 
-x <- data_frame()
+# grab coefficients and s.e. from model
+coeffs <- round(dyn.reg.1$coef, digits = 3)
+stderr <- round(sqrt(diag(dyn.reg.1$var.coef)), digits = 3)
 
+# create data table
+estimates <- bind_rows(coeffs, stderr)
 
+rownames(estimates) <- c("Coeff", "StdErr")
+colnames(estimates) <- c("$\\theta_1$", "$\\theta_2$", "$\\theta_3$", 
+                         "$\\theta_4$", "$\\Phi_1$", "$\\beta_0$", 
+                         "$\\beta_1$", "$\\beta_2$", "$\\beta_3$")
+
+kable(estimates, escape = FALSE)
 ```
 
-```{r}
+
+
+One of the primary sources of model assessment is analysis of the residuals. When inspecting the residuals, we are looking for evidence of leftover autocorrelation, satisfaction of normality assumptions ($e_t \sim N(0,\sigma^2)$), and outlier effects. Figure \@ref(fig:dynreg1-resid) below combines a few plots to help answer those questions. The top subfigure plots the raw model residuals, and is used to identify possible trends, seasonality, or heteroscedasticity. Fortunately, none of those features are apparent. The bottom-left searches for significant autocorrelation in the residuals. Raw residuals are correlated with themselves in increased lags, and any significant correlations would indicate a possible violation of the independence of the residuals. The current model's results only show one lag-period with significant autocorrelation, which may mean that there is information unnaccounted for by the model. Overall autocorrelation, however, appears to be insignificant, as further evidenced by the results of a Ljung-Box test for autocorrelation (Table \@ref(tab:dynreg1-boxtest)). The bottom-right plot shows a histogram of the residuals, comparing the raw distribution against the ideal normal. The plot shows slight skewness, but overall the data appear normal. In short, there is little - if any - misbehavior in the model's residuals.
+
+```{r dynreg1-resid, fig.align="center", fig.pos="H", fig.cap="Initial Attrition Model - Residual Analysis", fig.height=5, fig.width=6}
 # The first thing we'll want to check, after the model summary, is how our 
 # residuals behave. Do they appear to satisfy normality assumptions? Are there 
 # any outliers? Evidence of leftover autocorrelation? Essentially, we're 
@@ -640,8 +655,21 @@ x <- data_frame()
 # No - to all of the above. ACF plots look clean, raw residuals seem 
 # noisy, and also have a roughly normal distribution. Furthermore, a Ljung-Box
 # test shows no evidence that the data aren't normal (p: 0.8121).
-checkresiduals(dyn.reg.1)
+checkresiduals(dyn.reg.1, test = FALSE)
 ```
+
+```{r dynreg1-boxtest, fig.align="center", fig.pos="H", fig.cap="Initial Model - Autocorrelation Test"}
+
+p <- Box.test(dyn.reg.1$residuals, lag = 24, type = "Lj", fitdf = 9)
+
+box.results <- data_frame("Test type" = p$method, 
+                          "Test statistic" = round(p$statistic, digits = 3),
+                          "p-value" = round(p$p.value, digits = 3))
+
+kable(box.results)
+
+```
+
 
 
 <!--
