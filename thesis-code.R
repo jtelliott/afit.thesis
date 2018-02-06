@@ -21,8 +21,10 @@ library(knitr)
 library(gridExtra)
 library(tictoc)
 
-# set directory for lazy data referencing
-setwd("~/Documents/Grad School/Thesis/Data")
+# set directory for lazy data referencing - allow switch between macOS and Windows
+#setwd("~/Documents/Grad School/Thesis/Data")
+setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/Data")
+
 
 ###################
 #   Import Data   #
@@ -30,12 +32,12 @@ setwd("~/Documents/Grad School/Thesis/Data")
 
 # Personnel data
 # simple list of AFSCs and description
-afsc_list <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/lu_ao_afs.sas7bdat")
+afsc_list <- read.sas7bdat("lu_ao_afs.sas7bdat")
 # monthly records of assigned levels, broken out by AFSC - currently in longform
-assigned <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/assigned_levels.sas7bdat") %>% 
+assigned <- read.sas7bdat("assigned_levels.sas7bdat") %>% 
   spread(AFS, Assigned)
 # monthly separation counts, broken out by AFSC - currently in longform
-attrition <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/separations_count.sas7bdat") %>% 
+attrition <- read.sas7bdat("separations_count.sas7bdat") %>% 
   spread(AFS, Separation_Count) 
 
 # Econ data
@@ -498,48 +500,52 @@ LMM.lag.val <- subset(Labor.Market.Momentum.lag, start = set.split+1,
                      end = dim(econ.vars.d)[1])
 
 # Initialize table to store results of loop. We are going to capture the 
-# variable combination, AICc, training RMSE, and validation RMSE
-lag.results <- tibble("UR.lag" = rep(NA, 125),
-                      "LFPR.lag" = rep(NA, 125),
-                      "LMM.lag" = rep(NA, 125),
-                      "AICc" = rep(NA, 125),
-                      "Training.RMSE" = rep(NA, 125),
-                      "Validation.RMSE" = rep(NA, 125))
+# variable combination, AICc, training RMSE, and validation RMSE. Tibble 
+# generated, saved to local .rds so we won't have to re-run this awful loop; 
+# runtime is approximately 1 hr on 4-core machine, process run in parallel
 
-m <- 1
-for(i in c(1:5)){
-  for(j in c(1:5)){
-    for(k in c(1:5)){
-      
-      xreg.train <- cbind(UR.lag.train[,i],
-                          LFPR.lag.train[,j],
-                          LMM.lag.train[,k])
-      
-      xreg.val <- cbind(UR.lag.val[,i],
-                        LFPR.lag.val[,j],
-                        LMM.lag.val[,k])
-      
-      dyn.model <- auto.arima(train.ts.3,
-                              xreg = xreg.train, 
-                              stepwise = FALSE, 
-                              approximation = FALSE,
-                              parallel = TRUE)
-      
-      dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
-      
-      dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
-      
-      lag.results[m, "UR.lag"] <- colnames(UR.lag.train)[i]
-      lag.results[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
-      lag.results[m, "LMM.lag"] <- colnames(LMM.lag.train)[k]
-      lag.results[m, "AICc"] <- dyn.model$aicc
-      lag.results[m, "Training.RMSE"] <- dyn.model.err[1,2]
-      lag.results[m, "Validation.RMSE"] <- dyn.model.err[2,2]
-      
-      m <- m + 1
-    }
-  }
-}
 
-dyn.model.err[2,2]
+# lag.results <- tibble("UR.lag" = rep(NA, 125),
+#                       "LFPR.lag" = rep(NA, 125),
+#                       "LMM.lag" = rep(NA, 125),
+#                       "AICc" = rep(NA, 125),
+#                       "Training.RMSE" = rep(NA, 125),
+#                       "Validation.RMSE" = rep(NA, 125))
+# 
+# m <- 1
+# for(i in c(1:5)){
+#   for(j in c(1:5)){
+#     for(k in c(1:5)){
+#       
+#       xreg.train <- cbind(UR.lag.train[,i],
+#                           LFPR.lag.train[,j],
+#                           LMM.lag.train[,k])
+#       
+#       xreg.val <- cbind(UR.lag.val[,i],
+#                         LFPR.lag.val[,j],
+#                         LMM.lag.val[,k])
+#       
+#       dyn.model <- auto.arima(train.ts.3,
+#                               xreg = xreg.train, 
+#                               stepwise = FALSE, 
+#                               approximation = FALSE,
+#                               parallel = TRUE)
+#       
+#       dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+#       
+#       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+#       
+#       lag.results[m, "UR.lag"] <- colnames(UR.lag.train)[i]
+#       lag.results[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+#       lag.results[m, "LMM.lag"] <- colnames(LMM.lag.train)[k]
+#       lag.results[m, "AICc"] <- dyn.model$aicc
+#       lag.results[m, "Training.RMSE"] <- dyn.model.err[1,2]
+#       lag.results[m, "Validation.RMSE"] <- dyn.model.err[2,2]
+#       
+#       m <- m + 1
+#     }
+#   }
+# }
+# 
+# saveRDS(lag.results, "lagResults.rds")
 
