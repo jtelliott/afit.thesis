@@ -21,7 +21,7 @@ author:
 advisor:
   name:       "`r DODschools::noTouch('metadata.yml')$advisor$name`"
   department: "`r DODschools::noTouch('metadata.yml')$advisor$department`"
-  rank:       "`r DODschools::noTouch('metadata.yml')$advisor$rank`"
+#  rank:       "`r DODschools::noTouch('metadata.yml')$advisor$rank`"
   service:    "`r DODschools::noTouch('metadata.yml')$advisor$service`"
   prevdegree: "`r DODschools::noTouch('metadata.yml')$advisor$currentDegree`"
   phone:      "`r DODschools::noTouch('metadata.yml')$advisor$phone`"
@@ -32,18 +32,18 @@ reader1:
   rank:       "`r DODschools::noTouch('metadata.yml')$reader1$rank`"
   service:    "`r DODschools::noTouch('metadata.yml')$reader1$service`"
   prevdegree: "`r DODschools::noTouch('metadata.yml')$reader1$currentDegree`"
-reader2:
-  name:       "`r DODschools::noTouch('metadata.yml')$reader2$name`"
-  department: "`r DODschools::noTouch('metadata.yml')$reader2$dept`"
-  rank:       "`r DODschools::noTouch('metadata.yml')$reader2$rank`"
-  service:    "`r DODschools::noTouch('metadata.yml')$reader2$service`"
-  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader2$currentDegree`"
-reader3:
-  name:       "`r DODschools::noTouch('metadata.yml')$reader3$name`"
-  department: "`r DODschools::noTouch('metadata.yml')$reader3$dept`"
-  rank:       "`r DODschools::noTouch('metadata.yml')$reader3$rank`"
-  service:    "`r DODschools::noTouch('metadata.yml')$reader3$service`"
-  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader3$currentDegree`"
+# reader2:
+#   name:       "`r DODschools::noTouch('metadata.yml')$reader2$name`"
+#   department: "`r DODschools::noTouch('metadata.yml')$reader2$dept`"
+#   rank:       "`r DODschools::noTouch('metadata.yml')$reader2$rank`"
+#   service:    "`r DODschools::noTouch('metadata.yml')$reader2$service`"
+#   prevdegree: "`r DODschools::noTouch('metadata.yml')$reader2$currentDegree`"
+# reader3:
+#   name:       "`r DODschools::noTouch('metadata.yml')$reader3$name`"
+#   department: "`r DODschools::noTouch('metadata.yml')$reader3$dept`"
+#   rank:       "`r DODschools::noTouch('metadata.yml')$reader3$rank`"
+#   service:    "`r DODschools::noTouch('metadata.yml')$reader3$service`"
+#   prevdegree: "`r DODschools::noTouch('metadata.yml')$reader3$currentDegree`"
 sf298name:    "`r DODschools::noTouch('metadata.yml')$author$sf298name`"
 contractnum:  "`r DODschools::noTouch('metadata.yml')$sf298$contractnum`"
 grantnum:     "`r DODschools::noTouch('metadata.yml')$sf298$grantnum`"
@@ -128,7 +128,7 @@ cite_options(citation_format = 'pandoc')
 
 For both releasability and compatibility reasons, the personnel data has been aggregated to the national level, limiting the detail to which relationships can be explored. This was done to match the national economic data available, and to protect personal information of the individuals included in the analysis. 
 
-The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal behavior and affected relationships. In the vein, the U.S. military is transitioning to a new retirement system in 2018 which may likewise alter the relationship (if any) between the economic environment and military members' separation decisions.
+The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal behavior and affected relationships. The U.S. military is also transitioning to a new retirement system in 2018 which may likewise alter the relationship (if any) between the economic environment and military members' separation decisions.
 
 ## Assumptions and Limitations
 
@@ -625,8 +625,10 @@ dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = TRUE,
 For this first pass, the model selected was a regression model with a fourth-order moving average and first-order seasonal autoregression on the errors. More explicitly:
 
 $$ y = \beta_0 + \beta_1x'_{1,t} + \beta_2x'_{2,t} + \beta_3x'_{3,t} + n_t$$
-where, $$ (1-\Phi_1 B^{12})n_t = (1 + \theta_4 B)^4e_t $$
-and, $$ x'_{i,t} = x_{i,t} - x_{i,t-1}$$
+where, 
+$$ (1-\Phi_1 B^{12})n_t = (1 + \theta_1B + \theta_2B^2 + \theta_3B^3 + \theta_4 B^4)e_t $$
+and, 
+$$ x'_{i,t} = x_{i,t} - x_{i,t-1}$$
 The coefficient estimates are below in Table \@ref(tab:dynreg1-coeff): 
 
 ```{r dynreg1-coeff, fig.align="center", fig.pos="H", fig.cap="Estimated Coefficients - Initial Model"}

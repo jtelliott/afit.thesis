@@ -499,13 +499,14 @@ LMM.lag.val <- subset(Labor.Market.Momentum.lag, start = set.split+1,
 
 # Initialize table to store results of loop. We are going to capture the 
 # variable combination, AICc, training RMSE, and validation RMSE
-lag.results <- tibble("Variable.Combo" = rep(NA, 125),
+lag.results <- tibble("UR.lag" = rep(NA, 125),
+                      "LFPR.lag" = rep(NA, 125),
+                      "LMM.lag" = rep(NA, 125),
                       "AICc" = rep(NA, 125),
                       "Training.RMSE" = rep(NA, 125),
                       "Validation.RMSE" = rep(NA, 125))
 
 m <- 1
-
 for(i in c(1:5)){
   for(j in c(1:5)){
     for(k in c(1:5)){
@@ -528,14 +529,17 @@ for(i in c(1:5)){
       
       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
       
-      lag.results[m, "Variable.Combo"] <- c(i,j,k)
+      lag.results[m, "UR.lag"] <- colnames(UR.lag.train)[i]
+      lag.results[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+      lag.results[m, "LMM.lag"] <- colnames(LMM.lag.train)[k]
       lag.results[m, "AICc"] <- dyn.model$aicc
       lag.results[m, "Training.RMSE"] <- dyn.model.err[1,2]
-      lag.results[m, "Training.RMSE"] <- dyn.model.err[2,2]
+      lag.results[m, "Validation.RMSE"] <- dyn.model.err[2,2]
       
       m <- m + 1
     }
   }
 }
 
+dyn.model.err[2,2]
 

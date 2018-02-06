@@ -15,7 +15,7 @@ grad_date: '22 March 2018'
 advisor:
   name: 'Raymond R. Hill'
   department: 'ENS' # Use three-letter designator
-  rank: 'Civilian'
+  rank: 
   service: 'usaf' # Use abbreviation - leave blank if NA
   currentDegree: 'PhD'
   phone: '937-255-3636 x7469'
