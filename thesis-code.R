@@ -1,7 +1,7 @@
 # check for req'd packages, install if not present
 list.of.packages <- c("tidyverse", "lubridate", "sas7bdat", "fpp2", "reshape2",
                       "stargazer", "knitcitations", "RefManageR", "xtable", 
-                      "kableExtra", "zoo")
+                      "kableExtra", "zoo", "tictoc")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
 
@@ -19,6 +19,7 @@ library(stargazer)
 library(kableExtra)
 library(knitr)
 library(gridExtra)
+library(tictoc)
 
 # set directory for lazy data referencing
 setwd("~/Documents/Grad School/Thesis/Data")
@@ -401,9 +402,10 @@ econ.vars.d.train <- subset(econ.vars.d, end = set.split)
 econ.vars.d.val <- subset(econ.vars.d, start = set.split+1)
 
 # We'll utilize the auto arima function from fpp2
+tic("dynamic regression")
 dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = TRUE,
                         stepwise = FALSE, approximation = FALSE)
-
+toc()
 # The first thing we'll want to check, after the model summary, is how our 
 # residuals behave. Do they appear to satisfy normality assumptions? Are there 
 # any outliers? Evidence of leftover autocorrelation? Essentially, we're 
@@ -434,4 +436,106 @@ autoplot(dyn.reg.1.f) +
 # however. Looking back at our model summary, it's clear that none of the estimated
 # coefficients for the economic indicators are statistically significant. Boo.
 # This could be for several reasons:
-# 1)
+#
+# 1) indicators are month-to-month changes, don't have large enough fluctuations
+# to cause significant changes
+# 
+# 2) no lagged information - i.e. current economic info probably doesn't affect 
+# current attrition rate
+#
+# 3) data might be too aggregated, contains too much noise to establish significant
+# relationships
+
+# In summary, dynreg gives better forecasts than naive models, but current 
+# specification doesn't reveal much in the way of economic insight
+
+#####################################
+#   Specification - Lagged Effects  #
+#####################################
+
+# Initially, we'll test 6, 12, 18, and 24 months for each indicator. We'll 
+# build a framework for any desired time-lag later.
+
+
+# lazy, inefficient lagged variable build - if there's time later we'll build a
+# function and generalize this process
+
+Unemployment.Rate.lag <- cbind(
+  lag0 = econ.vars.d[,"Unemployment.Rate.Adj"],
+  lag6 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -6),
+  lag12 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -12),
+  lag18 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -18), 
+  lag24 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -24)
+)
+
+Labor.Force.Participation.lag <- cbind(
+  lag0 = econ.vars.d[,"Labor.Force.Participation"],
+  lag6 = stats::lag(econ.vars.d[,"Labor.Force.Participation"],-6),
+  lag12 = stats::lag(econ.vars.d[,"Labor.Force.Participation"], -12),
+  lag18 = stats::lag(econ.vars.d[,"Labor.Force.Participation"], -18), 
+  lag24 = stats::lag(econ.vars.d[,"Labor.Force.Participation"], -24)
+)
+
+Labor.Market.Momentum.lag <- cbind(
+  lag0 = econ.vars.d[,"Labor.Market.Momentum"],
+  lag6 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -6),
+  lag12 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -12),
+  lag18 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -18), 
+  lag24 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -24)
+)
+
+# create train and val splits
+UR.lag.train <- subset(Unemployment.Rate.lag, end = set.split)
+UR.lag.val <- subset(Unemployment.Rate.lag, start = set.split+1, 
+                     end = dim(econ.vars.d)[1])
+
+LFPR.lag.train <- subset(Labor.Force.Participation.lag, end = set.split)
+LFPR.lag.val <- subset(Labor.Force.Participation.lag, start = set.split+1, 
+                     end = dim(econ.vars.d)[1])
+
+LMM.lag.train <- subset(Labor.Market.Momentum.lag, end = set.split)
+LMM.lag.val <- subset(Labor.Market.Momentum.lag, start = set.split+1, 
+                     end = dim(econ.vars.d)[1])
+
+# Initialize table to store results of loop. We are going to capture the 
+# variable combination, AICc, training RMSE, and validation RMSE
+lag.results <- tibble("Variable.Combo" = rep(NA, 125),
+                      "AICc" = rep(NA, 125),
+                      "Training.RMSE" = rep(NA, 125),
+                      "Validation.RMSE" = rep(NA, 125))
+
+m <- 1
+
+for(i in c(1:5)){
+  for(j in c(1:5)){
+    for(k in c(1:5)){
+      
+      xreg.train <- cbind(UR.lag.train[,i],
+                          LFPR.lag.train[,j],
+                          LMM.lag.train[,k])
+      
+      xreg.val <- cbind(UR.lag.val[,i],
+                        LFPR.lag.val[,j],
+                        LMM.lag.val[,k])
+      
+      dyn.model <- auto.arima(train.ts.3,
+                              xreg = xreg.train, 
+                              stepwise = FALSE, 
+                              approximation = FALSE,
+                              parallel = TRUE)
+      
+      dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+      
+      dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+      
+      lag.results[m, "Variable.Combo"] <- c(i,j,k)
+      lag.results[m, "AICc"] <- dyn.model$aicc
+      lag.results[m, "Training.RMSE"] <- dyn.model.err[1,2]
+      lag.results[m, "Training.RMSE"] <- dyn.model.err[2,2]
+      
+      m <- m + 1
+    }
+  }
+}
+
+

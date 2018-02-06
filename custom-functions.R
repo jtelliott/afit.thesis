@@ -20,6 +20,17 @@ reorder.cormat <- function(cormat){
   hc <- hclust(dd)
   cormat <-cormat[hc$order, hc$order]
 }
+
+#fxn for creating lagged sets
+for (x in colnames(econ.vars.d)){
   
+  paste0(x, ".lag") <- cbind(
+    lag0 = econ.vars.d[,x],
+    lag6 = stats::lag(econ.vars.d[, x], -6)
+  )
+    
+}
+
+
 
 
