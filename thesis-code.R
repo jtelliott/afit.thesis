@@ -6,7 +6,7 @@ new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"
 if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
 
 # source file containing functions created for this analysis
-source("~/Documents/Grad School/Thesis/elliott-econometric-personnel-retention-18/custom-functions.R")
+source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 
 #library loadout
 library(tidyverse)
@@ -22,8 +22,8 @@ library(gridExtra)
 library(tictoc)
 
 # set directory for lazy data referencing - allow switch between macOS and Windows
-#setwd("~/Documents/Grad School/Thesis/Data")
-setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/Data")
+setwd("~/Documents/Grad School/Thesis/github/afit.thesis/Data")
+# setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/Data")
 
 
 ###################
@@ -548,4 +548,64 @@ LMM.lag.val <- subset(Labor.Market.Momentum.lag, start = set.split+1,
 # }
 # 
 # saveRDS(lag.results, "lagResults.rds")
+
+# read in compiled lag.results
+lag.results <- readRDS("lagResults.rds")
+
+# summarize the selection criteria
+summary(lag.results[,4:6])
+
+# filter tibble to return rows where each metric is below respective first quartile
+lag.results %>% 
+  filter(lag.results[,"Validation.RMSE"] <= 156.4 & 
+           lag.results[,"Training.RMSE"] <= 133.1 & 
+           lag.results[,"AICc"] <= 1299)
+
+# only one result, might want to go back and loosen filter criteria - for now
+# let's investigate that one model
+
+# best across three
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"],
+                    LMM.lag.train[,"lag24"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                    LFPR.lag.val[,"lag18"],
+                    LMM.lag.val[,"lag24"])
+
+dyn.reg.2 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+
+dyn.reg.2.f <- forecast(dyn.reg.2, xreg = xreg.val, h = 20)
+
+autoplot(dyn.reg.2.f) + 
+  autolayer(dyn.reg.2$fitted) +
+  autolayer(val.ts.3) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+# we can also identify the 'top' model by the minimum of each criteria
+rbind(lag.results %>% 
+        filter(AICc == min(AICc)),
+      lag.results %>% 
+        filter(Training.RMSE == min(Training.RMSE)),
+      lag.results %>% 
+        filter(Validation.RMSE == min(Validation.RMSE)))
+
+# take best five models according to each criteria and see if there are any
+# commonalities
+
+best.by.AICc <- lag.results %>% 
+                  arrange(AICc) %>% 
+                  head(5) 
+
+best.by.trainingRMSE <- lag.results %>% 
+                          arrange(Training.RMSE) %>% 
+                          head(5)
+
+best.by.validationRMSE <- lag.results %>% 
+                            arrange(Validation.RMSE) %>% 
+                            head(5)
 
