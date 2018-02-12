@@ -23,3 +23,5 @@ stargazer
 kableExtra
 knitr
 gridExtra
+stringr
+forcats

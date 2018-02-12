@@ -21,7 +21,7 @@ author:
 advisor:
   name:       "`r DODschools::noTouch('metadata.yml')$advisor$name`"
   department: "`r DODschools::noTouch('metadata.yml')$advisor$department`"
-#  rank:       "`r DODschools::noTouch('metadata.yml')$advisor$rank`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$advisor$rank`"
   service:    "`r DODschools::noTouch('metadata.yml')$advisor$service`"
   prevdegree: "`r DODschools::noTouch('metadata.yml')$advisor$currentDegree`"
   phone:      "`r DODschools::noTouch('metadata.yml')$advisor$phone`"
@@ -32,18 +32,18 @@ reader1:
   rank:       "`r DODschools::noTouch('metadata.yml')$reader1$rank`"
   service:    "`r DODschools::noTouch('metadata.yml')$reader1$service`"
   prevdegree: "`r DODschools::noTouch('metadata.yml')$reader1$currentDegree`"
-# reader2:
-#   name:       "`r DODschools::noTouch('metadata.yml')$reader2$name`"
-#   department: "`r DODschools::noTouch('metadata.yml')$reader2$dept`"
-#   rank:       "`r DODschools::noTouch('metadata.yml')$reader2$rank`"
-#   service:    "`r DODschools::noTouch('metadata.yml')$reader2$service`"
-#   prevdegree: "`r DODschools::noTouch('metadata.yml')$reader2$currentDegree`"
-# reader3:
-#   name:       "`r DODschools::noTouch('metadata.yml')$reader3$name`"
-#   department: "`r DODschools::noTouch('metadata.yml')$reader3$dept`"
-#   rank:       "`r DODschools::noTouch('metadata.yml')$reader3$rank`"
-#   service:    "`r DODschools::noTouch('metadata.yml')$reader3$service`"
-#   prevdegree: "`r DODschools::noTouch('metadata.yml')$reader3$currentDegree`"
+reader2:
+  name:       "`r DODschools::noTouch('metadata.yml')$reader2$name`"
+  department: "`r DODschools::noTouch('metadata.yml')$reader2$dept`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$reader2$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$reader2$service`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader2$currentDegree`"
+reader3:
+  name:       "`r DODschools::noTouch('metadata.yml')$reader3$name`"
+  department: "`r DODschools::noTouch('metadata.yml')$reader3$dept`"
+  rank:       "`r DODschools::noTouch('metadata.yml')$reader3$rank`"
+  service:    "`r DODschools::noTouch('metadata.yml')$reader3$service`"
+  prevdegree: "`r DODschools::noTouch('metadata.yml')$reader3$currentDegree`"
 sf298name:    "`r DODschools::noTouch('metadata.yml')$author$sf298name`"
 contractnum:  "`r DODschools::noTouch('metadata.yml')$sf298$contractnum`"
 grantnum:     "`r DODschools::noTouch('metadata.yml')$sf298$grantnum`"
@@ -68,6 +68,7 @@ sf298_date: "`r format(Sys.Date(), '%d-%m-%Y')`"
 dissertation: "`r DODschools::noTouch('metadata.yml')$dissertation`"
 cite_style: "`r DODschools::noTouch('metadata.yml')$cite_style`"
 cite_shape: "`r DODschools::noTouch('metadata.yml')$cite_shape`"
+num_cite: "`r DODschools::noTouch('metadata.yml')$num_cite`"
 output: 
   DODschools::afit_thesis:
     highlight: tango
@@ -92,7 +93,7 @@ if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-
 
 
 # source file containing functions created for this analysis
-source("~/Documents/Grad School/Thesis/elliott-econometric-personnel-retention-18/custom-functions.R")
+source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 
 #analysis required libraries
 library(tidyverse)
@@ -128,11 +129,11 @@ cite_options(citation_format = 'pandoc')
 
 For both releasability and compatibility reasons, the personnel data has been aggregated to the national level, limiting the detail to which relationships can be explored. This was done to match the national economic data available, and to protect personal information of the individuals included in the analysis. 
 
-The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal behavior and affected relationships. The U.S. military is also transitioning to a new retirement system in 2018 which may likewise alter the relationship (if any) between the economic environment and military members' separation decisions.
+The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal behavior and affected relationships. The U.S. military is also transitioning to a new retirement system. It is possible that any relationships revealed in this thesis will be affected by the new retirement system. 
 
 ## Assumptions and Limitations
 
-As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force officer corps are largely transferrable to civilian labor markets (citation/justification??). This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III. Standard assumptions for regression modeling and forecasting are made (independent, normal, and homoscedastic errors) and are tested, as well. 
+As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force officer corps are largely transferrable to civilian labor markets. This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III. Standard assumptions for regression modeling and forecasting are made (independent, normal, and homoscedastic errors) and are tested, as well. 
 
 ## Outline
 
@@ -150,7 +151,7 @@ Managing personnel and modeling retention behaviors have, appropriately, long be
 
 All organizations have some problem associated with retaining their people. This is especially true of the the military, wherein members are routinely confronted with deployments, long duty hours, and frequent relocations - factors generally not found in non-military organizations. These factors produce high stress on the military members and their families, who play a significant role in a member's retention decision \cite{fugita-lakhani-1991}. Evidence suggest that individuals serving in the military are generally more tolerant of these conflicts \cite{capon-etal-2007}, but the causes of attrition involve more than just familial concerns. Kane \cite{kane-2012} argues the military suffers from a chronic personnel mismanagement problem: Members' merit is not rewarded nearly as well as it is in the private sector, in terms of personal recognition and upward movement, partly due to heavy bureaucratic restrictions. This disparity can lead to frustration and job dissatisfaction, damaging the member's commitment to the organization and incentivizing attrition \cite{capon-etal-2007}. 
 
-Compounding the internal frustrations, civilian labor markets can offer intense incentives for leaving. Barrows \cite{barrows-1993} details the mechanisms underpinning U.S. Air Force pilot attrition to civilian airlines, framing the problem with human capital theory. The military offers a unique opportunity for developing highly desired skill sets, placing member's in positions of high stress and responsibility at early stages of professional development \cite{kane-2012}. Furthermore, evidence suggests that military as an insitution is quite adept at attracting intelligent and capable individuals \cite{asch-hosek-2004}. Providing innately talented individuals with a high degree of general and specific training fosters the development of high-performers with desirable and broadly applicable skill sets. Therein lies the problem, civilian firms are typically more flexible in their ability to compensate individuals through organizational advancement and wage, often outcompeting the military \cite{kane-2012}. These phenomena are in direct contradiction to the principles for successful retention laid out by Asch \cite{asch-1993}. She explains that in order for military compensation to be attractive, it needs to be at least as great as the member's the expected wages and benefits offered by civilian labor markets. Compensation should also be contigent upon performance, reflecting the individual's value to the organization, to maintain motivation and disincentivize attrition \cite{asch-1993}. In order to best determine compensation, then, it behooves the military to develop methods for anticipating the effects of labor market conditions on military members' retention decisions. 
+Compounding the internal frustrations, civilian labor markets can offer intense incentives for leaving. Barrows \cite{barrows-1993} details the mechanisms underpinning U.S. Air Force pilot attrition to civilian airlines, framing the problem with human capital theory. The military offers a unique opportunity for developing highly desired skill sets, placing members in positions of high stress and responsibility at early stages of professional development \cite{kane-2012}. Furthermore, evidence suggests that military as an insitution is quite adept at attracting intelligent and capable individuals \cite{asch-hosek-2004}. Providing innately talented individuals with a high degree of general and specific training fosters the development of high-performers with desirable and broadly applicable skill sets. Therein lies the problem, civilian firms are typically more flexible in their ability to compensate individuals through organizational advancement and wage, often outcompeting the military \cite{kane-2012}. These phenomena are in direct contradiction to the principles for successful retention laid out by Asch \cite{asch-1993}. Asch explains that in order for military compensation to be attractive, it needs to be at least as great as the members' the expected wages and benefits offered by civilian labor markets. Compensation should also be contigent upon performance, reflecting the individual's value to the organization, to maintain motivation and disincentivize attrition \cite{asch-1993}. In order to best determine compensation, then, it behooves the military to develop methods for anticipating the effects of labor market conditions on military members' retention decisions. 
 
 <!--
 Additionally, Carrell [6] notes that military members are sensitive to local wage disparities between the government and private sector. Intuitively this makes sense, as members receive more exposure to the wage advantages and economic conditions in their local communities than national averages. 
@@ -167,38 +168,38 @@ Gass \cite{gass-1991} takes a more general view by modeling the manpower problem
 
 Barrows \cite{barrows-1993} analyzes retention, specifically for Air Force pilots, through the lens of human capital and internal labor market theories. He argues two points important to this thesis: the degree of specific training is inversely correlated with attrition, and that the Air Force personnel system suffers from the inefficiences typical of an internal labor market. 
 
-To the first point, the military offers a high degree of general and specific training. General training is conducive to attrition, as it allows the individual to more easily transfer between jobs. Specific training, on the other hand, decreases worker transferability and helps enforce retention. This effect is seen in differing retention rates between general pilots (cargo, heavies) and those with more specific skill sets (helicopters, fighters). One can imagine this would also reveal itself in the non-rated officer population; that is, career fields with transferable skill sets suffer more from attrition than those with specific skill sets, e.g. think logistics (general) versus aircraft maintenance (specific). 
+To the first point, the military offers a high degree of general and specific training. General training is conducive to attrition, as it allows the individual to more easily transfer between jobs. Specific training, on the other hand, decreases worker transferability and helps improve retention. This effect is seen in differing retention rates between general pilots (e.g. cargo, heavies) and those with more specific skill sets (e.g. helicopters, fighters). One can imagine this would also reveal itself in the non-rated officer population; that is, career fields with transferable skill sets suffer more from attrition than those with specific skill sets, e.g. think logistics (general) versus aircraft maintenance (specific). 
 
-Regarding the second point, workers are somewhat insulated from the competition posed by outside labor markets (e.g. a Major does not have to worry about a civilian being hired to replace her), and are paid according to position as opposed to productivity. Shielding employees from outside competition can possibly remove incentive for performance; individuals who feel more secure in their jobs may not try as hard. Not paying according to performance can be damaging in two ways: high-performers can feel undervalued and motived to leave, and under-performers could be receiving more than they produce.
+Regarding the second point, workers are somewhat insulated from the competition posed by outside labor markets (e.g. Majors do not have to worry about civilians being hired specifically to replace them), and are paid according to position as opposed to productivity. Shielding employees from outside competition can possibly remove incentive for performance; individuals who feel more secure in their jobs may not try as hard. Not paying according to performance can be damaging in two ways: high-performers can feel undervalued and motived to leave, and under-performers could be receiving more than they produce.
 
-Looking to the Navy, specifically Junior Surface Warfare Officers (SWOs), Gjurich \cite{gjurich-1999} found that one of the most important factors affecting retention was marriage. Single officers are more likely to leave than those with families. This actually may be a proxy for risk aversion, however. Those officers with dependents may be less likely to risk unemployment by leaving the military, choosing instead to keep a relatively secure job. Again, the importance of demographic factors was reinforced, but litte is said of the economic considerations.
+Looking to the Navy, specifically Junior Surface Warfare Officers (SWOs), Gjurich \cite{gjurich-1999} found that one of the most important factors affecting retention was marriage. Single officers are more likely to leave than those with families. This actually may be a proxy for risk aversion. Those officers with dependents may be less likely to risk unemployment by leaving the military, choosing instead to keep a relatively secure job. Again, the importance of demographic factors was reinforced, but litte is said of the economic considerations.
 
 In 2002, Demirel \cite{demirel-2002} used logit regression to analyze retention behaviors for officers at the end of their initial service obligation and at ten years of service. While the focus of this endeavor was to identify any changes in retention related to commissioning source, several other demographic factors - such as marital status, education level, and sex - were found to be statistically significant. This reinforces conclusions about demographic factors drawn by previous research efforts, and shows evidence that these trends generally apply to the military population, instead of particular service branches.
 
-Ramlall \cite{ramlall-2004} takes a less technical approach and surveys the existing employee motivation theories to offer an explanation of how employee motivations affect retention, and how the disregard for the principles contained therein motivate attrition. Many causes are discussed, and a few are consistent (or at least common) amongst the spectrum of motivation theories. When wages and promotions are not seen to be tied to performance, individuals are disincentivized and do not feel as loyal to the institution. Also, a lack of flexibility within job scheduling and structure is seen as disloyal or disrepectful to the individual. Lastly, when managers fail to act as coaches or aren't seen as facilitators to employees' career's, turnover rates tend to be greater. Given that civilian labor markets are generally more flexible in both pay structure and work scheduling, this research underpins the importance of incorporating civilian labor market conditions.
+Ramlall \cite{ramlall-2004} takes a less technical approach and surveys the existing employee motivation theories to offer an explanation of how employee motivations affect retention, and how the disregard for the principles contained therein motivate attrition. Many causes are discussed, and a few are consistent (or at least common) amongst the spectrum of motivation theories. When wages and promotions are not seen as tied to performance, individuals are disincentivized and do not feel as loyal to the institution. Also, a lack of flexibility within job scheduling and structure is seen as disloyal or disrepectful to the individual. Lastly, when managers fail to act as coaches or are not seen as facilitators to employees' careers, turnover rates tend to be greater. Given that civilian labor markets are generally more flexible in both pay structure and work scheduling, this research underpins the importance of incorporating civilian labor market conditions.
 
-More recently, Schofield \cite{schofield-2015} employs a logisitic regression model to identify key demographic influencing the retention decisions of non-rated Air Force Officers. She finds that career field grouping, distinguished graduate status at commissioning source, years of prior enlistment, and several other structural variables were significant. She then utilizes these factors to generate a series of survival functions describing retention patterns and behavior. Again, the importance of demographic factors is reinforced. However, any possible effects of economic factors were unexplored.
+More recently, Schofield \cite{schofield-2015} employs a logisitic regression model to identify key demographic factors influencing the retention decisions of non-rated Air Force Officers. She finds that career field grouping, distinguished graduate status at commissioning source, years of prior enlistment, and several other structural variables were significant. She then utilizes these factors to generate a series of survival functions describing retention patterns and behavior. Again, the importance of demographic factors is reinforced. However, any possible effects of economic factors were unexplored.
 
-Looking at the rated officer corps, Franzen \cite{franzen-2017} takes a similar approach - again using logisitic regression to identify significant factors used to generate survival functions. However, this attempt differs from Schofield by choosing to also assess the influence of economic, demographic, and other variables exogenous to the military. She finds that marital status, number of dependents, gender, source of commissioning, prior enlisted service, and the New Orders value from the Advance Durable Goods Report were all significant. The first couple support the aforementioned notion that familial strain caused by military service affects retention, the next few (gender, source of commissioning, and prior service) reaffirm the work conducted by Schofield. The last variable, New Orders, suggests that indicators of economic health play some role in retention decisions. This last observation is a motivation for this thesis.
+Looking at the rated officer corps, Franzen \cite{franzen-2017} takes a similar approach to Schofield \cite{schofield-2015} using logisitic regression to identify significant factors and generating survival functions. However, Franzen's work differs from Schofield by choosing to also assess the influence of economic, demographic, and other variables exogenous to the military. She finds that marital status, number of dependents, gender, source of commissioning, prior enlisted service, and the New Orders value from the Advance Durable Goods Report were all significant. The first couple support the aforementioned notion that familial strain caused by military service affects retention, the next few (gender, source of commissioning, and prior service) reaffirm the work conducted by Schofield. The last variable, New Orders, suggests that indicators of economic health play some role in retention decisions. This last observation is a motivation for this thesis.
 
-In that vein, we look to the work conducted by Jantscher \cite{jantscher-2016} where she conducts correlation analysis to determine the relationship between a host of economic indicators and retention rates for each Air Force Specialty Code (AFSC). The results of the preliminary correlation analysis provide a subset of economic indicators shown to be significantly correlated with retention, such as unemployment rates, gross national savings, real GDP growth, etc. She then attempts to form a regression model to forecast retention, but was unable due to high multicollinearity between many indicators. Nonetheless, her correlation analysis provides a starting point from which additional modeling techniques may be applied.
+In that vein is the work conducted by Jantscher \cite{jantscher-2016} where she conducts correlation analysis to determine the relationship between a host of economic indicators and retention rates for each Air Force Specialty Code (AFSC). The results of the preliminary correlation analysis provide a subset of economic indicators shown to be significantly correlated with retention, such as unemployment rates, gross national savings, real GDP growth, etc. She then attempts to form a regression model to forecast retention, but was unable due to build a model due high multicollinearity between many of the indicators. Nonetheless, her correlation analysis provides a starting point from which additional modeling techniques may be applied.
 
 ## Insights
 
-Based on the review of the literature, several key themes arise:
+Several key themes arise based on the review of the literature:
 
-- Demographic and economic factors play a significant role in a member's attitude towards retention
-- Military members are aware of and incorporate opportunities in the civilian labor market when deciding to remain in or leave military service
-- Logistic regression on demographic data yields promising results when predicting whether an individual will remain in service, but may be innappropriate for modeling aggregate trends
-- Effects estimation of economic factors through regression can be difficult, as many indicators are highly correlated
+- Demographic and economic factors can play a significant role in a member's attitude towards retention;
+- Military members are aware of and incorporate opportunities in the civilian labor market when deciding to remain in or leave military service;
+- Logistic regression on demographic data yields promising results when predicting whether an individual will remain in service, but may be innappropriate for modeling aggregate trends; and
+- Effects estimation of economic factors through regression can be difficult, as many indicators are highly correlated.
 
 What is also apparent is that there are several topics yet unexplored:
 
-- Modeling the military population with performanced-based pay structures and advancement schemes to examine effects on retention
-- Exactly how comparable the military population is to the civilian, how easily the professional skills sets exhibited by the former transfer to the latter
-- Applying other forecasting techniques (ARIMA, Exponential Smoothing, Dynamic Regression) to the retention problem
+- Modeling the military population with performanced-based pay structures and advancement schemes to examine effects on retention;
+- Exactly how comparable the military population is to the civilian, how easily the professional skills sets exhibited by the former transfer to the latter; and
+- Applying other forecasting techniques (ARIMA, Exponential Smoothing, Dynamic Regression) to the retention problem.
 
-This thesis focuses on the last point. We attempt to forecast Air Force Non-rated officer retention with a dynamic regression model in order to estimate the effects of different economic indicators, documenting the process in the next chapter.
+This thesis focuses on the last point. The goal is to forecast Air Force Non-rated officer retention with a dynamic regression model in order to estimate the effects of different economic indicators. This is covered in the next chapter.
 
 
 <!-- Reviewing the existing literature, several themes are apparent: demographic and economic factors play a large role in a member's decision to leave the military - skill transferability, spousal opinion, performance rewards, etc. all affect retention. This is neither new nor novel information. However, most recent technical analysis work has been focused on the demographic aspects. Though much theory points towards the influence of the economic environment, little technical analysis has focused on more than just unemployment or civilian wages. It is the aim of this thesis to expand, if only marginally, that consideration. -->
@@ -216,10 +217,10 @@ setwd("~/Documents/Grad School/Thesis/github/afit.thesis/Data")
 # Here we read in all our data and combine the relevant sets for something workable
 
 # Personnel Data
-afsc_list <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/lu_ao_afs.sas7bdat")
-assigned <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/assigned_levels.sas7bdat") %>% 
+afsc_list <- read.sas7bdat("lu_ao_afs.sas7bdat")
+assigned <- read.sas7bdat("assigned_levels.sas7bdat") %>% 
   spread(AFS, Assigned)
-attrition <- read.sas7bdat("~/Documents/Grad School/Thesis/Data/separations_count.sas7bdat") %>% 
+attrition <- read.sas7bdat("separations_count.sas7bdat") %>% 
   spread(AFS, Separation_Count) 
 
 # The dates in the personnel data are in total days since 1 Jan 1960 (SAS default)
@@ -313,15 +314,15 @@ val.ts.1 <- subset(df.ts.1, start = 128)
 
 ### Introduction
 
-Before any predictive or descriptive analysis can begin, the data must be understood. Every data set has its idiosyncracies, its own unqiue challenges. Understanding these characteristics and the meaning of the data - what the variables represent and how they might interact with each other - is key to any successful analytic endeavor. Here, the data are described in detail - sources, meaning, and peculiarities.
+Before any predictive or descriptive analysis can begin, the data must be understood. Every data set has its idiosyncracies, its own unqiue challenges. Understanding these characteristics and the meaning of the data - what the variables represent and how they might interact with each other - is key to any successful analytic endeavor. Here, the data are described in detail - its sources, meaning, and peculiarities.
 
 ### HAF/A1XDX
 
-The Strategic Analysis branch of the Force Management Division (AF/A1XDX) provided the data on Air Force personnel used in this thesis. The data are extracted from the Military Personnel Data System (MilPDS), a database containing Air Force personnel data for every airman over his or her career. The data are input by trained personnelists or are automatically updated within the system (e.g. age will automatically increase annually) The data were originally split into two separate `.sas7bdat` files, one containing monthly attrition numbers for each Air Force Specialty Code (AFSC) and the other detailing monthly assigned levels for each AFSC. Each file contains information starting in October of 2004 through September of 2017, for a total of 156 observations across 67 AFSCs. 
+The Strategic Analysis branch of the Force Management Division (AF/A1XDX) provided the data on Air Force personnel used in this thesis. The data are extracted from the Military Personnel Data System (MilPDS), a database containing Air Force personnel data for every airman over his or her career. The data are input by trained personnelists or are automatically updated within the system (e.g., age will automatically increase). The data were originally split into two separate `.sas7bdat` files, one containing monthly attrition numbers for each Air Force Specialty Code (AFSC) and the other detailing monthly assigned levels for each AFSC. Each file contains information starting in October of 2004 through September of 2017, for a total of 156 observations across 67 AFSCs. 
 
 ### Federal Reserve Bank of St. Louis
 
-The Federal Reserve Bank of St. Louis is one of 13 entities which comprise the United States' central bank (the others being 11 regional reserve banks and the Board of Governors). As a whole, this group is responsible for deciding on and enacting monetary policy for the U.S. They maintain expansive databases containing information about the economic environment - financial data, national employment statistics, private sector business data, etc. Fortunately, the Federal Reserve Bank of St. Louis offers public access to the Federal Reserve Economic Data (FRED) database via online interface. From here, historical data on several economic indicators were retrieved: the nation unemployment rate (both seasonally adjusted and non-adjusted), the labor force participation rate (LFPR), job openings (adjusted and not), total nonfarm job quits, the FED's labor market momentum index, real GDP per capita, and the consumer price index (CPI). Each indicator consists of monthly recordings across varying time spans (e.g. 1990-2016 vs 2001-2017).
+The Federal Reserve Bank of St. Louis is one of 13 entities which comprise the United States' central bank (the others being 11 regional reserve banks and the Board of Governors). As a whole, the central bank is responsible for deciding on and enacting monetary policy for the U.S. They maintain expansive databases containing information about the economic environment - financial data, national employment statistics, private sector business data, etc. Fortunately, the Federal Reserve Bank of St. Louis offers public access to the Federal Reserve Economic Data (FRED) database via online interface. From here, historical data on several economic indicators were retrieved: the nation unemployment rate (both seasonally adjusted and non-adjusted), the labor force participation rate (LFPR), job openings (adjusted and not), total nonfarm job quits, the FED's labor market momentum index, real GDP per capita, and the consumer price index (CPI). Each indicator consists of monthly recordings across varying time spans (e.g. 1990-2016 vs 2001-2017).
 
 The LFPR is the percentage of the population actively employed or looking for employment. Its movement can give insight into the strength of the economy - e.g. rising participation is usually associated with growth. When paired with unemployment rates, the LFPR can also reveal people's attitude about the economy. For example, the steady decline of participation from 2010 onward (seen in Figure \@ref(fig:lfpr-unemployment)) might indicate that the decrease in unemployment over the same period is somewhat exaggerated; people seeking, but unable to find, work may become discouraged and exit the labor force, artificially decreasing the unemployment rate. It is possible that this perception of economic health affects retention decisions. In this thesis, LFPR is restricted to members of the civilian labor force with at least a baccalaureate and no younger than 25 years of age, the subset most closely related to officers.
 
@@ -344,7 +345,7 @@ It is assumed that the skillsets of our target population (non-rated line office
 
 The labor market momentum index compares current labor market conditions to historical averages. A negative value indicates conditions below the long-term average, and a positive value indicates favorable conditions. The CPI examines the weighted average price of a basket of consumer goods and services; it is used to estimate the cost of living. There is some uncertainty involving employment in separation from the military, so cost of living information may be especially important to that decision as the military is excluded from CPI statistics.
 
-By including these variables in a regression model and estimating their effects, this thesis is attempting to capture military members' perceptions of economic health and job prospects, and use that information as a means to forecast attrition.
+By including these variables in a regression model and estimating their effects, this work seeks to capture military members' perceptions of economic health and job prospects, and use that information as a means to forecast attrition.
 
 ### Cleaning and Preparation
 
@@ -353,14 +354,26 @@ Perfect data is rarely found or received outside of the classroom, and such is t
 The personnel data is first converted from long to wide format. <!--what does this mean? elaborate--> This procedure generates missing values, and they need to be dealt with appropriately. Missing values can result from several underlying issues: data storage corruption, entry errors, miscommunication between software, etc. Luckily, none of those apply here. Since the attrition data is a monthly count of people exiting USAF service, the intuition is that these missing values simply represent a lack of an observation (i.e. zero separations). This is confirmed by the data's provider, and so all missing values are replaced with zero.
 Initially, observation dates are stored as the number of days since 1 Jan 1960 (the standard for SAS). This is transformed into YYYY-MM-DD, in order to merge with the economic data. Several columns are added, each the total separations for a specific subset of the officer corps: rated, non-rated line, non-line, etc. These sums will be the responses used for modeling.
 
-The economic data does not require much treatment, as it comes from a professionally managed database. One of the indicators, real GDP per capita, occurs in quarterly intervals - the rest are monthly. In order to combine, the observation for a quarter is carried through the quarter (e.g. the observation for Q1 2006 is applied to January, Febuary, and March 2006). Then, variables are renamed for clarity. Finally, economic data are merged with the personnel through an inner join, preserving only those observations in common. 
+The economic data do not require much treatment, as they come from a professionally managed database. One of the indicators, real GDP per capita, occurs in quarterly intervals - the rest are monthly. To make data comparable, the quarterly values are applied across each month in the quarter (e.g. the observation for Q1 2006 is applied over January, Febuary, and March 2006). Then, variables are also renamed for clarity. Finally, economic data are merged with the personnel through an inner join, preserving only those observations with dates common to both data sets. 
 
 
 ## Model Selection
 
+### Introduction
+
+This section documents the modeling process, the analytic decisions at each juncture and their reasons. Before starting, however, several key concepts and definitions must be reviewed. 
+
+General modeling practices involve horizontally splitting the original data set into at least two, sometimes three, subsets. This is done to ensure model fitting and assessment are independent processes. There are many ways to generate these subsets, each particular to the structure of the data. With time-series data, as in this thesis, the typical approach is to retain roughly the first 80 percent for model fitting, leaving the rest for model assessment. These two sections are respectively known as the training and validation sets. The training set is used to estimate model parameters, which are then used for predictions on subsequent observations. These predictions are compared against the validation set - actual, observed data - as a means of assessing model performance. Once a final model has been designated, the training and validation data are re-combined and used to produce out-of-sample forecasts. The training/validation approach is applied to each modeling technique discussed in this thesis.
+
+This endeavor utilizes two models for forecasting: naive and dynamic regression. The former is a far simpler technique and is only used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements. Regression models with multiple predictor variables assume independence of the predictors (also called regressors or exogeneous variables). All regression models assume errors normally and independently distributed around zero with constant variance. 
+
+
+
+
+
 ### Initial Exploration
 
-Before throwing around modeling techniques, the data is visually inspected. Plotting one response, total separations over all career fields, in Figure \@ref(fig:response-plot) shows significant spikes during 2005, '06, '07, and '14. We know that during these periods, special spearation incentive programs were introduced in order to artificially downsize the air force. The effects of these periods merit investigation later on, as they could negatively affect model performance. 
+The first step is to examine the data visually. Plotting one response, total separations over all career fields, in Figure \@ref(fig:response-plot) shows significant spikes during 2005, '06, '07, and '14. We know that during these periods, special spearation incentive programs were introduced in order to artificially downsize the air force. The effects of these periods merit investigation later on, as they could negatively affect model performance. 
 ```{r response-plot, fig.align="center", fig.cap="Monthly Officer Separations", fig.pos="H", fig.width=5, fig.height=3.5}
 autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
 ```
@@ -376,7 +389,7 @@ p
 
 ```
 
-Considering these plots, we expect that a seasonal model performs best and that we will have to perform some alteration to accomodate the outiers. To confirm, we fit naive models to the data and examine to results. Beyond revealing seasonlity and outlier effects, fitting naive models serves to establish a baseline to compare later models against. Naive models are as simplistic as possible, so if later models perform worse or only marginally better, it implies they are not capturing much information.
+Considering these plots, we expect that a seasonal model performs best and that we will have to perform some alteration to accomodate the outiers. To confirm, we fit naive models to the data and examine to results. Beyond revealing seasonality and outlier effects, fitting naive models establishes a baseline to compare against later models. Naive models are very simplistic, so if later models perform worse or only marginally better, it implies they are not capturing much information.
 
 ```{r}
 n.1 <- naive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
@@ -408,13 +421,13 @@ grid.arrange(p, q, nrow=2, left = "Total Attrition", bottom = "Time")
 Tables \@ref(tab:n-err) and \@ref(tab:sn-err) show different error metrics for each of the two models. By mean square error (MSE), the seasonal model generally fits the training data better, possibily indicating presence of seasonality effects. However, there is a large disparity between validation MSEs, possibly caused by the major spike in 2014 - reaffirming the earlier intuition about outlier effects.
 
 ```{r n-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Naive Results"}
-kable(n.1.error[,1:6], caption = "Naive Results")
+kable(n.1.error[,1:6], caption = "Naive Results", digits = 3, align = 'c')
 ```
 ```{r sn-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Seasonal Naive Results"}
-kable(sn.1.error[,1:6], caption = 'Seasonal Naive Results')
+kable(sn.1.error[,1:6], caption = 'Seasonal Naive Results', digits = 3, align = 'c')
 ```
 
-It is known that during years 2005, '06, '07, and '14 special separation programs were implemented. Given the effect those years appear to have on modeling, they ought to be dealt with before continuing. Before deciding how, the explicit points in question need to be identified. To help, refer back to Figure \@ref(fig:response-season-plot). We note above that the spikes generally occur in November and December. However, the observations from 2005 are close enough to those from other years that they may have resulted naturally. We do not want to remove too much information from the data set, only that which is misleading. So, November and December observations from 2006, '07, and '14 are selected for replacement. 
+It is known that during years 2005, '06, '07, and '14 special separation programs were implemented. Given the effect those years appear to have on modeling, they must be accomodated before continuing. Before deciding how, the explicit points in question need to be identified. To help, refer back to Figure \@ref(fig:response-season-plot). We note above that the spikes generally occur in November and December. However, the observations from 2005 are close enough to those from other years that they may have resulted naturally. We do not want to remove too much information from the data set, only that which is misleading. So, November and December observations from 2006, '07, and '14 are selected for replacement. 
 
 Given the seasonality in the data set, the replaced values should stem from matching observations in previous years, as opposed to previous observations within the same year. The outliers are replaced with the arithmetic mean of all years not being replaced (e.g. November 2006, '07, '14 is replaced with the mean separations in November for all other years).
 
@@ -446,13 +459,13 @@ df.ts.1[dec.ind, 'Total'] <- dec
 df.ts.1[nov.ind, 'Total'] <- nov
 ```
 
-Replotting the repsonse in Figure \@ref(fig:response-plot-2) shows a much better behaved data set. The data look fairly stationary, setting the stage for more forecasting complex models.
+Replotting the repsonse in Figure \@ref(fig:response-plot-2) shows a much better behaved data set. The data look fairly stationary, setting the stage for developing more complex forecasting models.
 
 ```{r response-plot-2, fig.align="center", fig.cap="Separations - Outliers Removed", fig.pos="H", fig.width=5, fig.height=3.5}
 autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
 ```
 
-With the outliers replaced, seasonal effects are much more apparent as well (see Figure \@ref(fig:response-season-plot-2) below), further enforcing the need for a seasonal model.
+With the outliers replaced, seasonal effects are much more apparent (see Figure \@ref(fig:response-season-plot-2) below), further enforcing the need for a seasonal model.
 
 ```{r response-season-plot-2, fig.align="center", fig.cap="Seasonal Plot: Outliers Removed", fig.pos="H", fig.width=5, fig.height=3.5}
 ggseasonplot(df.ts.1[,'Total'], year.labels = TRUE, year.labels.left = TRUE) +
@@ -460,8 +473,6 @@ ggseasonplot(df.ts.1[,'Total'], year.labels = TRUE, year.labels.left = TRUE) +
   ggtitle("Seasonal Plot: Total Separations") + 
   theme(legend.position = "none")
 ```
-
-The purpose of imputing those values was to help produce better models. That can be assessed by retraining the naive models and comparing against previous results.
 
 ```{r}
 # store split index
@@ -478,14 +489,15 @@ n.2.error <- accuracy(n.2, val.ts.2)
 sn.2.error <- accuracy(sn.2, val.ts.2)
 ```
 
-Table \@ref(tab:season-rmse-compare) below compares the seasonal naive RMSEs before and after imputating the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model's ability to capture information. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations is a worthwhile endeavor.
+Table \@ref(tab:season-rmse-compare) compares the seasonal naive RMSEs before and after imputating the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations was useful.
 
 ```{r season-rmse-compare, fig.align="center", fig.pos="H", fig.cap="Seasonal Naive Comparison - Before and After Imputation"}
 outlier.compare <- data_frame("Raw Data" = sn.1.error[,2],
                               "Imputed Data" = sn.2.error[,2])
 row.names(outlier.compare) <- c("Training", "Validation")
 
-kable(outlier.compare, row.names = TRUE, caption = "Seasonal Naive RMSE Comparison")
+kable(outlier.compare, row.names = TRUE, caption = "Seasonal Naive RMSE Comparison",
+      digits = 3, align = 'c')
 ```
 
 ```{r sn-forecast-2, fig.align="center", fig.pos="H", fig.cap="Seasonal Naive Forecast After Imputation", fig.width=5, fig.height=3}
@@ -495,13 +507,12 @@ autoplot(sn.2) +
   ylab("Total Attrition")
 ```
 
-Though an important step in the modeling process, these naive models are not the end goal. Rather, they help identify initial road bumps in the modeling process and create a baseline against which to compare other, more sophisticated models.
 
 ### Dynamic Regression
 
-One major shortfall of the naive model is the inability to include exogenous information, and this is is case for many forecasting methods (ARIMA, Decomposition, Exponential Smoothing, etc). However, these methods do allow the inclusion of autoregressive information, which normal regression techniques do not. 
+Naive models are simple, regression models adequately invlove exogenous predictor variables, and time series model adequately handle autoregressive components of data. Individually these models are useful, but cannot handle both exogenous and autoregressive components.
 
-The solution, then, is to combine efforts with dynamic regression. Dynamic regression is just a multivariate regression model with an ARIMA model on the errors. The regression piece allows independent variables to be used in predicting a response, and the ARIMA portion helps capture and account for autoregressive information which often exists in time-series data (thereby helping preserve the assumption of independent errors). The general formulation of a dynamic regression model with ARIMA(1,1,1) errors, for example, errors is:
+Dynamic regression is a multivariate regression model with an ARIMA model on the errors. The regression piece allows use of independent variables in predicting a response, and the ARIMA portion helps model the autoregressive information which can exist in time-series data. The general formulation of a dynamic regression model with ARIMA(1,1,1) errors:
 
 $$ y_t = \beta_0 + \beta_1x_{1,t} + ... + \beta_kx_{k,t} + n_t$$
 where,
@@ -509,7 +520,7 @@ where,
 $$ (1-\phi_1B)(1-B)n_t = (1+\theta_1B)e_t $$
 and $e_t$ is white noise.
 
-Before fitting the dynamic regression model, several steps must be taken to ensure other key assumptions are not violated. First is the issue of collinearity. Dependence between any subset of the regressors will primarily lead to innaccurate coefficient estimates, a result contrary to the goal of this endeavor. To help avoid this pitfall, a correlation heat map of possible regressors is built. Figure \@ref(fig:heat-map-1) shows the correlation between all pair-wise combinations of variables considered in the economic data set. There are many instances of collinearity, which is expected - many economic indicators are variations or flavors of the same information. There are some independent subsets, though, and these will be the candidates for the dynamic regression model.
+Fitting a dynamic regression model requires taking several steps to ensure key assumptions are not violated. First is the issue of collinearity. Dependence between any subset of the regressors can lead to innaccurate coefficient estimates, a result contrary to the goal of any modeling effort. To avoid this pitfall, a correlation heat map of possible regressors is built. Figure \@ref(fig:heat-map-1) shows the correlation between all pair-wise combinations of variables considered in the economic data set. There are many instances of collinearity, which is expected - many economic indicators are variations or flavors of the same information. There are some independent subsets, though, and these will be the candidates for the dynamic regression model.
 
 ```{r heat-map-1, fig.align="center", fig.pos="H", fig.cap="Correlation Matrix - Economic Indicators", fig.width=7, fig.height=5}
 df[which(names(econ_data) %ni% c("Date", "Date1"))] %>% 
@@ -542,9 +553,9 @@ df[which(names(econ_data) %ni% c("Date", "Date1"))] %>%
                                title.position = "top", title.hjust = 0.5))
 ```
 
-For the first stab at modeling, the Unemployment Rate (Adj.), Labor Force Participation Rate, and Market Momentum Index are selected. At this point, the stationarity of the regressors must be ensured. Non-stationary regressors also produce inconsistent coefficient estimates - even if they are independent. To assess, we plot the three indicators below in Figure \@ref(econ-vars-1). 
+For a first modeling step, Unemployment Rate (Adj.), Labor Force Participation Rate, and Market Momentum Index are selected as independent variables. First, stationarity of the regressors is checked. Non-stationary regressors produce inconsistent coefficient estimates - even if they are independent. To assess, a plot of the three indicators in Figure \@ref(fig:econ-vars-1) is generated. 
 
-```{r econ-vars-1, fig.align="center", fig.pos="H", fig.cap="Economic Indicators - Raw", fig.height=6, fig.width=7}
+```{r econ-vars-1, fig.align="center", fig.pos="H", fig.cap="Economic Indicators - Raw", fig.height=5, fig.width=7}
 # grab index of econ vars: LFPR, Unem.Adj, LMM
 econ.vars <- which(names(df) %in% c("Labor.Force.Participation",
                                             "Unemployment.Rate.Adj", 
@@ -599,7 +610,7 @@ response.ts <- ts(df.ts.1[-1,"Total"], start = c(2004, 11), frequency = 12)
 #head(response.ts)
 ```
 
-With stationary and independent economic indicators, we can move on from regression to the ARIMA piece of the model. Up to six parameters must be specified: the order of autoregression, degree of differencing, and order of the moving average ($p,d,$ and $q$, respectively) and their seasonal counterparts ($P,D,$ and $Q$). For the sake of time, these are not manually found; instead, a brute-force algorithm is used. A range is specified for each parameter, and a model is fit for every combination within the specified ranges; the model with the lowest corrected Akaike Information Criteria (AICc) is selected. For the first, and all subsequent, dynamic regression models in the thesis, the following ranges/values were used: 
+With stationary and independent economic indicators, we can move on from regression to the ARIMA piece of the model. Up to six parameters must be specified: the order of autoregression, degree of differencing, and order of the moving average ($p,d,$ and $q$, respectively) and their seasonal counterparts ($P,D,$ and $Q$). For the sake of time, these are not manually determined; instead, a brute-force algorithm is used. A range is specified for each parameter, and a model is fit for every combination within the specified ranges; the model with the lowest corrected Akaike Information Criteria (AICc) is selected. For the first, and all subsequent, dynamic regression models in this work, the following ranges/values were used: 
 $p,q \in [0,5]$, $d,D = 0$, and $P, Q \in [0,2]$. 
 
 
@@ -629,7 +640,7 @@ where,
 $$ (1-\Phi_1 B^{12})n_t = (1 + \theta_1B + \theta_2B^2 + \theta_3B^3 + \theta_4 B^4)e_t $$
 and, 
 $$ x'_{i,t} = x_{i,t} - x_{i,t-1}$$
-The coefficient estimates are below in Table \@ref(tab:dynreg1-coeff): 
+The coefficient estimates are shown in Table \@ref(tab:dynreg1-coeff): 
 
 ```{r dynreg1-coeff, fig.align="center", fig.pos="H", fig.cap="Estimated Coefficients - Initial Model"}
 
@@ -645,12 +656,13 @@ colnames(estimates) <- c("$\\theta_1$", "$\\theta_2$", "$\\theta_3$",
                          "$\\theta_4$", "$\\Phi_1$", "$\\beta_0$", 
                          "$\\beta_1$", "$\\beta_2$", "$\\beta_3$")
 
-kable(estimates, escape = FALSE, caption = "Estimated Coefficients - Initial Model")
+kable(estimates, escape = FALSE, caption = "Estimated Coefficients - Initial Model",
+      align = 'c', digits = 3)
 ```
 
 
 
-One of the primary sources of model assessment is analysis of the residuals. When inspecting the residuals, we are looking for evidence of leftover autocorrelation, satisfaction of normality assumptions ($e_t \sim N(0,\sigma^2)$), and outlier effects. Figure \@ref(fig:dynreg1-resid) below combines a few plots to help answer those questions. The top subfigure plots the raw model residuals, and is used to identify possible trends, seasonality, or heteroscedasticity. Fortunately, none of those features are apparent. The bottom-left searches for significant autocorrelation in the residuals. Raw residuals are correlated with themselves in increased lags, and any significant correlations would indicate a possible violation of the independence of the residuals. The current model's results only show one lag-period with significant autocorrelation, which may mean that there is information unnaccounted for by the model. Overall autocorrelation, however, appears to be insignificant, as further evidenced by the results of a Ljung-Box test for autocorrelation (Table \@ref(tab:dynreg1-boxtest)). The bottom-right plot shows a histogram of the residuals, comparing the raw distribution against the ideal normal. The plot shows slight skewness, but overall the data appear normal. In short, there is little - if any - misbehavior in the model's residuals.
+Model assessment involves analysis of the residuals. When inspecting the residuals, we are looking for evidence of remaining autocorrelation, satisfaction of normality assumptions ($e_t \sim N(0,\sigma^2)$), and outlier effects. Figure \@ref(fig:dynreg1-resid) provides plots used to answer those questions. The top subfigure plots the raw model residuals, and is used to identify possible trends, seasonality, or heteroscedasticity. Fortunately, none of those features are apparent. The bottom-left is used to examine significant autocorrelation in the residuals; significant correlations would indicate a possible violation of the independence of the residuals. The current model's results only show one lag-period with significant autocorrelation, which may mean that there is information unnaccounted for by the model. Overall autocorrelation, however, appears to be insignificant, as further evidenced by the results of a Ljung-Box test for autocorrelation (Table \@ref(tab:dynreg1-boxtest)). The bottom-right plot shows a histogram of the residuals, comparing the raw distribution against the ideal normal. The plot shows slight skewness, but overall the data appear normal. Thus, there is little - if any - misbehavior in the model's residuals.
 
 ```{r dynreg1-resid, fig.align="center", fig.pos="H", fig.cap="Initial Attrition Model - Residual Analysis", fig.height=5, fig.width=6}
 # The first thing we'll want to check, after the model summary, is how our 
@@ -677,8 +689,8 @@ kable(box.results, caption = "Initial Model - Autocorrelation Test")
 ```
 
 
-Next, forecasts are generated from the training data and compared against the validation data.
-Figure \@ref(fig:dynreg1-forecast) shows a model that looks to track attrition in much greater detail than the naive models, which is expected. Large movements are generally captured, even if not perfectly forecast. To get a sense of modeling progress, the RMSEs are from our models are compared in Table \@ref(tab:model-compare-1).
+Forecasts are generated from the training data and compared against the validation data.
+Figure \@ref(fig:dynreg1-forecast) plots the training and validation data against the model predictions. Large movements are generally captured, even if not perfectly forecast. To compare modeling performance, the RMSEs are from our models are compared in Table \@ref(tab:model-compare-1).
 
 
 ```{r dynreg1-forecast, fig.align="center", fig.pos="H", fig.cap="Initial Model - Forecasts Against Validation Data", fig.height=3.75, fig.width=6.5}
@@ -707,13 +719,13 @@ err.compare <- data_frame("Simple Naive" = n.2.error[,2],
 
 rownames(err.compare) <- c("Training", "Validation")
   
-kable(err.compare, caption = "Model RMSE Comparison")
+kable(err.compare, caption = "Model RMSE Comparison", align = 'c', digits = 3)
 
 ```
 
-Dynamic regression, thankfully, demonstrates greater ability to forecast the attrition data than the naive models. However, all is not well. The high standard errors of our regression coefficients (Table \@ref(tab:dynreg1-coeff)) indicate that none of the economic indicators are statistically significant, meaning the ARIMA model is handling all the forecasting and the regression is providing little insight. Essentially, no information is gained from the economic indicators as they have been specified. This could be for several reasons:
+Dynamic regression demonstrates greater ability to forecast the attrition data than the naive models. However, the high standard errors of the regression coefficients (Table \@ref(tab:dynreg1-coeff)) indicate that none of the economic indicators are statistically significant. This means the ARIMA model handles all the forecasting and the regression provides little insight. Essentially, the economic predictor variables do not explain much of the data variability. This could be for several reasons:
 
-- Having been differenced, the indicators represent month-to-month changes. For most observations in the data set those changes are marginal, resulting in an insignificant effect on attrition - numerically. 
+- With differencing, the indicators represent month-to-month changes. For most observations in the data set those changes are marginal, resulting in an insignificant effect on attrition - numerically. 
 
 - As they are, the indicators show only the previous month's change. That is, the regression coefficients represent the effects last month's changes have on this month's attrition. Intuitively, this does not seem correct. Voluntary separation from the military is a long, bureaucratic process; as such, one would think the time-line is well beyond a month.
 
@@ -734,7 +746,6 @@ Unfortunately, there is not much that can be done about the first point. As ment
 
 # TO-DO
 
-- Fix some of the Table references
 - Add complete set of lagged variable analysis
 - Introduce subsetting of officer population (total vs rated-only vs non-rated line vs etc)
 - Adjust legends and coloring in some figures

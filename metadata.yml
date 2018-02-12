@@ -26,18 +26,6 @@ reader1:
   rank: 'Major'
   service: 'usaf' # Use abbreviation - leave blank if NA
   currentDegree: 'PhD'
-reader2:
-  name:  # Second Reader
-  department:  # Use three-letter designator
-  rank: 
-  service:  # Use abbreviation - leave blank if NA
-  currentDegree: 
-reader3:
-  name:   # Third Reader
-  department:  # Use three-letter designator
-  rank: 
-  service:  # Use abbreviation - leave blank if NA
-  currentDegree: 
 document:
   title: "Air Force Officer Attrition: An Econometric Analysis"
   designator: 'AFIT-ENS-MS-18-M-118'
@@ -51,7 +39,7 @@ dedication: >
 acknowledgement: >
   The acknowledgement.
 vita: >
-  The vita.
+  
 distribution_statement:
   A: yes        # distribution unlimited
   B: no       # U.S. Government agencies only

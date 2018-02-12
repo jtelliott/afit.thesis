@@ -9,7 +9,6 @@ if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-
 source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 
 #library loadout
-library(tidyverse)
 library(sas7bdat)
 library(fpp2)
 library(zoo)
@@ -20,10 +19,12 @@ library(kableExtra)
 library(knitr)
 library(gridExtra)
 library(tictoc)
+library(tidyverse)
 
 # set directory for lazy data referencing - allow switch between macOS and Windows
-setwd("~/Documents/Grad School/Thesis/github/afit.thesis/Data")
-# setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/Data")
+# Basically just set working directory to wherever local repo is held
+setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
+# setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
 
 
 ###################
@@ -32,15 +33,16 @@ setwd("~/Documents/Grad School/Thesis/github/afit.thesis/Data")
 
 # Personnel data
 # simple list of AFSCs and description
-afsc_list <- read.sas7bdat("lu_ao_afs.sas7bdat")
+afsc_list <- read.sas7bdat("Data/lu_ao_afs.sas7bdat")
 # monthly records of assigned levels, broken out by AFSC - currently in longform
-assigned <- read.sas7bdat("assigned_levels.sas7bdat") %>% 
+assigned <- read.sas7bdat("Data/assigned_levels.sas7bdat") %>% 
   spread(AFS, Assigned)
 # monthly separation counts, broken out by AFSC - currently in longform
-attrition <- read.sas7bdat("separations_count.sas7bdat") %>% 
+attrition <- read.sas7bdat("Data/separations_count.sas7bdat") %>% 
   spread(AFS, Separation_Count) 
 
 # Econ data
+setwd("Data")
 econ_data <- list.files(pattern = "*_natl.csv") %>% 
   # Import data sets
   lapply(read_csv) %>% 
@@ -167,8 +169,8 @@ sn.1.error <- accuracy(sn.1, val.ts.1[,"Total"])
 
 # First, we see that the seasonal model performs worse on the validation set, 
 # indicating that it is possibly overfit or overly affected by some outliers
-kable(n.1.error, caption = "Naive Performance")
-kable(sn.1.error, caption = "Seasonal Naive Performance")
+kable(n.1.error, caption = "Naive Performance", digits = 3, align = 'c')
+kable(sn.1.error, caption = "Seasonal Naive Performance", digits = 3, align = 'c')
 
 
 # Plotting the forecasts against the validation data, we can see that outliers
