@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.12.15)  12 FEB 2018 14:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.12.15)  13 FEB 2018 11:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1145,7 +1145,7 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 
 ]
 <elliott-econometric-personnel-retention-18_files/figure-latex/lfpr-unemploymen
-t-1.pdf, id=339, 427.5975pt x 279.0425pt>
+t-1.pdf, id=341, 427.5975pt x 279.0425pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/lfpr-unempl
 oyment-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/lfpr-unemplo
@@ -1154,108 +1154,112 @@ Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
 e-latex/lfpr-unemployment-1.pdf  used on input line 825.
 (pdftex.def)             Requested size: 427.59645pt x 279.04181pt.
 [11] [12 <./elliott-econometric-personnel-retention-18_files/figure-latex/lfpr-
-unemployment-1.pdf>] [13]
+unemployment-1.pdf>]
+Overfull \hbox (81.60919pt too wide) in paragraph at lines 859--878
+ [][] 
+ []
+
+[13] [14]
 <elliott-econometric-personnel-retention-18_files/figure-latex/response-plot-1.
-pdf, id=364, 355.3275pt x 242.9075pt>
+pdf, id=371, 355.3275pt x 242.9075pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/response-pl
 ot-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/response-plo
 t-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/response-plot-1.pdf  used on input line 920.
+e-latex/response-plot-1.pdf  used on input line 961.
 (pdftex.def)             Requested size: 355.32661pt x 242.90689pt.
-[14]
 <elliott-econometric-personnel-retention-18_files/figure-latex/response-season-
-plot-1.pdf, id=373, 355.3275pt x 226.8475pt>
+plot-1.pdf, id=374, 355.3275pt x 226.8475pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/response-se
 ason-plot-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/response-sea
 son-plot-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/response-season-plot-1.pdf  used on input line 937.
+e-latex/response-season-plot-1.pdf  used on input line 978.
 (pdftex.def)             Requested size: 355.32661pt x 226.84694pt.
 [15 <./elliott-econometric-personnel-retention-18_files/figure-latex/response-p
 lot-1.pdf>]
 <elliott-econometric-personnel-retention-18_files/figure-latex/n-sn-forecast-1.
-pdf, id=387, 358.33875pt x 317.185pt>
+pdf, id=389, 358.33875pt x 317.185pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/n-sn-foreca
 st-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/n-sn-forecas
 t-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/n-sn-forecast-1.pdf  used on input line 958.
+e-latex/n-sn-forecast-1.pdf  used on input line 999.
 (pdftex.def)             Requested size: 358.33788pt x 317.1842pt.
 [16 <./elliott-econometric-personnel-retention-18_files/figure-latex/response-s
 eason-plot-1.pdf>] [17 <./elliott-econometric-personnel-retention-18_files/figu
 re-latex/n-sn-forecast-1.pdf>]
 <elliott-econometric-personnel-retention-18_files/figure-latex/response-plot-2-
-1.pdf, id=414, 355.3275pt x 242.9075pt>
+1.pdf, id=416, 355.3275pt x 242.9075pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/response-pl
 ot-2-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/response-plo
 t-2-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/response-plot-2-1.pdf  used on input line 1025.
+e-latex/response-plot-2-1.pdf  used on input line 1066.
 (pdftex.def)             Requested size: 355.32661pt x 242.90689pt.
 [18 <./elliott-econometric-personnel-retention-18_files/figure-latex/response-p
 lot-2-1.pdf>]
 <elliott-econometric-personnel-retention-18_files/figure-latex/response-season-
-plot-2-1.pdf, id=427, 355.3275pt x 242.9075pt>
+plot-2-1.pdf, id=429, 355.3275pt x 242.9075pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/response-se
 ason-plot-2-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/response-sea
 son-plot-2-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/response-season-plot-2-1.pdf  used on input line 1038.
+e-latex/response-season-plot-2-1.pdf  used on input line 1079.
 (pdftex.def)             Requested size: 355.32661pt x 242.90689pt.
 <elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast-2-1.
-pdf, id=431, 360.34625pt x 206.7725pt>
+pdf, id=433, 360.34625pt x 206.7725pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast
 -2-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast-
 2-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/sn-forecast-2-1.pdf  used on input line 1071.
+e-latex/sn-forecast-2-1.pdf  used on input line 1112.
 (pdftex.def)             Requested size: 360.34537pt x 206.77199pt.
 [19 <./elliott-econometric-personnel-retention-18_files/figure-latex/response-s
 eason-plot-2-1.pdf>] [20 <./elliott-econometric-personnel-retention-18_files/fi
 gure-latex/sn-forecast-2-1.pdf>]
 <elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-1.pdf
-, id=462, 349.305pt x 348.30125pt>
+, id=464, 349.305pt x 348.30125pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-
 1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-1
 .pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/heat-map-1-1.pdf  used on input line 1111.
+e-latex/heat-map-1-1.pdf  used on input line 1152.
 (pdftex.def)             Requested size: 349.30414pt x 348.3004pt.
 [21 <./elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1
 -1.pdf>]
 <elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1-1.pd
-f, id=477, 481.8pt x 351.3125pt>
+f, id=479, 481.8pt x 351.3125pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1
 -1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1-
 1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/econ-vars-1-1.pdf  used on input line 1127.
+e-latex/econ-vars-1-1.pdf  used on input line 1168.
 (pdftex.def)             Requested size: 481.79881pt x 351.31163pt.
 
-Overfull \hbox (12.0438pt too wide) in paragraph at lines 1127--1128
+Overfull \hbox (12.0438pt too wide) in paragraph at lines 1168--1169
  [][] 
  []
 
 <elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2-1.pd
-f, id=479, 481.8pt x 351.3125pt>
+f, id=481, 481.8pt x 351.3125pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2
 -1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2-
 1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/econ-vars-2-1.pdf  used on input line 1140.
+e-latex/econ-vars-2-1.pdf  used on input line 1181.
 (pdftex.def)             Requested size: 481.79881pt x 351.31163pt.
 
-Overfull \hbox (12.0438pt too wide) in paragraph at lines 1140--1141
+Overfull \hbox (12.0438pt too wide) in paragraph at lines 1181--1182
  [][] 
  []
 
@@ -1263,23 +1267,23 @@ Overfull \hbox (12.0438pt too wide) in paragraph at lines 1140--1141
 1-1.pdf>] [23 <./elliott-econometric-personnel-retention-18_files/figure-latex/
 econ-vars-2-1.pdf>]
 <elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-resid-1.
-pdf, id=505, 423.5825pt x 351.3125pt>
+pdf, id=507, 423.5825pt x 351.3125pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-res
 id-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-resi
 d-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/dynreg1-resid-1.pdf  used on input line 1211.
+e-latex/dynreg1-resid-1.pdf  used on input line 1252.
 (pdftex.def)             Requested size: 423.58147pt x 351.31163pt.
 [24]
 <elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-forecast
--1.pdf, id=513, 468.75125pt x 260.975pt>
+-1.pdf, id=515, 468.75125pt x 260.975pt>
 File: elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-for
 ecast-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-fore
 cast-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/dynreg1-forecast-1.pdf  used on input line 1240.
+e-latex/dynreg1-forecast-1.pdf  used on input line 1281.
 (pdftex.def)             Requested size: 468.75009pt x 260.97437pt.
 [25 <./elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-re
 sid-1.pdf>] [26 <./elliott-econometric-personnel-retention-18_files/figure-late
@@ -1363,31 +1367,31 @@ Underfull \hbox (badness 1838) in paragraph at lines 105--107
 \rhXI=\dimen170
 \rhXII=\dimen171
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.76003pt on input line 1414.
+(Font)              scaled to size 8.76003pt on input line 1455.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.00003pt on input line 1414.
+(Font)              scaled to size 8.00003pt on input line 1455.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 1414.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1455.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 8.00003pt on input line 1414.
+(Font)              scaled to size 8.00003pt on input line 1455.
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\uppercase' on input line 1443.
+(hyperref)                removing `\uppercase' on input line 1484.
 
 
-Overfull \vbox (48.4238pt too high) detected at line 1443
+Overfull \vbox (48.4238pt too high) detected at line 1484
  []
 
 
-Overfull \vbox (48.4238pt too high) detected at line 1472
+Overfull \vbox (48.4238pt too high) detected at line 1513
  []
 
 
-Overfull \vbox (39.94284pt too high) detected at line 1517
+Overfull \vbox (39.94284pt too high) detected at line 1558
  []
 
 
-Overfull \hbox (3.06526pt too wide) in paragraph at lines 1581--1581
+Overfull \hbox (3.06526pt too wide) in paragraph at lines 1622--1622
 []|$[]$|  
  []
 
@@ -1396,22 +1400,22 @@ AED: lastpage setting LastPage
 [32
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1583.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1583.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1624.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1624.
 (./elliott-econometric-personnel-retention-18.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1583.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1583.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1624.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1624.
 
 Package rerunfilecheck Info: File `elliott-econometric-personnel-retention-18.o
 ut' has not changed.
 (rerunfilecheck)             Checksum: 18DDB55368405347C72F0F4A573DB263;1691.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1583.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1624.
  ) 
 Here is how much of TeX's memory you used:
- 11797 strings out of 492985
- 171857 string characters out of 6132585
- 287765 words of memory out of 5000000
- 14975 multiletter control sequences out of 15000+600000
+ 11799 strings out of 492985
+ 171887 string characters out of 6132585
+ 287824 words of memory out of 5000000
+ 14976 multiletter control sequences out of 15000+600000
  33369 words of font info for 57 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  53i,16n,92p,1011b,618s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1435,11 +1439,11 @@ ts/type1/public/cm-super/sfti1200.pfb></usr/local/texlive/2017/texmf-dist/fonts
 rw/helvetic/uhvb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/helv
 etic/uhvr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/zapfding/uz
 dr.pfb>
-Output written on elliott-econometric-personnel-retention-18.pdf (42 pages, 443
-865 bytes).
+Output written on elliott-econometric-personnel-retention-18.pdf (42 pages, 445
+608 bytes).
 PDF statistics:
- 691 PDF objects out of 1000 (max. 8388607)
- 582 compressed objects within 6 object streams
- 125 named destinations out of 1000 (max. 500000)
+ 693 PDF objects out of 1000 (max. 8388607)
+ 584 compressed objects within 6 object streams
+ 126 named destinations out of 1000 (max. 500000)
  324 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -829,8 +829,8 @@ of age, the subset most closely related to officers.
 \caption{Participation and Unemployment}\label{fig:lfpr-unemployment}
 \end{figure}
 
-It is assumed that the skillsets of our target population (non-rated
-line officers) are most transferrable to those jobs covered by nonfarm
+It is assumed that the skillsets of our target population (Air Force
+officers) are most transferrable to those jobs covered by nonfarm
 payrolls. Nonfarm is a category that excludes proprietors, private
 household employees, unincorporated self-employment, unpaid volunteers,
 and farm employees \cite{fred-nonfarm-2017}. Job quits are generally
@@ -851,6 +851,31 @@ By including these variables in a regression model and estimating their
 effects, this work seeks to capture military members' perceptions of
 economic health and job prospects, and use that information as a means
 to forecast attrition.
+
+\begin{table}
+
+\caption{\label{tab:econ-var}Selected Economic Variables}
+\centering
+\begin{tabular}[t]{l|l}
+\hline
+\bfseries{Variable} & \bfseries{Description}\\
+\hline
+Labor Market Momentum Index & Compares current market conditions to long-run average\\
+\hline
+CPI & Weighted average price of a basket of goods and services\\
+\hline
+Nonfarm Jobs Openings & Unfilled positions at the end of the month in the nonfarm sector\\
+\hline
+Real GDP per Capita & Measure of economic output per person, adjusted for inflation\\
+\hline
+Nonfarm Job Quits & Voluntary separations from the nonfarm sector\\
+\hline
+Unemployment Rate & Percentage of unemployed individuals in the labor force\\
+\hline
+Labor Force Participation Rate & Percentage of the population either employed or actively seeking work\\
+\hline
+\end{tabular}
+\end{table}
 
 \hypertarget{cleaning-and-preparation}{%
 \subsection{Cleaning and Preparation}\label{cleaning-and-preparation}}
@@ -891,18 +916,34 @@ sets.
 \subsection{Introduction}\label{introduction-2}}
 
 This section documents the modeling process, the analytic decisions at
-each juncture and their reasons. However, several key concepts and
-definitions must first be reviewed.
+each juncture and their reasons. Before starting, however, several key
+concepts and definitions must be reviewed.
 
-General modelling practices involve splitting the original data set into
-at least two, sometimes three, subsets. This is done to ensure model
-fitting and assessment are independent processes. There are many ways to
-generate these subsets, each particular to the type of data. With
-time-series data, as in this thesis, the typical approach is to retain
-roughly the first 80 percent for model fitting, leaving the rest for
-model assessment. These two sections are respectively known as the
-training and validation sets. The training set is used to estimate model
-parameters, and the validation set is used to assess those estimates.
+General modeling practices involve horizontally splitting the original
+data set into at least two, sometimes three, subsets. This is done to
+ensure model fitting and assessment are independent processes. There are
+many ways to generate these subsets, each particular to the structure of
+the data. With time-series data, as in this thesis, the typical approach
+is to retain roughly the first 80 percent for model fitting, leaving the
+rest for model assessment. These two sections are respectively known as
+the training and validation sets. The training set is used to estimate
+model parameters, which are then used for predictions on subsequent
+observations. These predictions are compared against the validation set
+- actual, observed data - as a means of assessing model performance.
+Once a final model has been designated, the training and validation data
+are re-combined and used to produce out-of-sample forecasts. The
+training/validation approach is applied to each modeling technique
+discussed in this thesis.
+
+This endeavor utilizes two models for forecasting: naive and dynamic
+regression. The former is a far simpler technique and is only used as a
+baseline. The latter is a bit more complex. Dynamic regression has two
+major components, regression and time-series, each with their own
+assumptions and requirements. Regression models with multiple predictor
+variables assume independence of those predictors (also called
+regressors or exogeneous variables). All regression models assume errors
+are normally and independently distributed around zero with constant
+variance.
 
 \hypertarget{initial-exploration}{%
 \subsection{Initial Exploration}\label{initial-exploration}}
@@ -1397,7 +1438,7 @@ subsequent analysis.
 \parbox[][\rhIII][c]{.25\textwidth}{
 \vspace{0pt}
 \small 1. REPORT DATE (DD-MM-YYYY)\\[2pt]
-\textField[\TU{ }\V{12-02-2018}]{sf1}{.24\textwidth}{0.4cm}
+\textField[\TU{ }\V{13-02-2018}]{sf1}{.24\textwidth}{0.4cm}
 }\vrule\hspace{1pt}
 
 \parbox[][\rhIII][c]{.45\textwidth}{

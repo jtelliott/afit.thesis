@@ -96,7 +96,6 @@ if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-
 source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 
 #analysis required libraries
-library(tidyverse)
 library(sas7bdat)
 library(fpp2)
 library(zoo)
@@ -105,6 +104,7 @@ library(reshape2)
 library(kableExtra)
 library(knitr)
 library(gridExtra)
+library(tidyverse)
 
 #template req'd libraries
 library(knitcitations)
@@ -340,11 +340,33 @@ df.ts.1[,c("Labor.Force.Participation", "Unemployment.Rate.Adj")] %>%
 ```
 
 
-It is assumed that the skillsets of our target population (non-rated line officers) are most transferrable to those jobs covered by nonfarm payrolls. Nonfarm is a category that excludes proprietors, private household employees, unincorporated self-employment, unpaid volunteers, and farm employees \cite{fred-nonfarm-2017}. Job quits are generally voluntary separations and may reflect workers' willingness to leave; it may be that the a higher propensity to volutarily leave a job translates to a positive outlook on obtaining another. 
+It is assumed that the skillsets of our target population (Air Force officers) are most transferrable to those jobs covered by nonfarm payrolls. Nonfarm is a category that excludes proprietors, private household employees, unincorporated self-employment, unpaid volunteers, and farm employees \cite{fred-nonfarm-2017}. Job quits are generally voluntary separations and may reflect workers' willingness to leave; it may be that the a higher propensity to volutarily leave a job translates to a positive outlook on obtaining another. 
 
 The labor market momentum index compares current labor market conditions to historical averages. A negative value indicates conditions below the long-term average, and a positive value indicates favorable conditions. The CPI examines the weighted average price of a basket of consumer goods and services; it is used to estimate the cost of living. There is some uncertainty involving employment in separation from the military, so cost of living information may be especially important to that decision as the military is excluded from CPI statistics.
 
 By including these variables in a regression model and estimating their effects, this work seeks to capture military members' perceptions of economic health and job prospects, and use that information as a means to forecast attrition.
+
+```{r econ-var, fig.align='center', fig.pos='H', fig.cap='Selected Economic Variables'}
+
+vars <- tibble("Variable" = c('Labor Market Momentum Index', 'CPI', 
+                              'Nonfarm Jobs Openings', 'Real GDP per Capita', 
+                              'Nonfarm Job Quits', 'Unemployment Rate',
+                              'Labor Force Participation Rate'),
+               "Description" = c('Compares current market conditions to long-run average', 
+                                 'Weighted average price of a basket of goods and services', 
+                                 'Unfilled positions at the end of the month in the nonfarm sector', 
+                                 'Measure of economic output per person, adjusted for inflation', 
+                                 'Voluntary separations from the nonfarm sector', 
+                                 'Percentage of unemployed individuals in the labor force', 
+                                 'Percentage of the population either employed or actively seeking work'))
+
+kable(vars, caption = 'Selected Economic Variables', format = 'latex') %>% 
+  column_spec(column = 0, bold = TRUE) %>% 
+  row_spec(0, bold = TRUE) %>% 
+  kable_styling()
+
+```
+
 
 ### Cleaning and Preparation
 
@@ -364,10 +386,7 @@ This section documents the modeling process, the analytic decisions at each junc
 
 General modeling practices involve horizontally splitting the original data set into at least two, sometimes three, subsets. This is done to ensure model fitting and assessment are independent processes. There are many ways to generate these subsets, each particular to the structure of the data. With time-series data, as in this thesis, the typical approach is to retain roughly the first 80 percent for model fitting, leaving the rest for model assessment. These two sections are respectively known as the training and validation sets. The training set is used to estimate model parameters, which are then used for predictions on subsequent observations. These predictions are compared against the validation set - actual, observed data - as a means of assessing model performance. Once a final model has been designated, the training and validation data are re-combined and used to produce out-of-sample forecasts. The training/validation approach is applied to each modeling technique discussed in this thesis.
 
-This endeavor utilizes two models for forecasting: naive and dynamic regression. The former is a far simpler technique and is only used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements. Regression models with multiple predictor variables assume independence of the predictors (also called regressors or exogeneous variables). All regression models assume errors normally and independently distributed around zero with constant variance. 
-
-
-
+This endeavor utilizes two models for forecasting: naive and dynamic regression. The former is a far simpler technique and is only used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements. Regression models with multiple predictor variables assume independence of those predictors (also called regressors or exogeneous variables). All regression models assume errors are normally and independently distributed around zero with constant variance. <!-- NEEDS MORE -->
 
 
 ### Initial Exploration
