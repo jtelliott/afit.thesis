@@ -5,13 +5,8 @@ list.of.packages <- c("tidyverse", "lubridate", "sas7bdat", "fpp2", "reshape2",
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
 
-# source file containing functions created for this analysis
-#source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
-source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
-
 #library loadout
 library(sas7bdat)
-library(fpp2)
 library(zoo)
 library(lubridate)
 library(reshape2)
@@ -20,11 +15,17 @@ library(knitr)
 library(gridExtra)
 library(tictoc)
 library(tidyverse)
+library(fpp2)
+
 
 # set directory for lazy data referencing - allow switch between macOS and Windows
 # Basically just set working directory to wherever local repo is held
-# setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
-setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
+setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
+#setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
+
+# source file containing functions created for this analysis
+source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
+#source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
 
 
 ###################
@@ -611,3 +612,4 @@ best.by.validationRMSE <- lag.results %>%
                             arrange(Validation.RMSE) %>% 
                             head(5)
 
+dirname(sys.frame(1)$ofile)

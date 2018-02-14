@@ -69,8 +69,6 @@ dissertation: "`r DODschools::noTouch('metadata.yml')$dissertation`"
 cite_style: "`r DODschools::noTouch('metadata.yml')$cite_style`"
 cite_shape: "`r DODschools::noTouch('metadata.yml')$cite_shape`"
 num_cite: "`r DODschools::noTouch('metadata.yml')$num_cite`"
-header-includes:
-  - \usepackage{longtable}
 output: 
   DODschools::afit_thesis:
     highlight: tango
@@ -589,7 +587,7 @@ df[which(names(econ_data) %ni% c("Date", "Date1"))] %>%
                                title.position = "top", title.hjust = 0.5))
 ```
 
-For a first modeling step, Unemployment Rate (Adj.), Labor Force Participation Rate, and Market Momentum Index are selected as independent variables. The stationarity of the regressors is checked. Non-stationary regressors can produce inconsistent coefficient estimates - even if they are independent. To assess, a plot of the three indicators in Figure \@ref(fig:econ-vars-1) is generated. 
+Given their low correlation, the Unemployment Rate (Adj.), Labor Force Participation Rate, and Labor Market Momentum Index are selected as independent variables. In order to ensure the assumptions made by the ARIMA piece of the model, the stationarity of the regressors is checked. Though trend and seasonality components can be incorporated through regression techniques, ARIMA models require stationarity. Non-stationary variables can produce inconsistent coefficient estimates, even if they are independent. To assess, a plot of the three indicators in Figure \@ref(fig:econ-vars-1) is generated. 
 
 ```{r econ-vars-1, fig.align="center", fig.pos="H", fig.cap="Economic Indicators - Raw", fig.height=5, fig.width=7}
 # grab index of econ vars: LFPR, Unem.Adj, LMM
@@ -615,7 +613,7 @@ autoplot(econ.vars.d, facets = TRUE) +
 
 ```
 
-Simple differencing appears to produce the desired effects; there is no evident trend or seasonality in any of the indicators. It is important to note the regressors now show the month-to-month change, which will be important when interpreting results. <!--do I want to talk about the stationarity of the response?--> 
+Simple differencing appears to produce the desired effect; there is no evident trend or seasonality in any indicator. It is important to note the regressors now show the month-to-month change, which will be pertinent when interpreting results. <!--do I want to talk about the stationarity of the response?--> 
 
 ```{r}
 # Oh, yea - way better. Differenced, these variables look useable. Now while 
@@ -776,21 +774,17 @@ Unfortunately, there is not much that can be done about the first point. As ment
 
 \newpage
 
-# Conclusions
+# Conclusions and Insights
 
 # Appendix A. R Code {-}
 
-```{r eval=FALSE, echo=TRUE, tidy=TRUE}
+```{r eval=FALSE, echo=TRUE}
 # check for req'd packages, install if not present
 list.of.packages <- c("tidyverse", "lubridate", "sas7bdat", "fpp2", "reshape2",
                       "stargazer", "knitcitations", "RefManageR", "xtable", 
                       "kableExtra", "zoo", "tictoc")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
-
-# source file containing functions created for this analysis
-#source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
-source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
 
 #library loadout
 library(sas7bdat)
@@ -806,8 +800,12 @@ library(tidyverse)
 
 # set directory for lazy data referencing - allow switch between macOS and Windows
 # Basically just set working directory to wherever local repo is held
-# setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
-setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
+setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
+#setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
+
+# source file containing functions created for this analysis
+source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
+#source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
 
 ```
 

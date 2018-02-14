@@ -131,6 +131,46 @@
 % \lstnewenvironment{Rinput}{\lstset{style=Rinput}}{}
 % \lstnewenvironment{Rcode}{\lstset{style=Rinline}}{}
 % \lstnewenvironment{Routput}{\lstset{style=Routput}}{}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \def\afittocfootskip{0.41in}      %if above margins change, routines 
                                   %using this command may require 
                                   %retuning (alm)
@@ -845,7 +885,7 @@ of age, the subset most closely related to officers.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/lfpr-unemployment-1} 
+{\centering \includegraphics{figures/lfpr-unemployment-1} 
 
 }
 
@@ -887,7 +927,7 @@ Labor Market Momentum Index & Compares current market conditions to long-run ave
 CPI & Weighted average price of a basket of goods and services\\
 Nonfarm Jobs Openings & Unfilled positions at the end of the month in the nonfarm sector\\
 Real GDP per Capita & Measure of economic output per person, adjusted for inflation\\
-Nonfarm Job Quits & Voluntary separations from the nonfarm sector\\
+Nonfarm Job Quits & Voluntary separations from jobs in the nonfarm sector\\
 \addlinespace
 Unemployment Rate & Percentage of unemployed individuals in the labor force\\
 Labor Force Participation Rate & Percentage of the population either employed or actively seeking work\\
@@ -980,7 +1020,7 @@ they could negatively affect model performance.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-plot-1} 
+{\centering \includegraphics{figures/response-plot-1} 
 
 }
 
@@ -997,7 +1037,7 @@ and end.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-season-plot-1} 
+{\centering \includegraphics{figures/response-season-plot-1} 
 
 }
 
@@ -1018,7 +1058,7 @@ forecast and the 2014 spike carried through in the seasonal forecast.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/n-sn-forecast-1} 
+{\centering \includegraphics{figures/n-sn-forecast-1} 
 
 }
 
@@ -1085,7 +1125,7 @@ stage for developing more complex forecasting models.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-plot-2-1} 
+{\centering \includegraphics{figures/response-plot-2-1} 
 
 }
 
@@ -1098,7 +1138,7 @@ need for a seasonal model.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/response-season-plot-2-1} 
+{\centering \includegraphics{figures/response-season-plot-2-1} 
 
 }
 
@@ -1131,7 +1171,7 @@ Validation & 454.288 & 186.584\\
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast-2-1} 
+{\centering \includegraphics{figures/sn-forecast-2-1} 
 
 }
 
@@ -1159,22 +1199,23 @@ errors:
 
 Fitting a dynamic regression model requires taking several steps to
 ensure key assumptions are not violated. First is the issue of
-collinearity. Dependence between regressors can lead to innaccurate
-coefficient estimates, a result contrary to the goal of any modeling
-effort. To avoid this pitfall, a correlation heat map of possible
-regressors is built. Figure \ref{fig:heatmap} shows how correlated the
-economic indicators are with each other. A high correlation coefficient
-implies collinearity, meaning the associated indicators should not be be
-in the model together. Figure \ref{fig:heat-map-1} shows the correlation
-between all pair-wise combinations of variables considered in the
-economic data set. There are many instances of collinearity, which is
-expected - many economic indicators are variations or flavors of the
-same information. There are some independent subsets, though, and these
-will be the candidates for the dynamic regression model.
+collinearity. Collinearity between predictor variables implies a
+dependent relationship and can lead to innaccurate coefficient
+estimates, a result contrary to the goal of any modeling effort. To
+avoid this pitfall, a correlation matrix of possible regressors is
+built. A correlation matrix shows how collinear each pair of indicators
+is. A high correlation coefficient between indicators implies
+collinearity, meaning the they should not be used together in the model.
+Figure \ref{fig:heat-map-1} shows the correlation between all pair-wise
+combinations of variables in the economic data set. There are many
+instances of collinearity, which is expected - many economic indicators
+are constructed from similar information. There are some independent
+subsets, though, and these will be the candidates for the dynamic
+regression model.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-1} 
+{\centering \includegraphics{figures/heat-map-1-1} 
 
 }
 
@@ -1183,14 +1224,14 @@ will be the candidates for the dynamic regression model.
 
 For a first modeling step, Unemployment Rate (Adj.), Labor Force
 Participation Rate, and Market Momentum Index are selected as
-independent variables. First, stationarity of the regressors is checked.
-Non-stationary regressors produce inconsistent coefficient estimates -
-even if they are independent. To assess, a plot of the three indicators
-in Figure \ref{fig:econ-vars-1} is generated.
+independent variables. The stationarity of the regressors is checked.
+Non-stationary regressors can produce inconsistent coefficient estimates
+- even if they are independent. To assess, a plot of the three
+indicators in Figure \ref{fig:econ-vars-1} is generated.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1-1} 
+{\centering \includegraphics{figures/econ-vars-1-1} 
 
 }
 
@@ -1203,7 +1244,7 @@ resulting data are shown below in Figure \ref{fig:econ-vars-2}.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2-1} 
+{\centering \includegraphics{figures/econ-vars-2-1} 
 
 }
 
@@ -1242,14 +1283,13 @@ shown in Table \ref{tab:dynreg1-coeff}:
 
 \caption{\label{tab:dynreg1-coeff}Estimated Coefficients - Initial Model}
 \centering
-\begin{tabular}[t]{l|c|c|c|c|c|c|c|c|c}
-\hline
-  & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_4$ & $\Phi_1$ & $\beta_0$ & $\beta_1$ & $\beta_2$ & $\beta_3$\\
-\hline
+\begin{tabular}[t]{lccccccccc}
+\toprule
+\bfseries{ } & \bfseries{$\theta_1$} & \bfseries{$\theta_2$} & \bfseries{$\theta_3$} & \bfseries{$\theta_4$} & \bfseries{$\Phi_1$} & \bfseries{$\beta_0$} & \bfseries{$\beta_1$} & \bfseries{$\beta_2$} & \bfseries{$\beta_3$}\\
+\midrule
 Coeff & 0.218 & 0.145 & 0.336 & 0.260 & 0.576 & 429.875 & -13.390 & -15.949 & -2.819\\
-\hline
 StdErr & 0.087 & 0.088 & 0.092 & 0.092 & 0.082 & 47.602 & 22.286 & 35.016 & 11.494\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -1274,7 +1314,7 @@ Thus, there is little - if any - misbehavior in the model's residuals.
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-resid-1} 
+{\centering \includegraphics{figures/dynreg1-resid-1} 
 
 }
 
@@ -1303,7 +1343,7 @@ performance, the RMSEs are from our models are compared in Table
 
 \begin{figure}[H]
 
-{\centering \includegraphics{elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-forecast-1} 
+{\centering \includegraphics{figures/dynreg1-forecast-1} 
 
 }
 
@@ -1372,14 +1412,46 @@ subsequent analysis.
 
 \newpage
 
-\hypertarget{conclusions}{%
-\chapter{Conclusions}\label{conclusions}}
+\hypertarget{conclusions-and-insights}{%
+\chapter{Conclusions and Insights}\label{conclusions-and-insights}}
 
-\hypertarget{appendix-a}{%
-\chapter*{Appendix A}\label{appendix-a}}
-\addcontentsline{toc}{chapter}{Appendix A}
+\hypertarget{appendix-a.-r-code}{%
+\chapter*{Appendix A. R Code}\label{appendix-a.-r-code}}
+\addcontentsline{toc}{chapter}{Appendix A. R Code}
 
-Code?
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# check for req'd packages, install if not present}
+\NormalTok{list.of.packages <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{, }\StringTok{"lubridate"}\NormalTok{, }\StringTok{"sas7bdat"}\NormalTok{, }\StringTok{"fpp2"}\NormalTok{, }\StringTok{"reshape2"}\NormalTok{, }
+    \StringTok{"stargazer"}\NormalTok{, }\StringTok{"knitcitations"}\NormalTok{, }\StringTok{"RefManageR"}\NormalTok{, }\StringTok{"xtable"}\NormalTok{, }\StringTok{"kableExtra"}\NormalTok{, }\StringTok{"zoo"}\NormalTok{, }
+    \StringTok{"tictoc"}\NormalTok{)}
+\NormalTok{new.packages <-}\StringTok{ }\NormalTok{list.of.packages[}\OperatorTok{!}\NormalTok{(list.of.packages }\OperatorTok{%in%}\StringTok{ }\KeywordTok{installed.packages}\NormalTok{()[, }
+    \StringTok{"Package"}\NormalTok{])]}
+\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(new.packages)) }\KeywordTok{install.packages}\NormalTok{(new.packages, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+
+\CommentTok{# source file containing functions created for this analysis}
+\CommentTok{# source('~/Documents/Grad}
+\CommentTok{# School/Thesis/github/afit.thesis/custom-functions.R')}
+\KeywordTok{source}\NormalTok{(}\StringTok{"C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R"}\NormalTok{)}
+
+\CommentTok{# library loadout}
+\KeywordTok{library}\NormalTok{(sas7bdat)}
+\KeywordTok{library}\NormalTok{(fpp2)}
+\KeywordTok{library}\NormalTok{(zoo)}
+\KeywordTok{library}\NormalTok{(lubridate)}
+\KeywordTok{library}\NormalTok{(reshape2)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(gridExtra)}
+\KeywordTok{library}\NormalTok{(tictoc)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+
+\CommentTok{# set directory for lazy data referencing - allow switch between macOS and}
+\CommentTok{# Windows Basically just set working directory to wherever local repo is}
+\CommentTok{# held setwd('~/Documents/Grad School/Thesis/github/afit.thesis/')}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/Jake Elliott/Desktop/afit.thesis/"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{to-do}{%
 \chapter{TO-DO}\label{to-do}}
@@ -1396,8 +1468,6 @@ Code?
 \item
   Conclusion (\textless{}-- wait until lagged effects are fully explored
   before drawing insights)
-\item
-  Introduction (\textless{}-- wait until end? not sure how to introduce)
 \end{itemize}
 \newpage
 %==================================================================
