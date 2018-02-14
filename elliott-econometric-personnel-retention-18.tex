@@ -451,6 +451,29 @@ United States
 \hypertarget{background}{%
 \section{Background}\label{background}}
 
+As with any large organization, the personnel management functions of
+the components of the Department of Defense (DoD) are concerned with
+personnel retention. However, since the DoD must grow all its leaders,
+retention is for more important and challenging.
+
+The DoD has long offered an all or nothing 20-year retirement: stay to
+20 years and you are eligible for retirement benefits, leave before 20
+years and you have nothing. This 20-year goal has certainly been a
+positive retention motivator.
+
+The new blended retirement system will change the all of nothing aspect
+of military retirement. Personnel can now lave befire 20 years with some
+level of retirement benefits. These new options will surely change
+military retention patterns.
+
+Part of the military strategy to keep retention at desired levels is to
+increase pay levels of targeted personnel groups with retention bonuses.
+Clearly, military members offered such a bonus must consider the bonus
+and retaining versus civilian pay potential if the member separates.
+
+This research is a study of military retention as affected by economic
+measures used as indicators of civilian employment potential.
+
 \hypertarget{scope}{%
 \section{Scope}\label{scope}}
 
@@ -854,27 +877,22 @@ to forecast attrition.
 
 \begin{table}
 
-\caption{\label{tab:econ-var}Selected Economic Variables}
+\caption{\label{tab:econ-var}Selected Economic Indicators}
 \centering
-\begin{tabular}[t]{l|l}
-\hline
+\resizebox{\linewidth}{!}{\begin{tabular}[t]{ll}
+\toprule
 \bfseries{Variable} & \bfseries{Description}\\
-\hline
+\midrule
 Labor Market Momentum Index & Compares current market conditions to long-run average\\
-\hline
 CPI & Weighted average price of a basket of goods and services\\
-\hline
 Nonfarm Jobs Openings & Unfilled positions at the end of the month in the nonfarm sector\\
-\hline
 Real GDP per Capita & Measure of economic output per person, adjusted for inflation\\
-\hline
 Nonfarm Job Quits & Voluntary separations from the nonfarm sector\\
-\hline
+\addlinespace
 Unemployment Rate & Percentage of unemployed individuals in the labor force\\
-\hline
 Labor Force Participation Rate & Percentage of the population either employed or actively seeking work\\
-\hline
-\end{tabular}
+\bottomrule
+\end{tabular}}
 \end{table}
 
 \hypertarget{cleaning-and-preparation}{%
@@ -884,20 +902,24 @@ Perfect data is rarely found or received outside of the classroom, and
 such is the case here. Before exploration and modeling, several steps
 are taken to produce a useable data set.
 
-The personnel data is first converted from long to wide format. This
-procedure generates missing values, and they need to be dealt with
-appropriately. Missing values can result from several underlying issues:
-data storage corruption, entry errors, miscommunication between
-software, etc. Luckily, none of those apply here. Since the attrition
-data is a monthly count of people exiting USAF service, the intuition is
-that these missing values simply represent a lack of an observation
-(i.e.~zero separations). This is confirmed by the data's provider, and
-so all missing values are replaced with zero. Initially, observation
-dates are stored as the number of days since 1 Jan 1960 (the standard
-for SAS). This is transformed into YYYY-MM-DD, in order to merge with
-the economic data. Several columns are added, each the total separations
-for a specific subset of the officer corps: rated, non-rated line,
-non-line, etc. These sums will be the responses used for modeling.
+The personnel data is first converted from long to wide format.
+Originally, the personnel data comes with three variables: AFSC, Date,
+and Separations. This form is not conducive for modeling, so a new
+variable is created for each category in AFSC containing the associated
+separation counts. This procedure generates missing values, and they
+need to be dealt with appropriately. Missing values can result from
+several underlying issues: data storage corruption, entry errors,
+miscommunication between software, etc. Luckily, none of those apply
+here. Since the attrition data is a monthly count of people exiting USAF
+service, the intuition is that these missing values simply represent a
+lack of an observation (i.e.~zero separations). This is confirmed by the
+data's provider, and so all missing values are replaced with zero.
+Initially, observation dates are stored as the number of days since 1
+Jan 1960 (the standard for SAS). This is transformed into YYYY-MM-DD, in
+order to merge with the economic data. Several columns are added, each
+the total separations for a specific subset of the officer corps: rated,
+non-rated line, non-line, etc. These sums will be the responses used for
+modeling.
 
 The economic data do not require much treatment, as they come from a
 professionally managed database. One of the indicators, real GDP per
@@ -1137,15 +1159,18 @@ errors:
 
 Fitting a dynamic regression model requires taking several steps to
 ensure key assumptions are not violated. First is the issue of
-collinearity. Dependence between any subset of the regressors can lead
-to innaccurate coefficient estimates, a result contrary to the goal of
-any modeling effort. To avoid this pitfall, a correlation heat map of
-possible regressors is built. Figure \ref{fig:heat-map-1} shows the
-correlation between all pair-wise combinations of variables considered
-in the economic data set. There are many instances of collinearity,
-which is expected - many economic indicators are variations or flavors
-of the same information. There are some independent subsets, though, and
-these will be the candidates for the dynamic regression model.
+collinearity. Dependence between regressors can lead to innaccurate
+coefficient estimates, a result contrary to the goal of any modeling
+effort. To avoid this pitfall, a correlation heat map of possible
+regressors is built. Figure \ref{fig:heatmap} shows how correlated the
+economic indicators are with each other. A high correlation coefficient
+implies collinearity, meaning the associated indicators should not be be
+in the model together. Figure \ref{fig:heat-map-1} shows the correlation
+between all pair-wise combinations of variables considered in the
+economic data set. There are many instances of collinearity, which is
+expected - many economic indicators are variations or flavors of the
+same information. There are some independent subsets, though, and these
+will be the candidates for the dynamic regression model.
 
 \begin{figure}[H]
 
@@ -1350,6 +1375,12 @@ subsequent analysis.
 \hypertarget{conclusions}{%
 \chapter{Conclusions}\label{conclusions}}
 
+\hypertarget{appendix-a}{%
+\chapter*{Appendix A}\label{appendix-a}}
+\addcontentsline{toc}{chapter}{Appendix A}
+
+Code?
+
 \hypertarget{to-do}{%
 \chapter{TO-DO}\label{to-do}}
 
@@ -1438,7 +1469,7 @@ subsequent analysis.
 \parbox[][\rhIII][c]{.25\textwidth}{
 \vspace{0pt}
 \small 1. REPORT DATE (DD-MM-YYYY)\\[2pt]
-\textField[\TU{ }\V{13-02-2018}]{sf1}{.24\textwidth}{0.4cm}
+\textField[\TU{ }\V{14-02-2018}]{sf1}{.24\textwidth}{0.4cm}
 }\vrule\hspace{1pt}
 
 \parbox[][\rhIII][c]{.45\textwidth}{

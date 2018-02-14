@@ -69,6 +69,8 @@ dissertation: "`r DODschools::noTouch('metadata.yml')$dissertation`"
 cite_style: "`r DODschools::noTouch('metadata.yml')$cite_style`"
 cite_shape: "`r DODschools::noTouch('metadata.yml')$cite_shape`"
 num_cite: "`r DODschools::noTouch('metadata.yml')$num_cite`"
+header-includes:
+  - \usepackage{longtable}
 output: 
   DODschools::afit_thesis:
     highlight: tango
@@ -101,10 +103,10 @@ library(fpp2)
 library(zoo)
 library(lubridate)
 library(reshape2)
-library(kableExtra)
 library(knitr)
 library(gridExtra)
 library(tidyverse)
+library(kableExtra)
 
 #template req'd libraries
 library(knitcitations)
@@ -123,6 +125,16 @@ cite_options(citation_format = 'pandoc')
 # Introduction
 
 ## Background
+
+As with any large organization, the personnel management functions of the components of the Department of Defense (DoD) are concerned with personnel retention. However, since the DoD must grow all its leaders, retention is for more important and challenging.
+
+The DoD has long offered an all or nothing 20-year retirement: stay to 20 years and you are eligible for retirement benefits, leave before 20 years and you have nothing. This 20-year goal has certainly been a positive retention motivator.
+
+The new blended retirement system will change the all of nothing aspect of military retirement. Personnel can now lave befire 20 years with some level of retirement benefits. These new options will surely change military retention patterns.
+
+Part of the military strategy to keep retention at desired levels is to increase pay levels of targeted personnel groups with retention bonuses. Clearly, military members offered such a bonus must consider the bonus and retaining versus civilian pay potential if the member separates.
+
+This research is a study of military retention as affected by economic measures used as indicators of civilian employment potential.
 
 ## Scope
 
@@ -346,24 +358,30 @@ The labor market momentum index compares current labor market conditions to hist
 
 By including these variables in a regression model and estimating their effects, this work seeks to capture military members' perceptions of economic health and job prospects, and use that information as a means to forecast attrition.
 
-```{r econ-var, fig.align='center', fig.pos='H', fig.cap='Selected Economic Variables'}
+```{r econ-var, fig.cap='Selected Economic Indicators'}
 
-vars <- tibble("Variable" = c('Labor Market Momentum Index', 'CPI', 
+panderOptions('table.alignment.default',
+   function(df) ifelse(sapply(df, is.numeric), 'right', 'left'))
+
+vars <- data.frame(Variable = c('Labor Market Momentum Index', 'CPI', 
                               'Nonfarm Jobs Openings', 'Real GDP per Capita', 
                               'Nonfarm Job Quits', 'Unemployment Rate',
                               'Labor Force Participation Rate'),
-               "Description" = c('Compares current market conditions to long-run average', 
+                  Description = c('Compares current market conditions to long-run average', 
                                  'Weighted average price of a basket of goods and services', 
                                  'Unfilled positions at the end of the month in the nonfarm sector', 
                                  'Measure of economic output per person, adjusted for inflation', 
-                                 'Voluntary separations from the nonfarm sector', 
+                                 'Voluntary separations from jobs in the nonfarm sector', 
                                  'Percentage of unemployed individuals in the labor force', 
                                  'Percentage of the population either employed or actively seeking work'))
 
-kable(vars, caption = 'Selected Economic Variables', format = 'latex') %>% 
-  column_spec(column = 0, bold = TRUE) %>% 
-  row_spec(0, bold = TRUE) %>% 
-  kable_styling()
+
+kable(vars, format = "latex", booktabs = TRUE, caption = "Selected Economic Indicators") %>% 
+  kable_styling(full_width = FALSE, latex_options = "scale_down") %>% 
+  row_spec(0, bold = TRUE)
+
+
+# pander(vars, split.cell = 70, split.table = Inf)
 
 ```
 
@@ -372,7 +390,7 @@ kable(vars, caption = 'Selected Economic Variables', format = 'latex') %>%
 
 Perfect data is rarely found or received outside of the classroom, and such is the case here. Before exploration and modeling, several steps are taken to produce a useable data set.
 
-The personnel data is first converted from long to wide format. <!--what does this mean? elaborate--> This procedure generates missing values, and they need to be dealt with appropriately. Missing values can result from several underlying issues: data storage corruption, entry errors, miscommunication between software, etc. Luckily, none of those apply here. Since the attrition data is a monthly count of people exiting USAF service, the intuition is that these missing values simply represent a lack of an observation (i.e. zero separations). This is confirmed by the data's provider, and so all missing values are replaced with zero.
+The personnel data is first converted from long to wide format. Originally, the personnel data comes with three variables: AFSC, Date, and Separations. This form is not conducive for modeling, so a new variable is created for each category in AFSC containing the associated separation counts. This procedure generates missing values, and they need to be dealt with appropriately. Missing values can result from several underlying issues: data storage corruption, entry errors, miscommunication between software, etc. Luckily, none of those apply here. Since the attrition data is a monthly count of people exiting USAF service, the intuition is that these missing values simply represent a lack of an observation (i.e. zero separations). This is confirmed by the data's provider, and so all missing values are replaced with zero.
 Initially, observation dates are stored as the number of days since 1 Jan 1960 (the standard for SAS). This is transformed into YYYY-MM-DD, in order to merge with the economic data. Several columns are added, each the total separations for a specific subset of the officer corps: rated, non-rated line, non-line, etc. These sums will be the responses used for modeling.
 
 The economic data do not require much treatment, as they come from a professionally managed database. One of the indicators, real GDP per capita, occurs in quarterly intervals - the rest are monthly. To make data comparable, the quarterly values are applied across each month in the quarter (e.g. the observation for Q1 2006 is applied over January, Febuary, and March 2006). Then, variables are also renamed for clarity. Finally, economic data are merged with the personnel through an inner join, preserving only those observations with dates common to both data sets. 
@@ -538,7 +556,7 @@ where,
 $$ (1-\phi_1B)(1-B)n_t = (1+\theta_1B)e_t $$
 and $e_t$ is white noise.
 
-Fitting a dynamic regression model requires taking several steps to ensure key assumptions are not violated. First is the issue of collinearity. Dependence between any subset of the regressors can lead to innaccurate coefficient estimates, a result contrary to the goal of any modeling effort. To avoid this pitfall, a correlation heat map of possible regressors is built. Figure \@ref(fig:heat-map-1) shows the correlation between all pair-wise combinations of variables considered in the economic data set. There are many instances of collinearity, which is expected - many economic indicators are variations or flavors of the same information. There are some independent subsets, though, and these will be the candidates for the dynamic regression model.
+Fitting a dynamic regression model requires taking several steps to ensure key assumptions are not violated. First is the issue of collinearity. Collinearity between predictor variables implies a dependent relationship and can lead to innaccurate coefficient estimates, a result contrary to the goal of any modeling effort. To avoid this pitfall, a correlation matrix of possible regressors is built. A correlation matrix shows how collinear each pair of indicators is. A high correlation coefficient between indicators implies collinearity, meaning the they should not be used together in the model. Figure \@ref(fig:heat-map-1) shows the correlation between all pair-wise combinations of variables in the economic data set. There are many instances of collinearity, which is expected - many economic indicators are constructed from similar information. There are some independent subsets, though, and these will be the candidates for the dynamic regression model.
 
 ```{r heat-map-1, fig.align="center", fig.pos="H", fig.cap="Correlation Matrix - Economic Indicators", fig.width=7, fig.height=5}
 df[which(names(econ_data) %ni% c("Date", "Date1"))] %>% 
@@ -571,7 +589,7 @@ df[which(names(econ_data) %ni% c("Date", "Date1"))] %>%
                                title.position = "top", title.hjust = 0.5))
 ```
 
-For a first modeling step, Unemployment Rate (Adj.), Labor Force Participation Rate, and Market Momentum Index are selected as independent variables. First, stationarity of the regressors is checked. Non-stationary regressors produce inconsistent coefficient estimates - even if they are independent. To assess, a plot of the three indicators in Figure \@ref(fig:econ-vars-1) is generated. 
+For a first modeling step, Unemployment Rate (Adj.), Labor Force Participation Rate, and Market Momentum Index are selected as independent variables. The stationarity of the regressors is checked. Non-stationary regressors can produce inconsistent coefficient estimates - even if they are independent. To assess, a plot of the three indicators in Figure \@ref(fig:econ-vars-1) is generated. 
 
 ```{r econ-vars-1, fig.align="center", fig.pos="H", fig.cap="Economic Indicators - Raw", fig.height=5, fig.width=7}
 # grab index of econ vars: LFPR, Unem.Adj, LMM
@@ -675,9 +693,10 @@ colnames(estimates) <- c("$\\theta_1$", "$\\theta_2$", "$\\theta_3$",
                          "$\\beta_1$", "$\\beta_2$", "$\\beta_3$")
 
 kable(estimates, escape = FALSE, caption = "Estimated Coefficients - Initial Model",
-      align = 'c', digits = 3)
+      align = 'c', digits = 3, booktabs = TRUE, format = "latex") %>% 
+  kable_styling() %>% 
+  row_spec(0, bold = TRUE)
 ```
-
 
 
 Model assessment involves analysis of the residuals. When inspecting the residuals, we are looking for evidence of remaining autocorrelation, satisfaction of normality assumptions ($e_t \sim N(0,\sigma^2)$), and outlier effects. Figure \@ref(fig:dynreg1-resid) provides plots used to answer those questions. The top subfigure plots the raw model residuals, and is used to identify possible trends, seasonality, or heteroscedasticity. Fortunately, none of those features are apparent. The bottom-left is used to examine significant autocorrelation in the residuals; significant correlations would indicate a possible violation of the independence of the residuals. The current model's results only show one lag-period with significant autocorrelation, which may mean that there is information unnaccounted for by the model. Overall autocorrelation, however, appears to be insignificant, as further evidenced by the results of a Ljung-Box test for autocorrelation (Table \@ref(tab:dynreg1-boxtest)). The bottom-right plot shows a histogram of the residuals, comparing the raw distribution against the ideal normal. The plot shows slight skewness, but overall the data appear normal. Thus, there is little - if any - misbehavior in the model's residuals.
@@ -703,7 +722,6 @@ box.results <- data_frame("Test type" = p$method,
                           "p-value" = round(p$p.value, digits = 3))
 
 kable(box.results, caption = "Initial Model - Autocorrelation Test")
-
 ```
 
 
@@ -760,6 +778,38 @@ Unfortunately, there is not much that can be done about the first point. As ment
 
 # Conclusions
 
+# Appendix A. R Code {-}
+
+```{r eval=FALSE, echo=TRUE, tidy=TRUE}
+# check for req'd packages, install if not present
+list.of.packages <- c("tidyverse", "lubridate", "sas7bdat", "fpp2", "reshape2",
+                      "stargazer", "knitcitations", "RefManageR", "xtable", 
+                      "kableExtra", "zoo", "tictoc")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
+
+# source file containing functions created for this analysis
+#source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
+source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
+
+#library loadout
+library(sas7bdat)
+library(fpp2)
+library(zoo)
+library(lubridate)
+library(reshape2)
+library(kableExtra)
+library(knitr)
+library(gridExtra)
+library(tictoc)
+library(tidyverse)
+
+# set directory for lazy data referencing - allow switch between macOS and Windows
+# Basically just set working directory to wherever local repo is held
+# setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
+setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
+
+```
 
 
 # TO-DO
@@ -768,4 +818,3 @@ Unfortunately, there is not much that can be done about the first point. As ment
 - Introduce subsetting of officer population (total vs rated-only vs non-rated line vs etc)
 - Adjust legends and coloring in some figures
 - Conclusion (<-- wait until lagged effects are fully explored before drawing insights)
-- Introduction (<-- wait until end? not sure how to introduce)
