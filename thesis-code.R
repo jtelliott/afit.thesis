@@ -20,12 +20,18 @@ library(fpp2)
 
 # set directory for lazy data referencing - allow switch between macOS and Windows
 # Basically just set working directory to wherever local repo is held
-setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
+#setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
 #setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
 
+#test auto cd
+setwd(dirname(sys.frame(1)$ofile))
+
 # source file containing functions created for this analysis
-source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
+#source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 #source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
+
+#test source cd
+source(paste0(dirname(sys.frame(1)$ofile), "/custom-functions.R"))
 
 
 ###################
@@ -564,7 +570,7 @@ lag.results %>%
            lag.results[,"Training.RMSE"] <= 133.1 & 
            lag.results[,"AICc"] <= 1299)
 
-# only one result, might want to go back and loosen filter criteria - for now
+# only one result: 24, 18, 24, might want to go back and loosen filter criteria - for now
 # let's investigate that one model
 
 # best across three
@@ -590,12 +596,12 @@ autoplot(dyn.reg.2.f) +
   ylab("Total Attrition")
 
 # we can also identify the 'top' model by the minimum of each criteria
-rbind(lag.results %>% 
-        filter(AICc == min(AICc)),
-      lag.results %>% 
-        filter(Training.RMSE == min(Training.RMSE)),
-      lag.results %>% 
-        filter(Validation.RMSE == min(Validation.RMSE)))
+top.models.1 <- rbind(lag.results %>% 
+                        filter(AICc == min(AICc)),
+                      lag.results %>% 
+                        filter(Training.RMSE == min(Training.RMSE)),
+                      lag.results %>% 
+                        filter(Validation.RMSE == min(Validation.RMSE)))
 
 # take best five models according to each criteria and see if there are any
 # commonalities
@@ -612,4 +618,129 @@ best.by.validationRMSE <- lag.results %>%
                             arrange(Validation.RMSE) %>% 
                             head(5)
 
-dirname(sys.frame(1)$ofile)
+inner_join(best.by.AICc, best.by.trainingRMSE)
+inner_join(best.by.AICc, best.by.validationRMSE)
+inner_join(best.by.trainingRMSE, best.by.validationRMSE)
+
+# Only best.by.AICc and best.by.training.MSE have a model in common
+
+# we'll look more closely at the best model from each category and the model 
+# common to best.by.AICc and best.by.training.MSE - that's four more models
+
+# Best from each category:
+
+# AICc: 24, 18, 6
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"],
+                    LMM.lag.train[,"lag6"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag18"],
+                  LMM.lag.val[,"lag6"])
+
+dyn.reg.3 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+
+# trainingMSE: 24, 18, 24 - already done, best under 1st quartiles
+
+# validationMSE: 0, 0, 24 - problem: not interested in predictions based on
+# current data, doesn't allow for forecasts into future - purely reactive, not
+# proactive information
+
+# most common model: 24, 18, 6 - already looked at with dyn.reg.3
+
+# Q: So...what does dyn.reg.3 show?
+# A: Similar pattern with previous models - UR is significant, LFPR is almost
+# significant, and LMM is not. Investigation into LMM reveals that it is a 
+# result of Principle component analysis of several indicators, including 
+# UR. Explains the .56 corr coeff from the heatmap, and indicates that LMM and 
+# UR capture same information. Corr might be causing inefficiencies in coeff of
+# other two variables - UR and LFPR. Try dropping LMM and re-running lag 
+# analysis.
+
+# lag.results.2 <- tibble("UR.lag" = rep(NA, 25),
+#                       "LFPR.lag" = rep(NA, 25),
+#                       "AICc" = rep(NA, 25),
+#                       "Training.RMSE" = rep(NA, 25),
+#                       "Validation.RMSE" = rep(NA, 25))
+# 
+# m <- 1
+# for(i in c(1:5)){
+#   for(j in c(1:5)){
+# 
+#       xreg.train <- cbind(UR.lag.train[,i],
+#                           LFPR.lag.train[,j])
+# 
+#       xreg.val <- cbind(UR.lag.val[,i],
+#                         LFPR.lag.val[,j])
+# 
+#       dyn.model <- auto.arima(train.ts.3,
+#                               xreg = xreg.train,
+#                               stepwise = FALSE,
+#                               approximation = FALSE,
+#                               parallel = TRUE)
+# 
+#       dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+# 
+#       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+# 
+#       lag.results.2[m, "UR.lag"] <- colnames(UR.lag.train)[i]
+#       lag.results.2[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+#       lag.results.2[m, "AICc"] <- dyn.model$aicc
+#       lag.results.2[m, "Training.RMSE"] <- dyn.model.err[1,2]
+#       lag.results.2[m, "Validation.RMSE"] <- dyn.model.err[2,2]
+# 
+#       m <- m + 1
+#   }
+# }
+# 
+# saveRDS(lag.results.2, "lagResults2.rds")
+
+lag.results.2 <- readRDS("lagResults2.rds")
+
+# Now that we have a data set with only 2 variables - UR and LFPR - let's 
+# the best models in the same manner as before
+
+summary(lag.results.2[,3:5])
+
+lag.results.2 %>% 
+  filter(lag.results.2[,"Validation.RMSE"] <= 151.8 & 
+           lag.results.2[,"Training.RMSE"] <= 133.9 & 
+           lag.results.2[,"AICc"] <= 1303)
+
+# No single model falls below the 1st quartile for all three. Look at best by 
+# each criteria
+
+top.models.2 <- rbind(lag.results.2 %>% 
+                        filter(AICc == min(AICc)),
+                      lag.results.2 %>% 
+                        filter(Training.RMSE == min(Training.RMSE)),
+                      lag.results.2 %>% 
+                        filter(Validation.RMSE == min(Validation.RMSE)))
+
+# take best five models according to each criteria and see if there are any
+# commonalities
+
+best.by.AICc.2 <- lag.results.2 %>% 
+  arrange(AICc) %>% 
+  head(5) 
+
+best.by.trainingRMSE.2 <- lag.results.2 %>% 
+  arrange(Training.RMSE) %>% 
+  head(5)
+
+best.by.validationRMSE.2 <- lag.results.2 %>% 
+  arrange(Validation.RMSE) %>% 
+  head(5)
+
+inner_join(best.by.AICc.2, best.by.trainingRMSE.2))
+inner_join(best.by.AICc.2, best.by.validationRMSE.2)
+inner_join(best.by.trainingRMSE.2, best.by.validationRMSE.2)
+
+# No models common to all top 5
+
+#dirname(sys.frame(1)$ofile)
+
+
