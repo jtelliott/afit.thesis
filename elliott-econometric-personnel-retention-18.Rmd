@@ -80,6 +80,12 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, show = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -138,11 +144,11 @@ This research is a study of military retention as affected by economic measures 
 
 For both releasability and compatibility reasons, the personnel data has been aggregated to the national level, limiting the detail to which relationships can be explored. This was done to match the national economic data available, and to protect personal information of the individuals included in the analysis. 
 
-The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal behavior and affected relationships. The U.S. military is also transitioning to a new retirement system. It is possible that any relationships revealed in this thesis will be affected by the new retirement system. 
+The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal retention behavior. The U.S. military is also transitioning to a new retirement system. It is possible that any relationships revealed in this thesis will be affected by the new retirement system. 
 
 ## Assumptions and Limitations
 
-As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force officer corps are largely transferrable to civilian labor markets. This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III. Standard assumptions for regression modeling and forecasting are made (independent, normal, and homoscedastic errors) and are tested, as well. 
+As with any analytic endeavor, several assumptions are made in order to faciliate the modeling of real world phenomena. Perhaps most central to this thesis is the assumption that there exists at least one economic indicator (but ideally many) that helps inform an individual military member's decision to stay or leave active duty service. It is also assumed that if these variables do not directly inform retention decisions, they serve as adequate proxies for unobservable or abstract factors that do influence the individual's decision. For instance, members may not follow the movements of the Consumer Price Index (CPI), but that movement should provide information on the cost of living which may affect the decision to stay in the military. We also assume that the skills held by the Air Force officer corps are largely transferrable to civilian labor markets. <!--This relationship may not hold equally across all Air Force career fields, however, and is investigated later in Chapter III-->. Standard assumptions for regression modeling and forecasting are made (independent, normal, and homoscedastic errors) and are tested, as well. 
 
 ## Outline
 
@@ -358,9 +364,6 @@ By including these variables in a regression model and estimating their effects,
 
 ```{r econ-var, fig.cap='Selected Economic Indicators'}
 
-panderOptions('table.alignment.default',
-   function(df) ifelse(sapply(df, is.numeric), 'right', 'left'))
-
 vars <- data.frame(Variable = c('Labor Market Momentum Index', 'CPI', 
                               'Nonfarm Jobs Openings', 'Real GDP per Capita', 
                               'Nonfarm Job Quits', 'Unemployment Rate',
@@ -400,10 +403,19 @@ The economic data do not require much treatment, as they come from a professiona
 
 This section documents the modeling process, the analytic decisions at each juncture and their reasons. Before starting, however, several key concepts and definitions must be reviewed. 
 
-General modeling practices involve horizontally splitting the original data set into at least two, sometimes three, subsets. This is done to ensure model fitting and assessment are independent processes. There are many ways to generate these subsets, each particular to the structure of the data. With time-series data, as in this thesis, the typical approach is to retain roughly the first 80 percent for model fitting, leaving the rest for model assessment. These two sections are respectively known as the training and validation sets. The training set is used to estimate model parameters, which are then used for predictions on subsequent observations. These predictions are compared against the validation set - actual, observed data - as a means of assessing model performance. Once a final model has been designated, the training and validation data are re-combined and used to produce out-of-sample forecasts. The training/validation approach is applied to each modeling technique discussed in this thesis.
+General modeling practices involve horizontally splitting the original data set into at least two, sometimes three, subsets. This is done to ensure model fitting and assessment are independent processes. There are many ways to generate these subsets, each particular to the structure of the data. With time-series data, as in this thesis, the typical approach is to retain roughly the first 80 percent for model fitting, leaving the rest for model assessment. These two sections are respectively known as the training and validation sets. The training set is used to estimate model parameters, which are then used for predictions on subsequent observations. These predictions are compared against the validation set - actual, observed data - as a means of assessing model performance. Model performance is assessed using three criteria: the corrected Akaike Information Criteria (AICc), training root mean square error (training RMSE), and validation mean square error (validation RMSE). Generally, better model performance is associated with lower scores for each criteria, so 'good' models are identified by having low scores relative to other models. The training/validation approach is applied to each modeling technique discussed in this thesis.
 
-This endeavor utilizes two models for forecasting: naive and dynamic regression. The former is a far simpler technique and is only used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements. Regression models with multiple predictor variables assume independence of those predictors (also called regressors or exogeneous variables). All regression models assume errors are normally and independently distributed around zero with constant variance. <!-- NEEDS MORE -->
+This endeavor utilizes two models for forecasting: naive models and dynamic regression models (also known as transfer functions). The former is a far simpler technique and is only used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements.
 
+Regression models with multiple predictor variables assume independence of those predictors (also called regressors or exogeneous variables). All regression models assume errors are normally and independently distributed around zero with constant variance. The regression portion is primarily concerned with coefficients of the predictor variables. These coefficients provide insight as to which predictors have a statisically significant effect on the model. 
+
+ARIMA models are used to address the pecularities of time series data, and a brief understanding of those characteristics is necessary to understanding the analysis in Chapter III. Foremost is the concept of autocorrelation, which is when a variable (e.g. the temperature) is dependent on previous observations of itself. Another concept central to subsequent modeling efforts is that of stationarity. A stationary variable is one that does not exhibit trend or seasonality effects - when plotted over time, it looks much like white noise. Stationarity is requisite for generating reliable forecasts with time-series models. Last is a matter of notation. In this thesis, backstep notation is used to indicate backwards time steps, denoted with $B$ and is defined as such:
+
+For a single step back,
+$$ By_t = y_{t-1} $$
+for two steps back,
+$$ B^2y_t = y_{t-2} $$
+et cetera.
 
 ### Initial Exploration
 
@@ -455,10 +467,16 @@ grid.arrange(p, q, nrow=2, left = "Total Attrition", bottom = "Time")
 Tables \@ref(tab:n-err) and \@ref(tab:sn-err) show different error metrics for each of the two models. By mean square error (MSE), the seasonal model generally fits the training data better, possibily indicating presence of seasonality effects. However, there is a large disparity between validation MSEs, possibly caused by the major spike in 2014 - reaffirming the earlier intuition about outlier effects.
 
 ```{r n-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Naive Results"}
-kable(n.1.error[,1:6], caption = "Naive Results", digits = 3, align = 'c')
+kable(n.1.error[,1:6], caption = "Naive Results", digits = 3, align = 'c', 
+      format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
 ```
 ```{r sn-err, fig.align="center", fig.pos="H", fig.width=4, fig.cap="Seasonal Naive Results"}
-kable(sn.1.error[,1:6], caption = 'Seasonal Naive Results', digits = 3, align = 'c')
+kable(sn.1.error[,1:6], caption = 'Seasonal Naive Results', digits = 3, align = 'c', 
+      format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
 ```
 
 It is known that during years 2005, '06, '07, and '14 special separation programs were implemented. Given the effect those years appear to have on modeling, they must be accomodated before continuing. Before deciding how, the explicit points in question need to be identified. To help, refer back to Figure \@ref(fig:response-season-plot). We note above that the spikes generally occur in November and December. However, the observations from 2005 are close enough to those from other years that they may have resulted naturally. We do not want to remove too much information from the data set, only that which is misleading. So, November and December observations from 2006, '07, and '14 are selected for replacement. 
@@ -531,7 +549,9 @@ outlier.compare <- data_frame("Raw Data" = sn.1.error[,2],
 row.names(outlier.compare) <- c("Training", "Validation")
 
 kable(outlier.compare, row.names = TRUE, caption = "Seasonal Naive RMSE Comparison",
-      digits = 3, align = 'c')
+      digits = 3, align = 'c', format = "latex", booktabs = TRUE) %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
 ```
 
 ```{r sn-forecast-2, fig.align="center", fig.pos="H", fig.cap="Seasonal Naive Forecast After Imputation", fig.width=5, fig.height=3}
@@ -718,8 +738,10 @@ p <- Box.test(dyn.reg.1$residuals, lag = 24, type = "Lj", fitdf = 9)
 box.results <- data_frame("Test type" = p$method, 
                           "Test statistic" = round(p$statistic, digits = 3),
                           "p-value" = round(p$p.value, digits = 3))
-
-kable(box.results, caption = "Initial Model - Autocorrelation Test")
+box.results %>% 
+  kable(caption = "Initial Model - Autocorrelation Test", booktabs = TRUE, format = "latex") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
 ```
 
 
@@ -753,7 +775,9 @@ err.compare <- data_frame("Simple Naive" = n.2.error[,2],
 
 rownames(err.compare) <- c("Training", "Validation")
   
-kable(err.compare, caption = "Model RMSE Comparison", align = 'c', digits = 3)
+kable(err.compare, format = "latex", caption = "Model RMSE Comparison", digits = 3, booktabs = TRUE) %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
 
 ```
 
@@ -761,24 +785,169 @@ Dynamic regression demonstrates greater ability to forecast the attrition data t
 
 - With differencing, the indicators represent month-to-month changes. For most observations in the data set those changes are marginal, resulting in an insignificant effect on attrition - numerically. 
 
-- As they are, the indicators show only the previous month's change. That is, the regression coefficients represent the effects last month's changes have on this month's attrition. Intuitively, this does not seem correct. Voluntary separation from the military is a long, bureaucratic process; as such, one would think the time-line is well beyond a month.
-
 - The economic and personnel data are both aggregated to the national level. It is possible that such a degree of aggregation includes so much noise that any economic effects are being masked.
 
-Unfortunately, there is not much that can be done about the first point. As mentioned earlier, the indicators must be stationary in order to ensure the reliability of any potential effects, and the data must be differenced to be stationary. The rest of the thesis, then, focuses on the last two points. It is simple enough to introduce lagged regressors, and that process is introduced next. As for aggregation, the economic data cannot be broken down, but the personnel data can (to an extent). Currently, the personnel data encompasses all AFSCs. It may be that different subsets of the Air Force officer corps are more sensitive to economic conditions than others, a possibility investigated in subsequent analysis.
+- As they are, the indicators show only the previous month's change. The regression coefficients represent the effects last month's changes have on this month's attrition. Intuitively, this does not seem correct. Voluntary separation from the military is a long, bureaucratic process; as such, it is more probable that members decide to leave the military more than a month ahead of time.
 
-### Lagged Indicators
+Unfortunately, there is not much that can be done about the first point. As mentioned earlier, the indicators must be stationary in order to ensure the reliability of any potential effects, and the data must be differenced to be stationary. <!--The rest of the thesis, then, focuses on the last two points. It is simple enough to introduce lagged regressors, and that process is introduced next. As for aggregation, the economic data cannot be broken down, but the personnel data can (to an extent). Currently, the personnel data encompasses all AFSCs. It may be that different subsets of the Air Force officer corps are more sensitive to economic conditions than others, a possibility investigated in subsequent analysis. -->
 
-### Officer Subsetting
+### Lagged Economic Indicators
 
+Occasionally with time-series data, the effect of one variable on another will not be immediately observed. Consider a production firm redirecting profit towards self-investment. Ideally, this investment will lead to enhanced production capacity and higher revenue, though likely at a much later date. In the same sense, the current economic conditions could have a greater effect on attrition 12 months from now than they do today. In this section, the relationships between attrition and the lagged economic inidicators are explored.
+
+The economic data is observed monthly over 12 years, and so there are many possible lag-periods to consider. It is also possible that the best lag-period is identical for all predictors, so several combinations of different predictors lagged to different periods should be tested. This is a huge test space. In order to decrease computational requirements, lag-periods are restricted to 0, 6, 12, 18, and 24 months. A separate dynamic regression model is generated (as in previous sections) for every combination of predictor and lag-period. This amounts to 125 dynamic regression models. The models are evaluated and compared on three metrics: AICc, training RMSE, and validation RMSE. Any models that peform well by comparison are then inspected further. 
+
+Table \@ref(tab:lag-results-1) below summarizes the values for each performance measure. Note that the minimum value for each category are below those seen in the previous model. This suggests that lagging the model's predictors can yield better results using current values. The lagged models are invesitgated in greater detail next.
+
+```{r lag-results-1, fig.cap="Summary Statistics - Lag Results"}
+lag.results <- readRDS("Data/lagResults.rds")
+
+summary(lag.results[4:6]) %>% 
+  kable(format = "latex", booktabs = TRUE, caption = "Summary Statistics - Lag Results") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+The 1st quartiles of each performance criteria are used to filter the set of models, seeking any models which perform well in all three categories. Only one model does so, where the unemployment rate is lagged by 24 months, labor force participation rate by 18 months, and labor market momentum by 24 months.
+
+```{r high-performers-1}
+lag.results %>% 
+  filter(lag.results[,"Validation.RMSE"] <= 156.4 & 
+           lag.results[,"Training.RMSE"] <= 133.1 & 
+           lag.results[,"AICc"] <= 1299) %>% 
+  kable(format = "latex", booktabs = TRUE, caption = "High Performance Across All Criteria") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+Inspecting the model further reveals that one of the economic indicator is a significant predictor, unemployment rate lagged at 24 months. Unfortunately, none of the other predictors are significant in this model (shown in Table \@ref(tab:best-by-all-1)).
+
+```{r best-by-all-1}
+dyn.reg.2 <- readRDS("Data/dynReg2.rds")
+
+broom::tidy(dyn.reg.2) %>%
+  kable(format = "latex", booktabs = TRUE, caption = "Best Across All Criteria") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+
+
+```
+
+Top performers can be also be identified by comparing the best five models from each criteria individually and looking for commonalities. The results in Table \@ref(tab:best-by-1) show that only AICc and Training RMSE have commonalities. The models in common are where the unemployment rate, labor force participation rate, and labor market momentum are respectively lagged at (24, 18, 6), (24, 18, 18), and (24, 18, 24). The identified models are next inspected individually for coefficient significance. 
+
+```{r best-by-1}
+best.by.AICc <- lag.results %>% 
+                  arrange(AICc) %>% 
+                  head(5) 
+
+best.by.trainingRMSE <- lag.results %>% 
+                          arrange(Training.RMSE) %>% 
+                          head(5)
+
+best.by.validationRMSE <- lag.results %>% 
+                            arrange(Validation.RMSE) %>% 
+                            head(5)
+
+rbind(best.by.AICc, best.by.trainingRMSE, best.by.validationRMSE) %>% 
+  kable(format = "latex", booktabs = TRUE, caption = "Common High Performers") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE) %>% 
+  # row_spec(1, bold = TRUE) %>%
+  # row_spec(9, bold = TRUE) %>%
+  # row_spec(2, bold = TRUE) %>%
+  # row_spec(10, bold = TRUE) %>%
+  # row_spec(5, bold = TRUE) %>%
+  # row_spec(6, bold = TRUE) %>% 
+  group_rows("Best by AICc", 1, 5) %>% 
+  group_rows("Best by Training RMSE", 6, 10) %>% 
+  group_rows("Best by Validation RMSE", 11, 15)
+  
+```
+
+The last common model (24, 18, 24) has already been inspected; it is the same one in Table \@ref(tab:best-by-all-1). That leaves two models for comparison (24, 18, 6) and (24, 18, 18).
+Their coefficients are summarized below in Tables \@ref(tab:common-1) and \@ref(tab:common-2) below. Both tables show similar results as the previous model (24, 18, 24): The unemployment rate is a significant predictor, labor force particpation has a large effect but with high standard error, and labor market momentum has a small effect with a large standard error.
+
+```{r common-1}
+dyn.reg.3 <- readRDS("Data/dynReg3.rds")
+
+broom::tidy(dyn.reg.3) %>%
+  kable(format = "latex", booktabs = TRUE, caption = "Common High Performer 1") %>%
+  kable_styling(latex_options = "hold_position") %>%
+  row_spec(0, bold = TRUE)
+
+```
+
+```{r common-2}
+dyn.reg.6 <- readRDS("Data/dynReg6.rds")
+
+broom::tidy(dyn.reg.6) %>%
+  kable(format = "latex", booktabs = TRUE, caption = "Common High Performer 2") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+Recall in Figure \@ref(fig:heat-map-1) that labor market momentum and labor force particpation rate are moderately correlated. Investigation into labor market momentum reveals that it is a combination of many economic indicators, including labor force participation. In short, labor market momentum repeats the information provided by the other two predictors and could be introducing multicollinearity issues. Given that information, and the collection of estimates discussed above, it might be worthwhile to exclude labor market momentum and re-evaluate.
+
+To that end, the lagged variable analyis is repeated with labor market momentum excluded from the list of possible predictors. Only 25 dynamic regression models are generated (with the identical lag periods) and they are compared using the same techniques as above. This time, no model falls under the 1st quartile for all performance criteria. Comparing the top five performers for each criteria does yield results. A dynamic regression model with the unemployment rate lagged by 24 months and labor force participation rate lagged by 18 months falls into the top five performers under AICc and Training RSME. Notice that the repsective lag periods are identical to those in earlier models. Table \@ref(tab:reduced-1) summarizes the coefficient estimates.
+
+```{r reduced-1}
+dyn.reg.4 <- readRDS("Data/dynReg4.rds")
+
+broom::tidy(dyn.reg.4) %>%
+  kable(format = "latex", booktabs = TRUE, caption = "Top Model - Reduced Model") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+Unfortunately, earlier trends in coefficient estimates hold. The unemployment rate has a noticeable and significant effect, and the labor force participation rate does not. It is worth mentioning, however, that the coefficient estimates are very close to those in earlier models, implying that labor market momentum was a redundant predictor. While these models provide some evidence of significant effects, it is possible that other combinations of economic indicators are better fit. In the next section, this idea is explored.
+
+### Alternative Economic Subsets
+
+Section 3.2.3 notes that there exist other subsets of economic indicators with low correlation, besides unemployment, labor force participation, and labor market momentum. In particular, nonfarm job quits and labor force particpation have a correlation coefficient of -0.07, the next lowest after unemployment and labor force participation. This motivates analysing dynamic regression models which include the former pair. The models are generated and analysed using the same methods as above. Each predictor is lagged at 0, 6, 12, 18, and 24 months, and a dynamic regression model is produced for every combination. These models are compared by AICc, training RMSE, and validation RMSE, seeking to identify top performers. 
+
+From this iteration of analysis, only one model produces results comparable to previous models. Table \@ref(tab:alt-indicators-1) displays the specified model and its perfomance scores. Though the scores are marginally worse than the best models from previous iteration, the coefficient estimates are more important.
+
+```{r alt-indicators-1}
+lag.results.3 <- readRDS("Data/lagResults3.rds")
+
+lag.results.3 %>% 
+  filter(AICc == min(AICc)) %>% 
+  kable(format = "latex", booktabs = TRUE, caption = "Alternative Predictors - Best Model") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+
+
+```
+
+Unfortuntely, Table \@ref(tab:alt-indicators-2) shows no evidence that either predictor is statistically significant. The combination of labor force participation and nonfarm quits does not affect attrition. As with the intitial models, predictive capacity is likely managed by the ARIMA portion alone.
+
+```{r alt-indicators-2}
+dyn.reg.5 <- readRDS("Data/dynReg5.rds")
+
+broom::tidy(dyn.reg.5) %>%
+  kable(format = "latex", booktabs = TRUE, caption = "Alternative Predictors - Coefficient Estimates") %>% 
+  kable_styling(latex_options = "hold_position") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+### Summary of Analysis
+
+This section analysed nine economic indicators and hundreds of models, in several iterations. The best models were identified and explored, revealing some trends and signifcant predictors. The insights gleaned from this process are summarised and discussed in the next chapter.
 
 \newpage
 
 # Conclusions and Insights
 
+The thesis sought to identify economic indicators with statistically significant effects on attrition and to specify a mathematical model with the capacity for reliable forecasts of attrition. Regarding the former, nine separate economic indicators were initially considered (summarized in Table \@ref(tab:econ-var)). Correlation analysis was used to identify subsets of variables exhibiting the least interdependence, in order to avoid the effects of multicollinearity. Initial modeling found no statistically significant effects. Subsequent attempts found that lagged economic indicators were significant, however. Specifically, the unemployment rate lagged by 24 months was found to be statisically signifcant in all of the top performing models. No other variables analysed (labor market momentum, labor force participation, and nonfarm job quits) showed evidence of statistically significant effects. Regarding forecasting capacity, all of the top performing dynamic regression models explored in Chapter III exhibited lower training and validation RMSE than the naive models. That is, the dynamic regression technique - regardless of predictor sigificance - is better adapted for forecasting attrition than simply applying previous observations forward. Additionally, this work confirms results found in previous endeavors (such as Jantscher \cite{jantscher-2016}), reinforcing the relevance of the unemployment rate to attrition. This work builds on that knowledge by also providing a time line, finding evidence that the current unemployment rate significantly affects attrition two years later. 
+
+Finally<!--and I mean finally, ugh-->, many possibilites were addressed in this work - four naive models and 33,792 unique dynamic regression models (176 regression specifications, each with 192 ARIMA variations). By no means does this encapsulate the total set of possible models; there are many avenues left unexplored by this thesis. Future work in this area could, first, explore different subsets of the economic indicators identified. The initial set of economic indicators can also easily be expanded; the relevant data is freely accessible to the public. Only five unique lag-periods were investigated, and the procedure discussed could easily incorporate more and different time lags (at the cost of more time and comupational complexity). Lastly, all data considered was aggregated to the nation level and only total attrition across U.S. officers was evaluated. Future work in this area could, and should, investigate possible differences across AFSC groupings and, if possible, at a higher level of fidelity (e.g. state or county vs. national aggregates).
+
+\newpage
+
 # Appendix A. R Code {-}
 
-```{r eval=FALSE, echo=TRUE}
+```{r eval=FALSE, echo=TRUE, size='tiny'}
+
 # check for req'd packages, install if not present
 list.of.packages <- c("tidyverse", "lubridate", "sas7bdat", "fpp2", "reshape2",
                       "stargazer", "knitcitations", "RefManageR", "xtable", 
@@ -788,7 +957,6 @@ if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-
 
 #library loadout
 library(sas7bdat)
-library(fpp2)
 library(zoo)
 library(lubridate)
 library(reshape2)
@@ -797,22 +965,914 @@ library(knitr)
 library(gridExtra)
 library(tictoc)
 library(tidyverse)
+library(fpp2)
+
 
 # set directory for lazy data referencing - allow switch between macOS and Windows
 # Basically just set working directory to wherever local repo is held
-setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
+#setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
 #setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
 
+#auto redirect working directory to file's location
+setwd(dirname(sys.frame(1)$ofile))
+
 # source file containing functions created for this analysis
-source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
+#source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 #source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
 
+#auto redirect working directory to function file's location
+source(paste0(dirname(sys.frame(1)$ofile), "/custom-functions.R"))
+
+
+###################
+#   Import Data   #
+###################
+
+# Personnel data
+# simple list of AFSCs and description
+afsc_list <- read.sas7bdat("Data/lu_ao_afs.sas7bdat")
+# monthly records of assigned levels, broken out by AFSC - currently in longform
+assigned <- read.sas7bdat("Data/assigned_levels.sas7bdat") %>% 
+  spread(AFS, Assigned)
+# monthly separation counts, broken out by AFSC - currently in longform
+attrition <- read.sas7bdat("Data/separations_count.sas7bdat") %>% 
+  spread(AFS, Separation_Count) 
+
+# Econ data
+setwd("Data")
+econ_data <- list.files(pattern = "*_natl.csv") %>% 
+  # Import data sets
+  lapply(read_csv) %>% 
+  # Merge all sets 
+  Reduce(function(x,y) merge(x, y, by = "DATE"), .) %>% 
+  # Store data as tibble
+  as.tibble() 
+
+# Now, because gdp per cap is observed only on a quarterly basis, we add it separately
+# in order to handle the missing values resulting from a merge. This merge is 
+# from the previous in that it keeps all values from the existing data set, creating NAs
+# where gdp_per_cap does not match with other observations. Merging the quarterly 
+# gdp_per_cap data with the monthly indicators results in NAs in gdp_per_cap where 
+# the dates do not match. We then handle NAs by extending the quarterly records throughout 
+# their respective quarters (e.g. the GDP per cap for Q1 2014 is applied to Jan-Mar 2014).
+# Simultaneously, we will rename the variables for interpretability.
+
+# Read in GDP per capita
+gdp_per_cap <- read_csv("real09_gdp_percap.csv")
+# Combine gdp per cap with econ_data, using a left-join (all.x = TRUE) to preserve the main data set
+econ_data <- merge(econ_data, gdp_per_cap, by = "DATE", all.x = TRUE) %>%
+  as.tibble() %>%
+  # Rename column headers to something more meaningful
+  select(Unemployment.Rate.Adj = UNRATE, Unemployment.Rate.NonAdj = UNRATENSA,
+         CPI.Adj = CPIAUCSL, Nonfarm.Jobs.Adj = JTSJOL, 
+         Nonfarm.Jobs.NonAdj = JTUJOL, Labor.Force.Participation = LNS11327662, 
+         Labor.Market.Momentum = FRBKCLMCIM, Real.GDP.Per.Capita = A939RX0Q048SBEA, 
+         Nonfarm.Quits.Adj = JTSQUL, Date = DATE)
+
+# The na.locf() command below carries a value forward through NAs until the next non-empty value is met; 
+# this is how we choose to represent the gdp per capita through an entire quarter
+econ_data$Real.GDP.Per.Capita <- as.numeric(econ_data$Real.GDP.Per.Capita) %>% 
+  na.locf()
+
+
+#######################################
+#   Data Cleaning and Preparation     #
+#######################################
+
+# The dates in the personnel data are in total days since 1 Jan 1960 (SAS default)
+# We'll need to reformat the date into something readable and mergeable with our 
+# econ set. Also, we create a new column - the total number of separations across 
+# all AFSCs. We'll also create totals for different categories of officers: rated, 
+# non-rated, line, etc.
+attrition <- mutate(attrition, Total = rowSums(attrition[-1], na.rm = TRUE)) %>% 
+  mutate(temp = EOP_Date * 86400) %>% 
+  mutate(Date = as.POSIXct(temp, origin = "1960-01-01")) %>% 
+  within(rm(temp, EOP_Date))
+
+# repeat prodcedure for assigned data
+assigned <- mutate(assigned, Total = rowSums(assigned[-1], na.rm = TRUE)) %>% 
+  mutate(temp = EOP_Date * 86400) %>% 
+  mutate(Date = as.POSIXct(temp, origin = "1960-01-01")) %>% 
+  within(rm(temp, EOP_Date))
+
+# However, the date variables differ slightly between the econ and personnel sets:
+# Though both represent monthly observations, the econ set default to the first 
+# of each month, and the personnel data defaulted to the last 
+# (e.g. October 2004 is represented as 01-10-2004 in the former, and 31-10-2004 in the latter)
+# To handle this, we'll create new date variables in each set that have the days 
+# trimmed off, then merge. Merging isn't strictly necessary, but it is a convenient
+# way to only keep those observations common to both data sets.
+econ_data <- mutate(econ_data, "Date1" = paste(year(Date), month(Date)))
+attrition <- mutate(attrition, "Date1" = paste(year(Date), month(Date)))
+# Merge data sets
+df <- merge(econ_data, attrition, by = "Date1")
+
+# Next, we see many NAs within the attrition data set. Given the data's nature, 
+# our intuition was that these missing values aren't a result of encoding error 
+# or similar, but rather an indication that no separations occurred during 
+# that period (i.e. NAs indicate no separations were observed, instead of
+# indicating some sort of error). This intuition was confirmed by the data's
+# provider, HAF/A1FPX.
+df[is.na(df)] <- 0
+
+# Next we'll go ahead and drop all of our date variables. When we use df
+# to create a time series object, the date variables become redundant.
+df <- df[, !(names(df) %in% c("Date1", "Date.x", "Date.y"))]
+
+# Now we'll initialize the time series object - start = Oct 2004, freq = 12 - 
+# and create the validation and training sets. Since we're only really interested
+# in the Total column for modeling purposes
+df.ts.1 <- ts(df, start = c(2004, 10), frequency = 12)
+train.ts.1 <- subset(df.ts.1, end = 127)
+val.ts.1 <- subset(df.ts.1, start = 128)
+
+#########################################
+#   Initial Exploration and Modeling    #
+#########################################
+
+# Let's take an initial, unmodified look at our response - total separations across
+# all officer AFSCs. We see some pretty substantial spikes; fortunately, we know
+# from the sponsor that they are artificially high. Special incentive programs 
+# for separation were implemented in the same years containing the spikes. So,
+# we can do something about those observations - remove them, impute and replace, etc.
+autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
+
+# We also will want to look for evidence of seasonality or for any one year that 
+# stands out. Grouping the separations by year, we can see that the tail ends of 
+# 2005, 2006, 2007 and 2014 were higher than other years (we saw this in the 
+# previous plot as well). Aside from those periods, however, no individual year 
+# stands out. We do notice, though, that separations appear to have a bowed shape
+# as the years progress. That is, slightly higher levels of separation at the beginning
+# and ends of the calenday year, with lower rates of separation during summer months.
+# We may have to account for this seasonality in our modeling by transforming the data.
+p <- ggseasonplot(df.ts.1[,'Total'], year.labels = TRUE, year.labels.left = TRUE) +
+  ylab("Total Separations") + 
+  ggtitle("Seasonal Plot: Total Separations") + 
+  theme(legend.position = "none")
+p  
+
+# However, we might want to try modeling before making any alterations to the data.
+# It very well could be that we don't need to replace or impute values, that we're 
+# able to forecast fairly accurately without adjustments. We'll start with 
+# some naive forecasts against which we compare future forecasts. 
+
+n.1 <- naive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
+sn.1 <- snaive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
+
+n.1.error <- accuracy(n.1, val.ts.1[,"Total"])
+sn.1.error <- accuracy(sn.1, val.ts.1[,"Total"])
+
+# There are two takeaways from results below:
+
+# First, we see that the seasonal model performs worse on the validation set, 
+# indicating that it is possibly overfit or overly affected by some outliers
+kable(n.1.error, caption = "Naive Performance", digits = 3, align = 'c')
+kable(sn.1.error, caption = "Seasonal Naive Performance", digits = 3, align = 'c')
+
+
+# Plotting the forecasts against the validation data, we can see that outliers
+# might be the source of the problem. The last spike, around 2014-2015, is carried
+# through in the forecasts, resulting in high errors. We know from an in-depth 
+# discussion of the actual data that spike is an aberration. From this, we infer
+# that outliers are going to be a problem, and probably ought to be handled.
+autoplot(n.1) +
+  autolayer(val.ts.1[,"Total"]) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+autoplot(sn.1) +
+  autolayer(val.ts.1[,"Total"]) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+# First, though, we need to identify which exact data points are outliers. We can 
+# refer back to our season plot to help. On visual inspection, it appears that 
+# roughly Oct-Dec of '05-'07 and '14 stand out (possibly Sep '07, as well).
+# These observations are backed by insight provided by the data's sponsor - HAF/A1.
+# From them, we've found out that in 2006, '07, and '14 special separation
+# programs were instituted in order to incentivize attrition. So, these outlying 
+# points probably reflect the effects of those special programs.
+p
+
+# To handle these, we'll calculate the average values of all other years during 
+# months and replace the current values. First, let's create slices of our
+# response containing the months we're concerned with - December and November.
+# We also want to grab the correpsonding indices for updating our series later.
+
+dec <- subset(df.ts.1[,'Total'], month = 12)
+dec.ind <- which(cycle(df.ts.1[,'Total']) == 12)
+nov <- subset(df.ts.1[,'Total'], month = 11)
+nov.ind <- which(cycle(df.ts.1[,'Total']) == 11)
+
+# oct <- subset(df.ts.1[,'Total'], month = 10)
+# sep <- subset(df.ts.1[,'Total'], month = 9)
+
+# Referring back to p, and combining the graphical insights with information
+# from the data's sponsor, we assume that 2006, '07, and '14 are the years which
+# saw the largest effects from the separation incentive programs - i.e. artificial
+# attrition. Those correspond the the 3rd, 4th, and 11th indices. So now, we 
+# replace those observations with the average of the non-aberrant years.
+
+dec[c(3,4,11)] <- mean(dec[-c(3,4,11)])
+nov[c(3,4,11)] <- mean(nov[-c(3,4,11)])
+
+# And finally, we place these values back into the original series.
+df.ts.1[dec.ind, 'Total'] <- dec
+df.ts.1[nov.ind, 'Total'] <- nov
+
+# Revisiting the response and seasonality plots, we can more easily see the 
+# effects of seasonality, and a much more stationary data set without any 
+# egregious outliers.
+
+autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
+
+ggseasonplot(df.ts.1[,'Total'], year.labels = TRUE, year.labels.left = TRUE) +
+  ylab("Total Separations") + 
+  ggtitle("Seasonal Plot: Total Separations") + 
+  theme(legend.position = "none")
+
+# Lastly, we might want to retrain and assess our naive models so see if removing
+# those outliers effected much
+
+# store split index
+set.split <- 127
+# New train and val sets
+train.ts.2 <- subset(df.ts.1[,'Total'], end = set.split)
+val.ts.2 <- subset(df.ts.1[,'Total'], start = set.split+1)
+
+# Train models and generate errors
+n.2 <- naive(train.ts.2, h = length(val.ts.2))
+sn.2 <- snaive(train.ts.2, h = length(val.ts.2))
+
+n.2.error <- accuracy(n.2, val.ts.2)
+sn.2.error <- accuracy(sn.2, val.ts.2)
+
+# Compare the errors
+kable(n.1.error, caption = "Naive Performance")
+kable(n.2.error, caption = "Naive Performance")
+
+kable(sn.1.error, caption = "Seasonal Naive Performance")
+kable(sn.2.error, caption = "Seasonal Naive Performance")
+
+# Aaaaaaand compare plots, forecasts
+
+# Nothing too special about these
+autoplot(n.2) +
+  autolayer(val.ts.2) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+# Here we see that the variation in the validation set is more closely followed 
+# by the forecasts. We infer that removing the outliers was beneficial.
+autoplot(sn.2) +
+  autolayer(val.ts.2) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+# Though our naive models aren't particularly useful for providing forecasts 
+# (or identifying key economic indicators), they're useful for providing a 
+# baseline comparison for other models. The idea being naive models are our 
+# simplest methods, and we'll compare the performance of more sophisticated 
+# against them - models such as...
+
+# A multivariate regression model with ARIMA errors. Why this? Because a 
+# multivariate regression model allows us to include outside variables (economic 
+# indicators) to help predict a response (attrition). The problem with just 
+# regression, though, is that regression assumes independent errors, and we 
+# often find autocorrelation with time-series data. Enter the 
+# ARIMA: fitting an ARIMA model on our regression error, then, allows us to 
+# handle the autocorrelative nature of the data, but does not allow room for 
+# any exogeneous information (i.e. info other than the response).
+
+# Separately, each of those methods provides roughly half of what we're looking
+# to model. So, by our powers combined: We'll relax the assumption of independent
+# errors in the regression model, and instead assume that they ARE autocorrelated.
+# And since we have a model for predicting autocorrelated data, we now treat the
+# 'error' term in the regression model as its own ARIMA model (technical 
+# formulation is in the thesis; you can also just search Google for
+# "Regression with ARIMA errors"). We're left with a model that, when correctly
+# specified, should provide both forecasts for our response and insight as to 
+# which variables contribute to those forecasts (response variance, etc).
+
+# Now, before go fitting our data, we need to take some steps to ensure we're 
+# fitting it properly - there are other assumptions involved here. First, we need
+# independent regressors. Collinearity between our regressor variables will 
+# inflate regression coefficients' variances; we won't have a good idea of how 
+# influential our economic indicators are. To avoid these issues, we'll build a 
+# heat map showing the correlation for every pairwise combination in our set of
+# economic indicators.
+
+# generate actual correlation heatmap
+# Note: reorder.cormat(), get.upper.tri(), and %ni% are custom functions whose code
+# can be found in the script custom-functions.R
+df[which(names(econ_data) %ni% c("Date", "Date1"))] %>% 
+  cor() %>%
+  round(2) %>% 
+  reorder.cormat() %>%
+  get.upper.tri() %>% 
+  melt(na.rm = TRUE) %>% 
+  ggplot(aes(Var2, Var1, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Collinearity") +
+  theme_minimal() + # minimal theme
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                   size = 12, hjust = 1)) +
+  coord_fixed() + 
+  geom_text(aes(Var2, Var1, label = value), color = "black", size = 3) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_blank(),
+    legend.justification = c(1, 0),
+    legend.position = c(0.6, 0.7),
+    legend.direction = "horizontal") +
+  guides(fill = guide_colorbar(barwidth = 7, barheight = 1, 
+                               title.position = "top", title.hjust = 0.5))
+
+# The heatmap shows many isntances of collinearity, which is expected - many 
+# economic indicators are variations or flavors of the same information. However,
+# some non-correlated groups are shown. For our initial model, we select the 
+# Labor Force Participation Rate, Market Momentum Index, and the Unemployment 
+# Rate. Though the first two have a noticeable correlation, we suspect they will
+# still provide information for our model - the correlation isn't too strong 
+# anyway. The model can be adjusted and specified later, this is just a first 
+# stab.
+
+# grab index of econ vars: LFPR, Unem.Adj, LMM
+econ.vars <- which(names(df) %in% c("Labor.Force.Participation",
+                                            "Unemployment.Rate.Adj", 
+                                            "Labor.Market.Momentum"))
+
+# Now that we've selected our regressors, we need to check for stationarity. We're
+# looking for evidence of non-zero trend, seasonality, etc.
+
+autoplot(df.ts.1[,econ.vars], facets = TRUE) +
+  ylab("")
+
+# Yikes, okay not good. Definitely non-stationary. Let's try differencing, and 
+# see if that improves the situation.
+
+econ.vars.d <- diff(df.ts.1[,econ.vars])
+
+autoplot(econ.vars.d, facets = TRUE) +
+  ylab("")
+
+# Oh, yea - way better. Differenced, these variables look useable. Now while 
+# we're looking at differencing, we should look to see if our response also
+# needs to be differenced. Remember, we have this:
+
+autoplot(df.ts.1[,"Total"]) +
+  ylab("Total Attrition")
+
+# Hmm, nothing too crazy, actually - is there any statistical evidence
+# for differencing?
+
+# regular differencing
+ndiffs(df.ts.1[,"Total"])
+# seasonal differencing
+nsdiffs(df.ts.1[,"Total"])
+
+# Neat! However, before we can build the model, we have to account for the
+# differencing performed on our regressors. With simple differencing, we lose
+# the first observation, and so we remove the first observation from our 
+# response.
+
+head(df.ts.1[,"Total"])
+head(econ.vars.d[,1])
+
+response.ts <- ts(df.ts.1[-1,"Total"], start = c(2004, 11), frequency = 12)
+
+head(response.ts)
+
+# We also need to split up the econ vars into training and test sets
+
+# store split index
+set.split <- 126
+
+# subset our response
+train.ts.3 <- subset(response.ts, end = set.split)
+val.ts.3 <- subset(response.ts, start = set.split+1)
+
+# subset econ variables
+econ.vars.d.train <- subset(econ.vars.d, end = set.split)
+econ.vars.d.val <- subset(econ.vars.d, start = set.split+1)
+
+# We'll utilize the auto arima function from fpp2
+tic("dynamic regression")
+dyn.reg.1 <- auto.arima(train.ts.3, xreg = econ.vars.d.train, trace = TRUE,
+                        stepwise = FALSE, approximation = FALSE)
+toc()
+# The first thing we'll want to check, after the model summary, is how our 
+# residuals behave. Do they appear to satisfy normality assumptions? Are there 
+# any outliers? Evidence of leftover autocorrelation? Essentially, we're 
+# checking to see if there's anything other than white noise in the error term.
+
+# No - to all of the above. ACF plots look clean, raw residuals seem 
+# noisy, and also have a roughly normal distribution. Furthermore, a Ljung-Box
+# test shows no evidence that the data aren't normal (p: 0.8121).
+checkresiduals(dyn.reg.1)
+
+# Let's generate some forecasts then
+dyn.reg.1.f <- forecast(dyn.reg.1, xreg = econ.vars.d.val, h = 20)
+
+# We'll also take a look at some accuracy measures. According to RMSE and MASE,
+# the dynamic regression model performs better than a seasonal naive estimation;
+# that's good news - we're getting closer towards accurate forecasting.
+accuracy(dyn.reg.1.f, val.ts.3)
+
+# And then plot those forecasts over the actual data
+autoplot(dyn.reg.1.f) + 
+  autolayer(dyn.reg.1$fitted) +
+  autolayer(val.ts.3) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+# In short, our residuals are clean, error is improved from that of naive methods,
+# and forecasts track the validation set fairly well. There's one glaring problem,
+# however. Looking back at our model summary, it's clear that none of the estimated
+# coefficients for the economic indicators are statistically significant. Boo.
+# This could be for several reasons:
+#
+# 1) indicators are month-to-month changes, don't have large enough fluctuations
+# to cause significant changes
+# 
+# 2) no lagged information - i.e. current economic info probably doesn't affect 
+# current attrition rate
+#
+# 3) data might be too aggregated, contains too much noise to establish significant
+# relationships
+
+# In summary, dynreg gives better forecasts than naive models, but current 
+# specification doesn't reveal much in the way of economic insight
+
+#####################################
+#   Specification - Lagged Effects  #
+#####################################
+
+# Initially, we'll test 6, 12, 18, and 24 months for each indicator. We'll 
+# build a framework for any desired time-lag later.
+
+
+# lazy, inefficient lagged variable build - if there's time later we'll build a
+# function and generalize this process
+
+Unemployment.Rate.lag <- cbind(
+  lag0 = econ.vars.d[,"Unemployment.Rate.Adj"],
+  lag6 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -6),
+  lag12 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -12),
+  lag18 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -18), 
+  lag24 = stats::lag(econ.vars.d[,"Unemployment.Rate.Adj"], -24)
+)
+
+Labor.Force.Participation.lag <- cbind(
+  lag0 = econ.vars.d[,"Labor.Force.Participation"],
+  lag6 = stats::lag(econ.vars.d[,"Labor.Force.Participation"],-6),
+  lag12 = stats::lag(econ.vars.d[,"Labor.Force.Participation"], -12),
+  lag18 = stats::lag(econ.vars.d[,"Labor.Force.Participation"], -18), 
+  lag24 = stats::lag(econ.vars.d[,"Labor.Force.Participation"], -24)
+)
+
+Labor.Market.Momentum.lag <- cbind(
+  lag0 = econ.vars.d[,"Labor.Market.Momentum"],
+  lag6 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -6),
+  lag12 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -12),
+  lag18 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -18), 
+  lag24 = stats::lag(econ.vars.d[,"Labor.Market.Momentum"], -24)
+)
+
+# create train and val splits
+UR.lag.train <- subset(Unemployment.Rate.lag, end = set.split)
+UR.lag.val <- subset(Unemployment.Rate.lag, start = set.split+1, 
+                     end = dim(econ.vars.d)[1])
+
+LFPR.lag.train <- subset(Labor.Force.Participation.lag, end = set.split)
+LFPR.lag.val <- subset(Labor.Force.Participation.lag, start = set.split+1, 
+                     end = dim(econ.vars.d)[1])
+
+LMM.lag.train <- subset(Labor.Market.Momentum.lag, end = set.split)
+LMM.lag.val <- subset(Labor.Market.Momentum.lag, start = set.split+1, 
+                     end = dim(econ.vars.d)[1])
+
+# Initialize table to store results of loop. We are going to capture the 
+# variable combination, AICc, training RMSE, and validation RMSE. Tibble 
+# generated, saved to local .rds so we won't have to re-run this awful loop; 
+# runtime is approximately 1 hr on 4-core machine, process run in parallel
+
+
+# lag.results <- tibble("UR.lag" = rep(NA, 125),
+#                       "LFPR.lag" = rep(NA, 125),
+#                       "LMM.lag" = rep(NA, 125),
+#                       "AICc" = rep(NA, 125),
+#                       "Training.RMSE" = rep(NA, 125),
+#                       "Validation.RMSE" = rep(NA, 125))
+# 
+# m <- 1
+# for(i in c(1:5)){
+#   for(j in c(1:5)){
+#     for(k in c(1:5)){
+#       
+#       xreg.train <- cbind(UR.lag.train[,i],
+#                           LFPR.lag.train[,j],
+#                           LMM.lag.train[,k])
+#       
+#       xreg.val <- cbind(UR.lag.val[,i],
+#                         LFPR.lag.val[,j],
+#                         LMM.lag.val[,k])
+#       
+#       dyn.model <- auto.arima(train.ts.3,
+#                               xreg = xreg.train, 
+#                               stepwise = FALSE, 
+#                               approximation = FALSE,
+#                               parallel = TRUE)
+#       
+#       dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+#       
+#       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+#       
+#       lag.results[m, "UR.lag"] <- colnames(UR.lag.train)[i]
+#       lag.results[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+#       lag.results[m, "LMM.lag"] <- colnames(LMM.lag.train)[k]
+#       lag.results[m, "AICc"] <- dyn.model$aicc
+#       lag.results[m, "Training.RMSE"] <- dyn.model.err[1,2]
+#       lag.results[m, "Validation.RMSE"] <- dyn.model.err[2,2]
+#       
+#       m <- m + 1
+#     }
+#   }
+# }
+# 
+# saveRDS(lag.results, "lagResults.rds")
+
+# read in compiled lag.results
+lag.results <- readRDS("lagResults.rds")
+
+# summarize the selection criteria
+summary(lag.results[,4:6])
+
+# filter tibble to return rows where each metric is below respective first quartile
+lag.results %>% 
+  filter(lag.results[,"Validation.RMSE"] <= 156.4 & 
+           lag.results[,"Training.RMSE"] <= 133.1 & 
+           lag.results[,"AICc"] <= 1299)
+
+# only one result: 24, 18, 24, might want to go back and loosen filter criteria - for now
+# let's investigate that one model
+
+# best across three
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"],
+                    LMM.lag.train[,"lag24"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                    LFPR.lag.val[,"lag18"],
+                    LMM.lag.val[,"lag24"])
+
+dyn.reg.2 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+
+dyn.reg.2.f <- forecast(dyn.reg.2, xreg = xreg.val, h = 20)
+
+autoplot(dyn.reg.2.f) + 
+  autolayer(dyn.reg.2$fitted) +
+  autolayer(val.ts.3) +
+  theme(legend.position = "none") +
+  ylab("Total Attrition")
+
+# we can also identify the 'top' model by the minimum of each criteria
+top.models.1 <- rbind(lag.results %>% 
+                        filter(AICc == min(AICc)),
+                      lag.results %>% 
+                        filter(Training.RMSE == min(Training.RMSE)),
+                      lag.results %>% 
+                        filter(Validation.RMSE == min(Validation.RMSE)))
+
+# take best five models according to each criteria and see if there are any
+# commonalities
+
+best.by.AICc <- lag.results %>% 
+                  arrange(AICc) %>% 
+                  head(5) 
+
+best.by.trainingRMSE <- lag.results %>% 
+                          arrange(Training.RMSE) %>% 
+                          head(5)
+
+best.by.validationRMSE <- lag.results %>% 
+                            arrange(Validation.RMSE) %>% 
+                            head(5)
+
+inner_join(best.by.AICc, best.by.trainingRMSE)
+inner_join(best.by.AICc, best.by.validationRMSE)
+inner_join(best.by.trainingRMSE, best.by.validationRMSE)
+
+# Only best.by.AICc and best.by.training.MSE have a model in common
+
+# we'll look more closely at the best model from each category and the model 
+# common to best.by.AICc and best.by.training.MSE - that's four more models
+
+# Best from each category:
+
+# AICc: 24, 18, 6
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"],
+                    LMM.lag.train[,"lag6"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag18"],
+                  LMM.lag.val[,"lag6"])
+
+dyn.reg.3 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+checkresiduals(dyn.reg.3)
+
+# AICc: 24, 18, 18
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"],
+                    LMM.lag.train[,"lag18"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag18"],
+                  LMM.lag.val[,"lag18"])
+
+dyn.reg.6 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+saveRDS(dyn.reg.6, "dynReg6.rds")
+
+# trainingMSE: 24, 18, 24 - already done, best under 1st quartiles
+
+# validationMSE: 0, 0, 24 - problem: not interested in predictions based on
+# current data, doesn't allow for forecasts into future - purely reactive, not
+# proactive information
+
+# most common model: 24, 18, 6 - already looked at with dyn.reg.3
+
+# Q: So...what does dyn.reg.3 show?
+# A: Similar pattern with previous models - UR is significant, LFPR is almost
+# significant, and LMM is not. Investigation into LMM reveals that it is a 
+# result of Principle component analysis of several indicators, including 
+# UR. Explains the .56 corr with LFPR from the heatmap, and indicates that  
+# LMM and LFPR capture similar information. Corr might be causing 
+# inefficiencies in coeff of other two variables - UR and LFPR. Try dropping  
+# LMM and re-running lag analysis.
+
+# lag.results.2 <- tibble("UR.lag" = rep(NA, 25),
+#                       "LFPR.lag" = rep(NA, 25),
+#                       "AICc" = rep(NA, 25),
+#                       "Training.RMSE" = rep(NA, 25),
+#                       "Validation.RMSE" = rep(NA, 25))
+# 
+# m <- 1
+# for(i in c(1:5)){
+#   for(j in c(1:5)){
+# 
+#       xreg.train <- cbind(UR.lag.train[,i],
+#                           LFPR.lag.train[,j])
+# 
+#       xreg.val <- cbind(UR.lag.val[,i],
+#                         LFPR.lag.val[,j])
+# 
+#       dyn.model <- auto.arima(train.ts.3,
+#                               xreg = xreg.train,
+#                               stepwise = FALSE,
+#                               approximation = FALSE,
+#                               parallel = TRUE)
+# 
+#       dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+# 
+#       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+# 
+#       lag.results.2[m, "UR.lag"] <- colnames(UR.lag.train)[i]
+#       lag.results.2[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+#       lag.results.2[m, "AICc"] <- dyn.model$aicc
+#       lag.results.2[m, "Training.RMSE"] <- dyn.model.err[1,2]
+#       lag.results.2[m, "Validation.RMSE"] <- dyn.model.err[2,2]
+# 
+#       m <- m + 1
+#   }
+# }
+# 
+# saveRDS(lag.results.2, "lagResults2.rds")
+
+lag.results.2 <- readRDS("lagResults2.rds")
+
+# Now that we have a data set with only 2 variables - UR and LFPR - let's 
+# the best models in the same manner as before
+
+summary(lag.results.2[,3:5])
+
+lag.results.2 %>% 
+  filter(lag.results.2[,"Validation.RMSE"] <= 151.8 & 
+           lag.results.2[,"Training.RMSE"] <= 133.9 & 
+           lag.results.2[,"AICc"] <= 1303)
+
+# No single model falls below the 1st quartile for all three. Look at best by 
+# each criteria
+
+top.models.2 <- rbind(lag.results.2 %>% 
+                        filter(AICc == min(AICc)),
+                      lag.results.2 %>% 
+                        filter(Training.RMSE == min(Training.RMSE)),
+                      lag.results.2 %>% 
+                        filter(Validation.RMSE == min(Validation.RMSE)))
+
+# take best five models according to each criteria and see if there are any
+# commonalities
+
+best.by.AICc.2 <- lag.results.2 %>% 
+  arrange(AICc) %>% 
+  head(5) 
+
+best.by.trainingRMSE.2 <- lag.results.2 %>% 
+  arrange(Training.RMSE) %>% 
+  head(5)
+
+best.by.validationRMSE.2 <- lag.results.2 %>% 
+  arrange(Validation.RMSE) %>% 
+  head(5)
+
+inner_join(best.by.AICc.2, best.by.trainingRMSE.2)
+inner_join(best.by.AICc.2, best.by.validationRMSE.2)
+inner_join(best.by.trainingRMSE.2, best.by.validationRMSE.2)
+
+# Best model by AICc from 2-variable (24, 18) has slightly better AICc 
+# and validation RMSE than that of 3-variable (24, 18, 6). Also, results from 
+# 2 model are comparable to our 'best' model from 3-variable (24, 18, 24).
+# Let's look at the coefficients:
+
+# lag2 best by AICc: 24, 18
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag18"])
+
+dyn.reg.4 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+checkresiduals(dyn.reg.4)
+
+
+# From this 'round' we can say our 'best' model is the 24,18: minimizes 
+# information loss, and provides similar results to the 'best' model from 
+# previous round. When faced with similar results, pick simplest - Occam's razor
+# Now, we are getting mild results with this variable selection. Let's try
+# including a different subset of variables. Referring back to the heatmap, we
+# can see other subsets with low collinearity: LFPR and nonfarm quits, nonfarm
+# quits and cpi. However, nonfarm quits and cpi are highly negatively correlated
+# so we can either choose one to place with nonfarm quits or do both groups
+# separately. FOr now, let's start with LFPR and nonfarm quits - if those
+# results don't look great, we'll try the other subset.
+
+#LFPR and NonfarmQuits
+
+# need to difference nonfarmquits
+econ.vars.2 <- which(names(df) %in% c("Labor.Force.Participation",
+                                    "Unemployment.Rate.Adj", 
+                                    "Labor.Market.Momentum",
+                                    "Nonfarm.Quits.Adj",
+                                    "CPI.Adj"))
+
+econ.vars.2.d <- diff(df.ts.1[,econ.vars.2])
+
+autoplot(econ.vars.2.d[,c("CPI.Adj", "Nonfarm.Quits.Adj")], facets = TRUE)
+
+# create lag set for Nonfarm quits, LFPR already exists
+Quits.lag <- cbind(
+  lag0 = econ.vars.2.d[,"Nonfarm.Quits.Adj"],
+  lag6 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -6),
+  lag12 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -12),
+  lag18 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -18), 
+  lag24 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -24)
+)
+
+# create train and val splits for nonfarm quits
+Quits.lag.train <- subset(Quits.lag, end = set.split)
+Quits.lag.val <- subset(Quits.lag, start = set.split+1, 
+                     end = dim(econ.vars.2.d)[1])
+
+lag.results.3 <- tibble("Quits.lag" = rep(NA, 25),
+                      "LFPR.lag" = rep(NA, 25),
+                      "AICc" = rep(NA, 25),
+                      "Training.RMSE" = rep(NA, 25),
+                      "Validation.RMSE" = rep(NA, 25))
+
+# m <- 1
+# for(i in c(1:5)){
+#   for(j in c(1:5)){
+# 
+#       xreg.train <- cbind(Quits.lag.train[,i],
+#                           LFPR.lag.train[,j])
+# 
+#       xreg.val <- cbind(Quits.lag.val[,i],
+#                         LFPR.lag.val[,j])
+# 
+#       dyn.model <- auto.arima(train.ts.3,
+#                               xreg = xreg.train,
+#                               stepwise = FALSE,
+#                               approximation = FALSE,
+#                               parallel = TRUE)
+# 
+#       dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+# 
+#       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+# 
+#       lag.results.3[m, "Quits.lag"] <- colnames(Quits.lag.train)[i]
+#       lag.results.3[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+#       lag.results.3[m, "AICc"] <- dyn.model$aicc
+#       lag.results.3[m, "Training.RMSE"] <- dyn.model.err[1,2]
+#       lag.results.3[m, "Validation.RMSE"] <- dyn.model.err[2,2]
+# 
+#       m <- m + 1
+#   }
+# }
+# 
+# saveRDS(lag.results.3, "lagResults3.rds")
+
+lag.results.3 <- readRDS("lagResults3.rds")
+
+# top model for each
+top.models.3 <- rbind(lag.results.3 %>% 
+                        filter(AICc == min(AICc)),
+                      lag.results.3 %>% 
+                        filter(Training.RMSE == min(Training.RMSE)),
+                      lag.results.3 %>% 
+                        filter(Validation.RMSE == min(Validation.RMSE)))
+
+summary(lag.results.3[,3:5])
+
+lag.results.3 %>% 
+  filter(lag.results.3[,"Validation.RMSE"] <= 152.9 & 
+           lag.results.3[,"Training.RMSE"] <= 135.6 & 
+           lag.results.3[,"AICc"] <= 1303)
+
+# none fall under 1st quartile for all three
+
+# look at top 5 from each
+best.by.AICc.3 <- lag.results.3 %>% 
+  arrange(AICc) %>% 
+  head(5) 
+
+best.by.trainingRMSE.3 <- lag.results.3 %>% 
+  arrange(Training.RMSE) %>% 
+  head(5)
+
+best.by.validationRMSE.3 <- lag.results.3 %>% 
+  arrange(Validation.RMSE) %>% 
+  head(5)
+
+inner_join(best.by.AICc.3, best.by.trainingRMSE.3)
+inner_join(best.by.AICc.3, best.by.validationRMSE.3)
+inner_join(best.by.trainingRMSE.3, best.by.validationRMSE.3)
+
+# Only trainingRMSE and ValidationRMSE have one in common, and model isn't
+# usful as it uses lag0 variables (i.e. current data)
+
+# let's compare the top models for each 'round' so far (order is AIC, train, val)
+top.models.1
+top.models.2
+top.models.3
+
+# only min AICc from 3rd round (LFPR and nonfarmquits) look comparable to other
+# models, let's inspect the model more closely (24,24)
+
+xreg.train <- cbind(Quits.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag24"])
+
+xreg.val <- cbind(Quits.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag24"])
+
+dyn.reg.5 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+checkresiduals(dyn.reg.5)
+
+#results: residuals look 'okay', but not a clean as previous models, and 
+# none of the coefficients look to be significant
+
+# final choice:
+# dyn.reg.4: URlag24, LFPRlag18
+
+#save all models used so they do not have to be regnerated
+saveRDS(dyn.reg.1, "dynReg1.rds")
+saveRDS(dyn.reg.2, "dynReg2.rds")
+saveRDS(dyn.reg.3, "dynReg3.rds")
+saveRDS(dyn.reg.4, "dynReg4.rds")
+saveRDS(dyn.reg.5, "dynReg5.rds")
+
+
+
+
 ```
-
-
-# TO-DO
-
-- Add complete set of lagged variable analysis
-- Introduce subsetting of officer population (total vs rated-only vs non-rated line vs etc)
-- Adjust legends and coloring in some figures
-- Conclusion (<-- wait until lagged effects are fully explored before drawing insights)

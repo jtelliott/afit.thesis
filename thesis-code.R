@@ -23,14 +23,14 @@ library(fpp2)
 #setwd("~/Documents/Grad School/Thesis/github/afit.thesis/")
 #setwd("C:/Users/Jake Elliott/Desktop/afit.thesis/")
 
-#test auto cd
+#auto redirect working directory to file's location
 setwd(dirname(sys.frame(1)$ofile))
 
 # source file containing functions created for this analysis
 #source("~/Documents/Grad School/Thesis/github/afit.thesis/custom-functions.R")
 #source("C:/Users/Jake Elliott/Desktop/afit.thesis/custom-functions.R")
 
-#test source cd
+#auto redirect working directory to function file's location
 source(paste0(dirname(sys.frame(1)$ofile), "/custom-functions.R"))
 
 
@@ -644,6 +644,21 @@ dyn.reg.3 <- auto.arima(train.ts.3,
                         approximation = FALSE)
 checkresiduals(dyn.reg.3)
 
+# AICc: 24, 18, 18
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"],
+                    LMM.lag.train[,"lag18"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag18"],
+                  LMM.lag.val[,"lag18"])
+
+dyn.reg.6 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+saveRDS(dyn.reg.6, "dynReg6.rds")
+
 # trainingMSE: 24, 18, 24 - already done, best under 1st quartiles
 
 # validationMSE: 0, 0, 24 - problem: not interested in predictions based on
@@ -793,8 +808,8 @@ Quits.lag <- cbind(
 )
 
 # create train and val splits for nonfarm quits
-Quits.lag.train <- subset(Nonfarm.Quits.lag, end = set.split)
-Quits.lag.val <- subset(Nonfarm.Quits.lag, start = set.split+1, 
+Quits.lag.train <- subset(Quits.lag, end = set.split)
+Quits.lag.val <- subset(Quits.lag, start = set.split+1, 
                      end = dim(econ.vars.2.d)[1])
 
 lag.results.3 <- tibble("Quits.lag" = rep(NA, 25),
@@ -900,6 +915,11 @@ checkresiduals(dyn.reg.5)
 # final choice:
 # dyn.reg.4: URlag24, LFPRlag18
 
-#dirname(sys.frame(1)$ofile)
+#save all models used so they do not have to be regnerated
+saveRDS(dyn.reg.1, "dynReg1.rds")
+saveRDS(dyn.reg.2, "dynReg2.rds")
+saveRDS(dyn.reg.3, "dynReg3.rds")
+saveRDS(dyn.reg.4, "dynReg4.rds")
+saveRDS(dyn.reg.5, "dynReg5.rds")
 
 
