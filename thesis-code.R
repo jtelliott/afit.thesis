@@ -642,6 +642,7 @@ dyn.reg.3 <- auto.arima(train.ts.3,
                         xreg = xreg.train,
                         stepwise = FALSE,
                         approximation = FALSE)
+checkresiduals(dyn.reg.3)
 
 # trainingMSE: 24, 18, 24 - already done, best under 1st quartiles
 
@@ -655,10 +656,10 @@ dyn.reg.3 <- auto.arima(train.ts.3,
 # A: Similar pattern with previous models - UR is significant, LFPR is almost
 # significant, and LMM is not. Investigation into LMM reveals that it is a 
 # result of Principle component analysis of several indicators, including 
-# UR. Explains the .56 corr coeff from the heatmap, and indicates that LMM and 
-# UR capture same information. Corr might be causing inefficiencies in coeff of
-# other two variables - UR and LFPR. Try dropping LMM and re-running lag 
-# analysis.
+# UR. Explains the .56 corr with LFPR from the heatmap, and indicates that  
+# LMM and LFPR capture similar information. Corr might be causing 
+# inefficiencies in coeff of other two variables - UR and LFPR. Try dropping  
+# LMM and re-running lag analysis.
 
 # lag.results.2 <- tibble("UR.lag" = rep(NA, 25),
 #                       "LFPR.lag" = rep(NA, 25),
@@ -735,11 +736,169 @@ best.by.validationRMSE.2 <- lag.results.2 %>%
   arrange(Validation.RMSE) %>% 
   head(5)
 
-inner_join(best.by.AICc.2, best.by.trainingRMSE.2))
+inner_join(best.by.AICc.2, best.by.trainingRMSE.2)
 inner_join(best.by.AICc.2, best.by.validationRMSE.2)
 inner_join(best.by.trainingRMSE.2, best.by.validationRMSE.2)
 
-# No models common to all top 5
+# Best model by AICc from 2-variable (24, 18) has slightly better AICc 
+# and validation RMSE than that of 3-variable (24, 18, 6). Also, results from 
+# 2 model are comparable to our 'best' model from 3-variable (24, 18, 24).
+# Let's look at the coefficients:
+
+# lag2 best by AICc: 24, 18
+xreg.train <- cbind(UR.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag18"])
+
+xreg.val <- cbind(UR.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag18"])
+
+dyn.reg.4 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+checkresiduals(dyn.reg.4)
+
+
+# From this 'round' we can say our 'best' model is the 24,18: minimizes 
+# information loss, and provides similar results to the 'best' model from 
+# previous round. When faced with similar results, pick simplest - Occam's razor
+# Now, we are getting mild results with this variable selection. Let's try
+# including a different subset of variables. Referring back to the heatmap, we
+# can see other subsets with low collinearity: LFPR and nonfarm quits, nonfarm
+# quits and cpi. However, nonfarm quits and cpi are highly negatively correlated
+# so we can either choose one to place with nonfarm quits or do both groups
+# separately. FOr now, let's start with LFPR and nonfarm quits - if those
+# results don't look great, we'll try the other subset.
+
+#LFPR and NonfarmQuits
+
+# need to difference nonfarmquits
+econ.vars.2 <- which(names(df) %in% c("Labor.Force.Participation",
+                                    "Unemployment.Rate.Adj", 
+                                    "Labor.Market.Momentum",
+                                    "Nonfarm.Quits.Adj",
+                                    "CPI.Adj"))
+
+econ.vars.2.d <- diff(df.ts.1[,econ.vars.2])
+
+autoplot(econ.vars.2.d[,c("CPI.Adj", "Nonfarm.Quits.Adj")], facets = TRUE)
+
+# create lag set for Nonfarm quits, LFPR already exists
+Quits.lag <- cbind(
+  lag0 = econ.vars.2.d[,"Nonfarm.Quits.Adj"],
+  lag6 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -6),
+  lag12 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -12),
+  lag18 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -18), 
+  lag24 = stats::lag(econ.vars.2.d[,"Nonfarm.Quits.Adj"], -24)
+)
+
+# create train and val splits for nonfarm quits
+Quits.lag.train <- subset(Nonfarm.Quits.lag, end = set.split)
+Quits.lag.val <- subset(Nonfarm.Quits.lag, start = set.split+1, 
+                     end = dim(econ.vars.2.d)[1])
+
+lag.results.3 <- tibble("Quits.lag" = rep(NA, 25),
+                      "LFPR.lag" = rep(NA, 25),
+                      "AICc" = rep(NA, 25),
+                      "Training.RMSE" = rep(NA, 25),
+                      "Validation.RMSE" = rep(NA, 25))
+
+# m <- 1
+# for(i in c(1:5)){
+#   for(j in c(1:5)){
+# 
+#       xreg.train <- cbind(Quits.lag.train[,i],
+#                           LFPR.lag.train[,j])
+# 
+#       xreg.val <- cbind(Quits.lag.val[,i],
+#                         LFPR.lag.val[,j])
+# 
+#       dyn.model <- auto.arima(train.ts.3,
+#                               xreg = xreg.train,
+#                               stepwise = FALSE,
+#                               approximation = FALSE,
+#                               parallel = TRUE)
+# 
+#       dyn.model.f <- forecast(dyn.model, xreg = xreg.val, h = 20)
+# 
+#       dyn.model.err <- accuracy(dyn.model.f, val.ts.3)
+# 
+#       lag.results.3[m, "Quits.lag"] <- colnames(Quits.lag.train)[i]
+#       lag.results.3[m, "LFPR.lag"] <- colnames(LFPR.lag.train)[j]
+#       lag.results.3[m, "AICc"] <- dyn.model$aicc
+#       lag.results.3[m, "Training.RMSE"] <- dyn.model.err[1,2]
+#       lag.results.3[m, "Validation.RMSE"] <- dyn.model.err[2,2]
+# 
+#       m <- m + 1
+#   }
+# }
+# 
+# saveRDS(lag.results.3, "lagResults3.rds")
+
+lag.results.3 <- readRDS("lagResults3.rds")
+
+# top model for each
+top.models.3 <- rbind(lag.results.3 %>% 
+                        filter(AICc == min(AICc)),
+                      lag.results.3 %>% 
+                        filter(Training.RMSE == min(Training.RMSE)),
+                      lag.results.3 %>% 
+                        filter(Validation.RMSE == min(Validation.RMSE)))
+
+summary(lag.results.3[,3:5])
+
+lag.results.3 %>% 
+  filter(lag.results.3[,"Validation.RMSE"] <= 152.9 & 
+           lag.results.3[,"Training.RMSE"] <= 135.6 & 
+           lag.results.3[,"AICc"] <= 1303)
+
+# none fall under 1st quartile for all three
+
+# look at top 5 from each
+best.by.AICc.3 <- lag.results.3 %>% 
+  arrange(AICc) %>% 
+  head(5) 
+
+best.by.trainingRMSE.3 <- lag.results.3 %>% 
+  arrange(Training.RMSE) %>% 
+  head(5)
+
+best.by.validationRMSE.3 <- lag.results.3 %>% 
+  arrange(Validation.RMSE) %>% 
+  head(5)
+
+inner_join(best.by.AICc.3, best.by.trainingRMSE.3)
+inner_join(best.by.AICc.3, best.by.validationRMSE.3)
+inner_join(best.by.trainingRMSE.3, best.by.validationRMSE.3)
+
+# Only trainingRMSE and ValidationRMSE have one in common, and model isn't
+# usful as it uses lag0 variables (i.e. current data)
+
+# let's compare the top models for each 'round' so far (order is AIC, train, val)
+top.models.1
+top.models.2
+top.models.3
+
+# only min AICc from 3rd round (LFPR and nonfarmquits) look comparable to other
+# models, let's inspect the model more closely (24,24)
+
+xreg.train <- cbind(Quits.lag.train[,"lag24"],
+                    LFPR.lag.train[,"lag24"])
+
+xreg.val <- cbind(Quits.lag.val[,"lag24"],
+                  LFPR.lag.val[,"lag24"])
+
+dyn.reg.5 <- auto.arima(train.ts.3,
+                        xreg = xreg.train,
+                        stepwise = FALSE,
+                        approximation = FALSE)
+checkresiduals(dyn.reg.5)
+
+#results: residuals look 'okay', but not a clean as previous models, and 
+# none of the coefficients look to be significant
+
+# final choice:
+# dyn.reg.4: URlag24, LFPRlag18
 
 #dirname(sys.frame(1)$ofile)
 
