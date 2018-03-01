@@ -402,7 +402,7 @@ The economic data do not require much treatment as they come from a professional
 
 General modeling practices involve horizontally splitting the original data set into at least two, sometimes three, subsets. This ensures model fitting and assessment are independent processes. There are many ways to generate these subsets, each particular to the structure of the data. With time-series data, as in this research, the typical approach is to retain roughly the first 80 percent of the data for model fitting, leaving the rest for model assessment. These two sections are respectively known as the training and validation sets. The training set is used to estimate model parameters, which are then used for predictions on subsequent observations. These predictions are compared against the validation set - actual, observed data - as a means of assessing model performance. Model performance is assessed using three criteria: the corrected Akaike Information Criteria (AICc), training root mean square error (training RMSE), and validation root mean square error (validation RMSE). Generally, better model performance is associated with lower scores for each criteria, so 'good' models are identified by having lower scores relative to other models. The training/validation approach is applied to each modeling technique employed.
 
-This endeavor utilizes two modeling techniques for forecasting: na\\\"ive models and dynamic regression models (also known as transfer functions). The former is a far simpler technique and is used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements.
+This endeavor utilizes two modeling techniques for forecasting: naïve models and dynamic regression models (also known as transfer functions). The former is a far simpler technique and is used as a baseline. The latter is a bit more complex. Dynamic regression has two major components, regression and time-series, each with their own assumptions and requirements.
 
 Regression models with multiple predictor variables assume independence of those predictors (also called regressors or exogeneous variables). All regression models assume errors are normally and independently distributed around zero with constant variance. The regression portion is primarily concerned with coefficients of the predictor variables. These coefficients provide insight as to which predictors have a statisically significant effect in explaining the variability in the data. 
 
@@ -433,7 +433,7 @@ p
 
 ```
 
-Considering these plots, it is expected that a seasonal model performs best and some alteration will have to be made to accomodate the outliers. To confirm, na\\\"ive models are fit to the data and the results are examined. Beyond revealing seasonality and outlier effects, fitting na\\\"ive models establishes a baseline to compare against later models. Na\\\"ive models are very simplistic, so if later models perform worse or only marginally better, it implies they are not capturing much information.
+Considering these plots, it is expected that a seasonal model performs best and some alteration will have to be made to accomodate the outliers. To confirm, naïve models are fit to the data and the results are examined. Beyond revealing seasonality and outlier effects, fitting naïve models establishes a baseline to compare against later models. Naïve models are very simplistic, so if later models perform worse or only marginally better, it implies they are not capturing much information.
 
 ```{r}
 n.1 <- naive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
@@ -443,19 +443,19 @@ n.1.error <- accuracy(n.1, val.ts.1[,"Total"])
 sn.1.error <- accuracy(sn.1, val.ts.1[,"Total"])
 ```
 
-Figure \@ref(fig:n-sn-forecast) gives evidence to the negative effects of outliers. Notice the large confidence intervals surrounding the na\\\"ive forecast and the 2014 spike carried through in the seasonal forecast.
+Figure \@ref(fig:n-sn-forecast) gives evidence to the negative effects of outliers. Notice the large confidence intervals surrounding the naïve forecast and the 2014 spike carried through in the seasonal forecast.
 
 ```{r n-sn-forecast, fig.align="center", fig.pos="H", fig.cap="Simple and Seasonal Na\\\"ive Forecasts", fig.width=5}
 p <- autoplot(n.1) +
   autolayer(val.ts.1[,"Total"]) +
   theme(legend.position = "none") +
-  labs(title = "Simple Forecasts", x = "", y = "")
+  labs(title = "Simple Forecasts", x = "", y = "") +
   scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
 
 q <- autoplot(sn.1) +
   autolayer(val.ts.1[,"Total"]) +
   theme(legend.position = "none") +
-  labs(title = "Seasonal Forecasts", x = "", y = "")
+  labs(title = "Seasonal Forecasts", x = "", y = "") +
   scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
 
 
@@ -540,7 +540,7 @@ n.2.error <- accuracy(n.2, val.ts.2)
 sn.2.error <- accuracy(sn.2, val.ts.2)
 ```
 
-Table \@ref(tab:season-rmse-compare) compares the seasonal na\\\"ive RMSEs before and after imputing the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations was useful.
+Table \@ref(tab:season-rmse-compare) compares the seasonal naïve RMSEs before and after imputing the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations was useful.
 
 ```{r season-rmse-compare, fig.align="center", fig.pos="H", fig.cap="Seasonal Na\\\"ive Comparison - Before and After Imputation"}
 outlier.compare <- data_frame("Raw Data" = sn.1.error[,2],
@@ -563,7 +563,7 @@ autoplot(sn.2) +
 
 ### Dynamic Regression
 
-Na\\\"ive models are simple, regression models adequately involve exogenous predictor variables, and time series model adequately handle autoregressive components of data. Individually these models are useful, but cannot handle both exogenous and autoregressive components.
+Naïve models are simple, regression models adequately involve exogenous predictor variables, and time series model adequately handle autoregressive components of data. Individually these models are useful, but cannot handle both exogenous and autoregressive components.
 
 Dynamic regression is a regression model with an ARIMA model fit to the errors. The regression piece allows use of independent variables in predicting a response, and the ARIMA portion helps model the autoregressive information which can exist in time-series data. The general formulation of a dynamic regression model with ARIMA(1,1,1) errors:
 
@@ -771,8 +771,8 @@ autoplot(dyn.reg.1.f) +
 # that's good news - we're getting closer towards accurate forecasting.
 dyn.reg.1.error <- accuracy(dyn.reg.1.f, val.ts.3)
 
-err.compare <- data_frame("Simple Na\\\"ive" = n.2.error[,2],
-           "Seasonal Na\\\"ive" = sn.2.error[,2],
+err.compare <- data_frame("Simple Naïve" = n.2.error[,2],
+           "Seasonal Naïve" = sn.2.error[,2],
            "Dynamic Regression" = dyn.reg.1.error[,2])
 
 rownames(err.compare) <- c("Training", "Validation")
@@ -783,7 +783,7 @@ kable(err.compare, format = "latex", caption = "Model RMSE Comparison", digits =
 
 ```
 
-Dynamic regression demonstrates greater ability to forecast the attrition data than the na\\\"ive models. However, the high standard errors of the regression coefficients ($\beta_1$, $\beta_2$, and $\beta_3$ in Table \@ref(tab:dynreg1-coeff)) indicate that none of the economic indicators are statistically significant. This means the ARIMA model handles all the forecasting and the regression provides little insight. Essentially, the economic predictor variables do not explain much of the data variability. This could be for several reasons:
+Dynamic regression demonstrates greater ability to forecast the attrition data than the naïve models. However, the high standard errors of the regression coefficients ($\beta_1$, $\beta_2$, and $\beta_3$ in Table \@ref(tab:dynreg1-coeff)) indicate that none of the economic indicators are statistically significant. This means the ARIMA model handles all the forecasting and the regression provides little insight. Essentially, the economic predictor variables do not explain much of the data variability. This could be for several reasons:
 
 - With differencing, the indicators represent month-to-month changes. For most observations in the data set those changes are marginal, resulting in an insignificant effect on attrition, at least numerically. 
 
@@ -940,9 +940,9 @@ This section analysed nine economic indicators and hundreds of models, in severa
 
 # Conclusions and Insights
 
-The research sought to identify economic indicators with statistically significant effects on attrition and to specify a mathematical model with which to build reliable forecasts of attrition. Regarding the former, nine separate economic indicators were initially considered (summarized in Table \@ref(tab:econ-var)). Correlation analysis was used to identify subsets of variables exhibiting the least interdependence to avoid the effects of multicollinearity. Initial modeling found no statistically significant effects. However, subsequent attempts found that lagged economic indicators were significant. Specifically, the unemployment rate lagged by 24 months was found to be statistically signifcant in all of the top performing models. No other variables analyzed (labor market momentum, labor force participation, and nonfarm job quits) showed evidence of significant effects. Regarding forecasting capacity, all of the top performing dynamic regression models explored in Chapter III exhibited lower training and validation RMSE than the na\\\"ive models. That is, the dynamic regression technique, regardless of predictor significance, is better adapted for forecasting attrition than simply applying previous observations forward. This work confirms results found in previous endeavors (such as Jantscher \cite{jantscher-2016}), reinforcing the relevance of the unemployment rate to attrition. This work builds on that knowledge by also providing a timeline, finding evidence that the current unemployment rate has a significant effect on attrition two years later. 
+The research sought to identify economic indicators with statistically significant effects on attrition and to specify a mathematical model with which to build reliable forecasts of attrition. Regarding the former, nine separate economic indicators were initially considered (summarized in Table \@ref(tab:econ-var)). Correlation analysis was used to identify subsets of variables exhibiting the least interdependence to avoid the effects of multicollinearity. Initial modeling found no statistically significant effects. However, subsequent attempts found that lagged economic indicators were significant. Specifically, the unemployment rate lagged by 24 months was found to be statistically signifcant in all of the top performing models. No other variables analyzed (labor market momentum, labor force participation, and nonfarm job quits) showed evidence of significant effects. Regarding forecasting capacity, all of the top performing dynamic regression models explored in Chapter III exhibited lower training and validation RMSE than the naïve models. That is, the dynamic regression technique, regardless of predictor significance, is better adapted for forecasting attrition than simply applying previous observations forward. This work confirms results found in previous endeavors (such as Jantscher \cite{jantscher-2016}), reinforcing the relevance of the unemployment rate to attrition. This work builds on that knowledge by also providing a timeline, finding evidence that the current unemployment rate has a significant effect on attrition two years later. 
 
-Many possibilites were addressed in this work; four na\\\"ive models and 33,792 unique dynamic regression models (176 regression specifications, each with 192 ARIMA variations). By no means does this encapsulate the total set of possible models. There are many avenues left unexplored by this research. Future work in this area could, first, explore different subsets of the economic indicators identified. The initial set of economic indicators can also easily be expanded; the relevant data is freely accessible to the public. Only five unique lag-periods were investigated, and the procedure discussed could easily incorporate more vaired time lags (at the cost of more time and computational complexity). Lastly, all data considered were aggregated to the national level and only total attrition across U.S. Air Force officers was evaluated. Future work in this area could, and should, investigate possible differences across AFSC groupings and, if possible, at a higher level of fidelity (e.g. state or county vs. national aggregates).
+Many possibilites were addressed in this work; four naïve models and 33,792 unique dynamic regression models (176 regression specifications, each with 192 ARIMA variations). By no means does this encapsulate the total set of possible models. There are many avenues left unexplored by this research. Future work in this area could, first, explore different subsets of the economic indicators identified. The initial set of economic indicators can also easily be expanded; the relevant data is freely accessible to the public. Only five unique lag-periods were investigated, and the procedure discussed could easily incorporate more vaired time lags (at the cost of more time and computational complexity). Lastly, all data considered were aggregated to the national level and only total attrition across U.S. Air Force officers was evaluated. Future work in this area could, and should, investigate possible differences across AFSC groupings and, if possible, at a higher level of fidelity (e.g. state or county vs. national aggregates).
 
 \newpage
 

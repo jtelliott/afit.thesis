@@ -1027,12 +1027,12 @@ identified by having lower scores relative to other models. The
 training/validation approach is applied to each modeling technique
 employed.
 
-This endeavor utilizes two modeling techniques for forecasting:
-na\textbackslash{}"ive models and dynamic regression models (also known
-as transfer functions). The former is a far simpler technique and is
-used as a baseline. The latter is a bit more complex. Dynamic regression
-has two major components, regression and time-series, each with their
-own assumptions and requirements.
+This endeavor utilizes two modeling techniques for forecasting: naïve
+models and dynamic regression models (also known as transfer functions).
+The former is a far simpler technique and is used as a baseline. The
+latter is a bit more complex. Dynamic regression has two major
+components, regression and time-series, each with their own assumptions
+and requirements.
 
 Regression models with multiple predictor variables assume independence
 of those predictors (also called regressors or exogeneous variables).
@@ -1098,29 +1098,16 @@ and end.
 
 Considering these plots, it is expected that a seasonal model performs
 best and some alteration will have to be made to accomodate the
-outliers. To confirm, na\textbackslash{}"ive models are fit to the data
-and the results are examined. Beyond revealing seasonality and outlier
-effects, fitting na\textbackslash{}"ive models establishes a baseline to
-compare against later models. Na\textbackslash{}"ive models are very
-simplistic, so if later models perform worse or only marginally better,
-it implies they are not capturing much information.
+outliers. To confirm, naïve models are fit to the data and the results
+are examined. Beyond revealing seasonality and outlier effects, fitting
+naïve models establishes a baseline to compare against later models.
+Naïve models are very simplistic, so if later models perform worse or
+only marginally better, it implies they are not capturing much
+information.
 
 Figure \ref{fig:n-sn-forecast} gives evidence to the negative effects of
-outliers. Notice the large confidence intervals surrounding the
-na\textbackslash{}"ive forecast and the 2014 spike carried through in
-the seasonal forecast.
-
-\begin{verbatim}
-## <ScaleContinuousPosition>
-##  Range:  
-##  Limits:    0 --    1
-\end{verbatim}
-
-\begin{verbatim}
-## <ScaleContinuousPosition>
-##  Range:  
-##  Limits:    0 --    1
-\end{verbatim}
+outliers. Notice the large confidence intervals surrounding the naïve
+forecast and the 2014 spike carried through in the seasonal forecast.
 
 \begin{figure}[H]
 
@@ -1209,15 +1196,14 @@ a seasonal model.
 \caption{Seasonal Plot: Outliers Removed}\label{fig:response-season-plot-2}
 \end{figure}
 
-Table \ref{tab:season-rmse-compare} compares the seasonal
-na\textbackslash{}"ive RMSEs before and after imputing the identified
-outliers. The results indicate that removing and replacing the extreme
-values for November and December improved the model. This is further
-reflected by the forecast (shown in blue) in Figure
-\ref{fig:sn-forecast-2}, which follows the validation data (shown in
-orange) more closely than those in Figure \ref{fig:n-sn-forecast}.
-Overall, these results imply that imputation of the selected
-observations was useful.
+Table \ref{tab:season-rmse-compare} compares the seasonal naïve RMSEs
+before and after imputing the identified outliers. The results indicate
+that removing and replacing the extreme values for November and December
+improved the model. This is further reflected by the forecast (shown in
+blue) in Figure \ref{fig:sn-forecast-2}, which follows the validation
+data (shown in orange) more closely than those in Figure
+\ref{fig:n-sn-forecast}. Overall, these results imply that imputation of
+the selected observations was useful.
 
 \begin{table}[!h]
 
@@ -1245,10 +1231,10 @@ Validation & 454.288 & 186.584\\
 \hypertarget{dynamic-regression}{%
 \subsection{Dynamic Regression}\label{dynamic-regression}}
 
-Na\textbackslash{}"ive models are simple, regression models adequately
-involve exogenous predictor variables, and time series model adequately
-handle autoregressive components of data. Individually these models are
-useful, but cannot handle both exogenous and autoregressive components.
+Naïve models are simple, regression models adequately involve exogenous
+predictor variables, and time series model adequately handle
+autoregressive components of data. Individually these models are useful,
+but cannot handle both exogenous and autoregressive components.
 
 Dynamic regression is a regression model with an ARIMA model fit to the
 errors. The regression piece allows use of independent variables in
@@ -1426,7 +1412,7 @@ performance, the RMSEs from the models are compared in Table
 \centering
 \begin{tabular}[t]{lrrr}
 \toprule
-\bfseries{ } & \bfseries{Simple Na\textbackslash{}"ive} & \bfseries{Seasonal Na\textbackslash{}"ive} & \bfseries{Dynamic Regression}\\
+\bfseries{ } & \bfseries{Simple Naïve} & \bfseries{Seasonal Naïve} & \bfseries{Dynamic Regression}\\
 \midrule
 Training & 199.832 & 161.262 & 130.746\\
 Validation & 160.642 & 186.584 & 142.988\\
@@ -1435,14 +1421,13 @@ Validation & 160.642 & 186.584 & 142.988\\
 \end{table}
 
 Dynamic regression demonstrates greater ability to forecast the
-attrition data than the na\textbackslash{}"ive models. However, the high
-standard errors of the regression coefficients (\(\beta_1\),
-\(\beta_2\), and \(\beta_3\) in Table \ref{tab:dynreg1-coeff}) indicate
-that none of the economic indicators are statistically significant. This
-means the ARIMA model handles all the forecasting and the regression
-provides little insight. Essentially, the economic predictor variables
-do not explain much of the data variability. This could be for several
-reasons:
+attrition data than the naïve models. However, the high standard errors
+of the regression coefficients (\(\beta_1\), \(\beta_2\), and
+\(\beta_3\) in Table \ref{tab:dynreg1-coeff}) indicate that none of the
+economic indicators are statistically significant. This means the ARIMA
+model handles all the forecasting and the regression provides little
+insight. Essentially, the economic predictor variables do not explain
+much of the data variability. This could be for several reasons:
 
 \begin{itemize}
 \item
@@ -1778,31 +1763,30 @@ analyzed (labor market momentum, labor force participation, and nonfarm
 job quits) showed evidence of significant effects. Regarding forecasting
 capacity, all of the top performing dynamic regression models explored
 in Chapter III exhibited lower training and validation RMSE than the
-na\textbackslash{}"ive models. That is, the dynamic regression
-technique, regardless of predictor significance, is better adapted for
-forecasting attrition than simply applying previous observations
-forward. This work confirms results found in previous endeavors (such as
-Jantscher \cite{jantscher-2016}), reinforcing the relevance of the
-unemployment rate to attrition. This work builds on that knowledge by
-also providing a timeline, finding evidence that the current
-unemployment rate has a significant effect on attrition two years later.
+naïve models. That is, the dynamic regression technique, regardless of
+predictor significance, is better adapted for forecasting attrition than
+simply applying previous observations forward. This work confirms
+results found in previous endeavors (such as Jantscher
+\cite{jantscher-2016}), reinforcing the relevance of the unemployment
+rate to attrition. This work builds on that knowledge by also providing
+a timeline, finding evidence that the current unemployment rate has a
+significant effect on attrition two years later.
 
-Many possibilites were addressed in this work; four
-na\textbackslash{}"ive models and 33,792 unique dynamic regression
-models (176 regression specifications, each with 192 ARIMA variations).
-By no means does this encapsulate the total set of possible models.
-There are many avenues left unexplored by this research. Future work in
-this area could, first, explore different subsets of the economic
-indicators identified. The initial set of economic indicators can also
-easily be expanded; the relevant data is freely accessible to the
-public. Only five unique lag-periods were investigated, and the
-procedure discussed could easily incorporate more vaired time lags (at
-the cost of more time and computational complexity). Lastly, all data
-considered were aggregated to the national level and only total
-attrition across U.S. Air Force officers was evaluated. Future work in
-this area could, and should, investigate possible differences across
-AFSC groupings and, if possible, at a higher level of fidelity
-(e.g.~state or county vs.~national aggregates).
+Many possibilites were addressed in this work; four naïve models and
+33,792 unique dynamic regression models (176 regression specifications,
+each with 192 ARIMA variations). By no means does this encapsulate the
+total set of possible models. There are many avenues left unexplored by
+this research. Future work in this area could, first, explore different
+subsets of the economic indicators identified. The initial set of
+economic indicators can also easily be expanded; the relevant data is
+freely accessible to the public. Only five unique lag-periods were
+investigated, and the procedure discussed could easily incorporate more
+vaired time lags (at the cost of more time and computational
+complexity). Lastly, all data considered were aggregated to the national
+level and only total attrition across U.S. Air Force officers was
+evaluated. Future work in this area could, and should, investigate
+possible differences across AFSC groupings and, if possible, at a higher
+level of fidelity (e.g.~state or county vs.~national aggregates).
 
 \newpage
 
