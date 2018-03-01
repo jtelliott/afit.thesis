@@ -33,12 +33,38 @@ document:
   keywords: 'LaTeX,Thesis,typesetting'
   type: 'Thesis'
 abstract: >
-  The abstract of the thesis.
-dedication: >
-  The dedication.
+  
+  Many organizations are concerned, and struggle, with personnel management. Training 
+  personnel is expensive, so there is a high emphasis on understanding why and 
+  anticipating when individuals leave an organization. The military is no exception. 
+  Moreover, the military is strictly hierarchical and must grow all its leaders, 
+  making retention all the more vital.
+
+  Intuition holds that there is a relationship between the economic environment and 
+  personnel attrition rates in the military (e.g. when the economy is bad, attrition is 
+  low). This study investigates that relationship in a more formal manner. Specifically, 
+  this study conducts an econometric analysis of U.S. Air Force officer attrition rates 
+  from 2004-2016, utilizing several economic indicators such as the unemployment rate, 
+  labor market momentum, and labor force participation. Dynamic regression models are used 
+  to explore these relationships, and to generate a reliable attrition forecasting 
+  capability.
+
+  This study finds that the unemployment rate significantly affects U.S. Air Force 
+  officer attrition, reinforcing the results of previous works. Furthermore, this study 
+  identifies a time lag for that relationship; unemployment rates were found to affect 
+  attrition two years later. Further insights are discussed, and paths for expansion of 
+  this work are laid out.
+
+dedication : >  
+  
 acknowledgement: >
-  I am incredibly greatful to my advisor, Dr. Hill for being invested in me as a student 
-  and officer, getting on my case when I needed it, and for being patient above all else.
+
+  I am incredibly grateful to my advisor, Dr. Hill, for getting on my case when I needed 
+  it and, above all else, for being patient.
+  
+  I also want to thank my sponsor, the Strategic Analysis branch of the Force 
+  Management Division of Headquarters Air Force (HAF/A1XDX) for providing the personnel 
+  data and research guidance.
 vita: >
   
 distribution_statement:
