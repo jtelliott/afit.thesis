@@ -1168,11 +1168,11 @@ It is known that during years 2005, '06, '07, and '14 special separation
 programs were implemented. Given the effect those years appear to have
 on modeling, they must be accomodated before continuing. Before deciding
 how, the explicit points in question need to be identified. To help,
-refer to Figure \ref{fig:response-season-plot}. We note above that the
+refer to Figure \ref{fig:response-season-plot}. As noted above, the
 spikes generally occur in November and December. However, the
 observations from 2005 are close enough to those from other years that
-they may have resulted naturally. We do not want to remove too much
-information from the data set, only that which is misleading. So,
+they may have resulted naturally. Minimal removal of information from
+the data set is desired, removing only that which is misleading. So,
 November and December observations from 2006, '07, and '14 are selected
 for replacement.
 
@@ -1180,7 +1180,7 @@ Given the seasonality in the data set, the replaced values should stem
 from matching observations in previous years, as opposed to previous
 observations within the same year. The outliers are replaced (or
 imputed) with the arithmetic mean of all years not being replaced
-(e.g.~November 2006, '07, '14 is replaced with the mean separations in
+(e.g.~November 2006, '07, '14 are replaced with the mean separations in
 November for all other years).
 
 Replotting the response in Figure \ref{fig:response-plot-2} shows a much
@@ -1210,7 +1210,7 @@ a seasonal model.
 \end{figure}
 
 Table \ref{tab:season-rmse-compare} compares the seasonal
-na\textbackslash{}"ive RMSEs before and after imputating the identified
+na\textbackslash{}"ive RMSEs before and after imputing the identified
 outliers. The results indicate that removing and replacing the extreme
 values for November and December improved the model. This is further
 reflected by the forecast (shown in blue) in Figure
@@ -1327,16 +1327,16 @@ stationary. It is important to note the regressors now show the
 month-to-month change, which will be pertinent when interpreting
 results.
 
-With stationary and independent economic indicators, we can move on from
-regression to specification of the ARIMA model. Up to six parameters can
-be specified and estimated: the order of autoregression, degree of
-differencing, and order of the moving average (\(p,d,\) and \(q\),
-respectively) and their seasonal counterparts (\(P,D,\) and \(Q\)). Many
-combinations are considered. A range is specified for each parameter,
-and a model is fit for every combination within the specified ranges;
-the model with the lowest corrected Akaike Information Criteria (AICc)
-is selected. For the first, and all subsequent, dynamic regression
-models in this work, the following ranges/values were used:
+With stationary and independent economic indicators, model formulation
+can transition from regression to the ARIMA portion. Up to six
+parameters can be specified and estimated: the order of autoregression,
+degree of differencing, and order of the moving average (\(p,d,\) and
+\(q\), respectively) and their seasonal counterparts (\(P,D,\) and
+\(Q\)). Many combinations are considered. A range is specified for each
+parameter, and a model is fit for every combination within the specified
+ranges; the model with the lowest corrected Akaike Information Criteria
+(AICc) is selected. For the first, and all subsequent, dynamic
+regression models in this work, the following ranges/values were used:
 \(p,q \in [0,5]\), \(d,D = 0\), and \(P, Q \in [0,2]\).
 
 For this first pass, the model selected was a regression model with a
@@ -1363,18 +1363,18 @@ StdErr & 0.087 & 0.088 & 0.092 & 0.092 & 0.082 & 47.602 & 22.286 & 35.016 & 11.4
 \end{tabular}
 \end{table}
 
-Model assessment involves analysis of the residuals. When inspecting the
-residuals, we are looking for evidence of any remaining autocorrelation,
-satisfaction of normality assumptions (\(e_t \sim N(0,\sigma^2)\)), and
-outlier effects. Figure \ref{fig:dynreg1-resid} provides the plots used
-to answer those questions. The top subfigure plots the raw model
-residuals, and is used to identify possible trends, seasonality, or
-heteroscedasticity. Fortunately, none of those features are apparent.
-The bottom-left is used to examine significant autocorrelation in the
-residuals; significant correlations would indicate a possible violation
-of the independence of the residuals. The current model's results only
-show one lag-period with significant autocorrelation, which may mean
-that there is information unnaccounted for by the current model. Overall
+Model assessment involves analysis of the residuals. Residuals are
+examined for evidence of remaining autocorrelation, satisfaction of
+normality assumptions (\(e_t \sim N(0,\sigma^2)\)), and outlier effects.
+Figure \ref{fig:dynreg1-resid} provides the plots used to answer those
+questions. The top subfigure plots the raw model residuals, and is used
+to identify possible trends, seasonality, or heteroscedasticity.
+Fortunately, none of those features are apparent. The bottom-left is
+used to examine significant autocorrelation in the residuals;
+significant correlations would indicate a possible violation of the
+independence of the residuals. The current model's results only show one
+lag-period with significant autocorrelation, which may mean that there
+is information unnaccounted for by the current model. Overall
 autocorrelation, however, appears insignificant, as further evidenced by
 the results of a Ljung-Box test for autocorrelation (Table
 \ref{tab:dynreg1-boxtest}). The bottom-right plot shows a histogram of
@@ -1485,13 +1485,13 @@ The economic data is observed monthly over 12 years, and so there are
 many possible lag-periods to consider. It is also possible that the best
 lag-period is not identical for all predictors, so several combinations
 of different predictors lagged to different periods should be tested.
-This is a huge test space. To decrease computational requirements,
-lag-periods are restricted to 0, 6, 12, 18, and 24 months. A separate
-dynamic regression model is generated for every combination of predictor
-and lag-period. This amounts to 125 dynamic regression models. The
-models are evaluated and compared on three metrics: AICc, training RMSE,
-and validation RMSE. Any models that peform well by comparison are
-inspected further.
+This results in a very large test space. To decrease computational
+requirements, lag-periods are restricted to 0, 6, 12, 18, and 24 months.
+A separate dynamic regression model is generated for every combination
+of predictor and lag-period. This amounts to 125 dynamic regression
+models. The models are evaluated and compared on three metrics: AICc,
+training RMSE, and validation RMSE. Any models that peform well by
+comparison are inspected further.
 
 Table \ref{tab:lag-results-1} below summarizes the values for each
 performance metric. Note that the minimum value for each category are
@@ -1606,12 +1606,11 @@ significance.
 The last common model (24, 18, 24) has already been inspected; it is the
 same one in Table \ref{tab:best-by-all-1}. That leaves two models for
 comparison (24, 18, 6) and (24, 18, 18). Their coefficients are
-summarized below in Tables \ref{tab:common-1} and \ref{tab:common-2}
-below, respectively. Both tables show similar results as the previous
-model (24, 18, 24): The unemployment rate is a significant predictor,
-labor force particpation has a large effect but with high standard
-error, and labor market momentum has a small effect with a large
-standard error.
+summarized in Tables \ref{tab:common-1} and \ref{tab:common-2} below,
+respectively. Both tables show similar results as the previous model
+(24, 18, 24): The unemployment rate is a significant predictor, labor
+force particpation has a large effect but with high standard error, and
+labor market momentum has a small effect with a large standard error.
 
 \begin{table}[!h]
 
@@ -1660,8 +1659,8 @@ market momentum is removed.
 
 Lagged variable analyis is repeated with labor market momentum excluded
 from the list of possible predictors. 25 dynamic regression models are
-generated (with the identical lag periods) and are compared. This time,
-no model falls under the 1st quartile for all performance criteria.
+generated (with the identical lag periods) and compared. This time, no
+model falls under the 1st quartile for all performance criteria.
 Comparing the top five performers for each criteria does yield results.
 A dynamic regression model with the unemployment rate lagged by 24
 months and labor force participation rate lagged by 18 months falls into
@@ -1757,7 +1756,7 @@ LFPR.lag.train[, "lag24"] & 63.5418324 & 43.4367079\\
 This section analysed nine economic indicators and hundreds of models,
 in several iterations. The best models were identified and explored,
 revealing some trends and signifcant predictors. The insights gleaned
-from this process are summarised and discussed in the next chapter.
+from this process are summarized and discussed in the next chapter.
 
 \newpage
 
@@ -1773,20 +1772,20 @@ to identify subsets of variables exhibiting the least interdependence to
 avoid the effects of multicollinearity. Initial modeling found no
 statistically significant effects. However, subsequent attempts found
 that lagged economic indicators were significant. Specifically, the
-unemployment rate lagged by 24 months was found to be statisically
+unemployment rate lagged by 24 months was found to be statistically
 signifcant in all of the top performing models. No other variables
-analysed (labor market momentum, labor force participation, and nonfarm
+analyzed (labor market momentum, labor force participation, and nonfarm
 job quits) showed evidence of significant effects. Regarding forecasting
 capacity, all of the top performing dynamic regression models explored
 in Chapter III exhibited lower training and validation RMSE than the
 na\textbackslash{}"ive models. That is, the dynamic regression
-technique, regardless of predictor sigificance, is better adapted for
+technique, regardless of predictor significance, is better adapted for
 forecasting attrition than simply applying previous observations
 forward. This work confirms results found in previous endeavors (such as
 Jantscher \cite{jantscher-2016}), reinforcing the relevance of the
 unemployment rate to attrition. This work builds on that knowledge by
-also providing a time line, finding evidence that the current
-unemployment rate significantly affects attrition two years later.
+also providing a timeline, finding evidence that the current
+unemployment rate has a significant effect on attrition two years later.
 
 Many possibilites were addressed in this work; four
 na\textbackslash{}"ive models and 33,792 unique dynamic regression
@@ -1798,12 +1797,12 @@ indicators identified. The initial set of economic indicators can also
 easily be expanded; the relevant data is freely accessible to the
 public. Only five unique lag-periods were investigated, and the
 procedure discussed could easily incorporate more vaired time lags (at
-the cost of more time and comupational complexity). Lastly, all data
-considered was aggregated to the national level and only total attrition
-across U.S. Air Force officers was evaluated. Future work in this area
-could, and should, investigate possible differences across AFSC
-groupings and, if possible, at a higher level of fidelity (e.g.~state or
-county vs.~national aggregates).
+the cost of more time and computational complexity). Lastly, all data
+considered were aggregated to the national level and only total
+attrition across U.S. Air Force officers was evaluated. Future work in
+this area could, and should, investigate possible differences across
+AFSC groupings and, if possible, at a higher level of fidelity
+(e.g.~state or county vs.~national aggregates).
 
 \newpage
 
