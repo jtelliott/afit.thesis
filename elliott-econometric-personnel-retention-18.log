@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.12.15)  28 FEB 2018 20:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.12.15)  1 MAR 2018 08:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1200,7 +1200,7 @@ st-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/n-sn-forecas
 t-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/n-sn-forecast-1.pdf  used on input line 1115.
+e-latex/n-sn-forecast-1.pdf  used on input line 1127.
 (pdftex.def)             Requested size: 358.33788pt x 317.1842pt.
 [18 <./elliott-econometric-personnel-retention-18_files/figure-latex/response-s
 eason-plot-1.pdf>]
@@ -1216,7 +1216,7 @@ ot-2-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/response-plo
 t-2-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/response-plot-2-1.pdf  used on input line 1180.
+e-latex/response-plot-2-1.pdf  used on input line 1192.
 (pdftex.def)             Requested size: 355.32661pt x 242.90689pt.
 [20]
 <elliott-econometric-personnel-retention-18_files/figure-latex/response-season-
@@ -1226,7 +1226,7 @@ ason-plot-2-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/response-sea
 son-plot-2-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/response-season-plot-2-1.pdf  used on input line 1193.
+e-latex/response-season-plot-2-1.pdf  used on input line 1205.
 (pdftex.def)             Requested size: 355.32661pt x 242.90689pt.
 [21 <./elliott-econometric-personnel-retention-18_files/figure-latex/response-p
 lot-2-1.pdf> <./elliott-econometric-personnel-retention-18_files/figure-latex/r
@@ -1238,7 +1238,7 @@ File: elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast
 <use elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecast-
 2-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/sn-forecast-2-1.pdf  used on input line 1226.
+e-latex/sn-forecast-2-1.pdf  used on input line 1238.
 (pdftex.def)             Requested size: 360.34537pt x 206.77199pt.
 [22 <./elliott-econometric-personnel-retention-18_files/figure-latex/sn-forecas
 t-2-1.pdf>]
@@ -1249,7 +1249,7 @@ File: elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-
 <use elliott-econometric-personnel-retention-18_files/figure-latex/heat-map-1-1
 .pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/heat-map-1-1.pdf  used on input line 1274.
+e-latex/heat-map-1-1.pdf  used on input line 1286.
 (pdftex.def)             Requested size: 349.30414pt x 348.3004pt.
 [23]
 <elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1-1.pd
@@ -1259,10 +1259,10 @@ File: elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1
 <use elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-1-
 1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/econ-vars-1-1.pdf  used on input line 1293.
+e-latex/econ-vars-1-1.pdf  used on input line 1305.
 (pdftex.def)             Requested size: 481.79881pt x 351.31163pt.
 
-Overfull \hbox (12.0438pt too wide) in paragraph at lines 1293--1294
+Overfull \hbox (12.0438pt too wide) in paragraph at lines 1305--1306
  [][] 
  []
 
@@ -1275,10 +1275,10 @@ File: elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2
 <use elliott-econometric-personnel-retention-18_files/figure-latex/econ-vars-2-
 1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/econ-vars-2-1.pdf  used on input line 1306.
+e-latex/econ-vars-2-1.pdf  used on input line 1318.
 (pdftex.def)             Requested size: 481.79881pt x 351.31163pt.
 
-Overfull \hbox (12.0438pt too wide) in paragraph at lines 1306--1307
+Overfull \hbox (12.0438pt too wide) in paragraph at lines 1318--1319
  [][] 
  []
 
@@ -1292,7 +1292,7 @@ id-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-resi
 d-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/dynreg1-resid-1.pdf  used on input line 1375.
+e-latex/dynreg1-resid-1.pdf  used on input line 1387.
 (pdftex.def)             Requested size: 423.58147pt x 351.31163pt.
 [27]
 <elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-forecast
@@ -1302,7 +1302,7 @@ ecast-1.pdf Graphic file (type pdf)
 <use elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-fore
 cast-1.pdf>
 Package pdftex.def Info: elliott-econometric-personnel-retention-18_files/figur
-e-latex/dynreg1-forecast-1.pdf  used on input line 1404.
+e-latex/dynreg1-forecast-1.pdf  used on input line 1416.
 (pdftex.def)             Requested size: 468.75009pt x 260.97437pt.
 [28 <./elliott-econometric-personnel-retention-18_files/figure-latex/dynreg1-re
 sid-1.pdf>] [29 <./elliott-econometric-personnel-retention-18_files/figure-late
@@ -1316,129 +1316,129 @@ Chapter IV.
 
 ] [37]
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <6> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 1806.
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 1818.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <6> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 1807.
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 1819.
 [38
 
 ]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [39]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [40]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [41]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [42]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [43]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [44]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [45]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [46]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [47]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [48]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [49]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [50]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [51]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [52]
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 
-Underfull \vbox (badness 10000) detected at line 2730
+Underfull \vbox (badness 10000) detected at line 2742
  []
 
 [53] [54] (./elliott-econometric-personnel-retention-18.bbl
@@ -1513,31 +1513,31 @@ Underfull \hbox (badness 1838) in paragraph at lines 105--107
 \rhXI=\dimen174
 \rhXII=\dimen175
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.76003pt on input line 2817.
+(Font)              scaled to size 8.76003pt on input line 2829.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.00003pt on input line 2817.
+(Font)              scaled to size 8.00003pt on input line 2829.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 2817.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 2829.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 8.00003pt on input line 2817.
+(Font)              scaled to size 8.00003pt on input line 2829.
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\uppercase' on input line 2846.
+(hyperref)                removing `\uppercase' on input line 2858.
 
 
-Overfull \vbox (48.4238pt too high) detected at line 2846
+Overfull \vbox (48.4238pt too high) detected at line 2858
  []
 
 
-Overfull \vbox (48.4238pt too high) detected at line 2875
+Overfull \vbox (48.4238pt too high) detected at line 2887
  []
 
 
-Overfull \vbox (39.94284pt too high) detected at line 2920
+Overfull \vbox (39.94284pt too high) detected at line 2932
  []
 
 
-Overfull \hbox (3.06526pt too wide) in paragraph at lines 3003--3003
+Overfull \hbox (3.06526pt too wide) in paragraph at lines 3015--3015
 []|$[]$|  
  []
 
@@ -1546,16 +1546,16 @@ AED: lastpage setting LastPage
 [57
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3005.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 3005.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 3017.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 3017.
 (./elliott-econometric-personnel-retention-18.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3005.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3005.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 3017.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 3017.
 
 Package rerunfilecheck Info: File `elliott-econometric-personnel-retention-18.o
 ut' has not changed.
 (rerunfilecheck)             Checksum: 0FA1BC14AB5F58A0C839B111CFE18078;1822.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3005.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 3017.
  ) 
 Here is how much of TeX's memory you used:
  12310 strings out of 492985
@@ -1586,8 +1586,8 @@ rw/courier/ucrr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/couri
 er/ucrro8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/helvetic/uhv
 b8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb>
-Output written on elliott-econometric-personnel-retention-18.pdf (66 pages, 533
-970 bytes).
+Output written on elliott-econometric-personnel-retention-18.pdf (66 pages, 534
+146 bytes).
 PDF statistics:
  846 PDF objects out of 1000 (max. 8388607)
  709 compressed objects within 8 object streams

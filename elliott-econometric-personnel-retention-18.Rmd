@@ -132,9 +132,9 @@ cite_options(citation_format = 'pandoc')
 
 As with any large organization, the personnel management functions of the components of the Department of Defense (DoD) are concerned with personnel retention. However, since the DoD must grow all its leaders from an entry level, retention is far more important and challenging.
 
-The DoD has long offered an all or nothing 20-year retirement: stay to 20 years and you are eligible for retirement benefits, leave before 20 years and you have nothing. This 20-year goal has certainly been a positive retention motivator.
+The DoD has long offered an all-or-nothing 20-year retirement: stay to 20 years and you are eligible for retirement benefits, leave before 20 years and you have nothing. This 20-year goal has certainly been a positive retention motivator.
 
-The new blended retirement system will change the all or nothing aspect of military retirement. Personnel can now leave before 20 years with some level of retirement benefits. These new options will surely change military retention patterns. How the patterns will change is unknown.
+The new blended retirement system will change the all-or-nothing aspect of military retirement. Personnel can now leave before 20 years with some level of retirement benefit. These new options will surely change military retention patterns. How the patterns will change is unknown.
 
 Part of the military strategy to keep retention at desired levels is to increase pay levels of targeted personnel groups with retention bonuses. Clearly, military members offered such a bonus must consider the bonus and retaining versus civilian pay potential if the member separates.
 
@@ -144,7 +144,7 @@ This research is a study of military retention as affected by economic measures 
 
 For both releasability and compatibility reasons, the Air Force personnel data used in this work has been aggregated to the national level, limiting the detail to which relationships can be explored. This was done to match the national economic data available, and to protect personal information of the individuals included in the analysis. 
 
-The military personnel data concerns those serving during the 2004-2017 time frame, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal military retention behavior. The U.S. military is also transitioning to a new retirement system. It is possible that any relationships revealed in this thesis will be affected differently by the new retirement system. 
+The military personnel data concerns those serving during the 2004-2017 timeframe, and the economic data matches. Some extraordinary events occurred during that period, notably the Great Recession beginning in 2008, which may have altered normal military retention behavior. The U.S. military is also transitioning to a new retirement system. It is possible that any relationships revealed in this thesis will be affected differently by the new retirement system. 
 
 ## Assumptions and Limitations
 
@@ -152,7 +152,7 @@ As with any analytic endeavor, several assumptions are made in order to faciliat
 
 ## Outline
 
-This chapter introduced the retention problem investigated and discussed the foundational motivations and thoughts underpinning the thesis. The next chapter reviews the related literature - the efforts used to better frame the problem and previous attempts to model it. The third chapter focuses on the methodology, documenting how and why the data was attained (i.e. sources and selection criteria), as well as any transformations necessary to conduct the analysis. Chapter III continues by discussing the modeling procedure in detail, including general steps and specific mathmatical formulations. Lastly, the results are examined and insights or conclusions are highlighted in Chapter IV.
+This chapter introduced the retention problem investigated and discussed the foundational motivations and thoughts underpinning the thesis. The next chapter reviews the related literature - the efforts used to better frame the problem and previous attempts to model it. The third chapter focuses on the methodology, documenting how and why the data were attained (i.e. sources and selection criteria), as well as any transformations necessary to conduct the analysis. Chapter III continues by discussing the modeling procedure in detail, including general steps and specific mathmatical formulations. Lastly, the results are examined and insights or conclusions are highlighted in Chapter IV.
 
 \newpage
 
@@ -164,9 +164,9 @@ Managing personnel and modeling retention behaviors have, appropriately, long be
 
 ## The Military Retention Problem
 
-All organizations have some problem associated with retaining their people. This is especially true of the military, wherein members are routinely confronted with deployments, long duty hours, and frequent relocations - factors generally not found in non-military organizations. These factors produce high stress on the military members and their families, who play a significant role in a member's retention decision \cite{fugita-lakhani-1991}. Evidence suggests that individuals serving in the military are generally more tolerant of these conflicts \cite{capon-etal-2007}, but the causes of attrition involve more than just familial concerns. Kane \cite{kane-2012} argues the military suffers from a chronic personnel mismanagement problem: Members' merit is not always rewarded nearly as well as it is in the private sector, in terms of personal recognition and upward movement, partly due to heavy bureaucratic restrictions. This disparity can lead to frustration and job dissatisfaction, damaging the member's commitment to the organization and incentivizing their attrition behavior \cite{capon-etal-2007}. 
+All organizations have some problem associated with retaining their people. This is especially true of the military, wherein members are routinely confronted with deployments, long duty hours, and frequent relocations - factors generally not found in non-military organizations. These factors produce high stress on the military members and their families, who play a significant role in a member's retention decision \cite{fugita-lakhani-1991}. Evidence suggests that individuals serving in the military are generally more tolerant of these conflicts \cite{capon-etal-2007}, but the causes of attrition involve more than just familial concerns. Kane \cite{kane-2012} argues the military suffers from a chronic personnel mismanagement problem: members' merit is not always rewarded nearly as well as it is in the private sector, in terms of personal recognition and upward movement, partly due to heavy bureaucratic restrictions. This disparity can lead to frustration and job dissatisfaction, damaging the member's commitment to the organization and incentivizing their attrition behavior \cite{capon-etal-2007}. 
 
-Compounding the internal frustrations, civilian labor markets can offer intense incentives for leaving. Barrows \cite{barrows-1993} details the mechanisms underpinning U.S. Air Force pilot attrition to civilian airlines, framing the problem with human capital theory. The military offers a unique opportunity for developing highly desired skill sets, placing members in positions of high stress, and providing them responsibility at early stages of professional development \cite{kane-2012}. Furthermore, evidence suggests that military as an insitution is quite adept at attracting intelligent and capable individuals \cite{asch-hosek-2004}. Providing innately talented individuals with a high degree of general and specific training fosters the development of high-performers with desirable and broadly applicable skill sets. Therein lies the problem. Civilian firms are typically more flexible in their ability to compensate such individuals through organizational advancement and wage, often outcompeting the military \cite{kane-2012}. These phenomena are in direct contradiction to the principles for successful retention laid out by Asch \cite{asch-1993}. Asch explains that in order for military compensation to be attractive, it needs to be at least as great as the members' expected wages and benefits as would be offered by civilian labor markets. Compensation should also be contigent upon performance, reflecting the individual's value to the organization, to maintain motivation and disincentivize attrition \cite{asch-1993}. In order to help best determine compensation, then, it behooves the military to develop methods for anticipating the effects of labor market conditions on military members' retention decisions. 
+Compounding the internal frustrations, civilian labor markets can offer intense incentives for leaving. Barrows \cite{barrows-1993} details the mechanisms underpinning U.S. Air Force pilot attrition to civilian airlines, framing the problem with human capital theory. The military offers a unique opportunity for developing highly desired skill sets, placing members in positions of high stress, and providing them responsibility at early stages of professional development \cite{kane-2012}. Furthermore, evidence suggests that the military as an insitution is quite adept at attracting intelligent and capable individuals \cite{asch-hosek-2004}. Providing innately talented individuals with a high degree of general and specific training fosters the development of high-performers with desirable and broadly applicable skill sets. Therein lies the problem. Civilian firms are typically more flexible in their ability to compensate such individuals through organizational advancement and wage, often outcompeting the military \cite{kane-2012}. These phenomena are in direct contradiction to the principles for successful retention laid out by Asch \cite{asch-1993}. Asch explains that in order for military compensation to be attractive, it needs to be at least as great as the members' expected wages and benefits as would be offered by civilian labor markets. Compensation should also be contigent upon performance, reflecting the individual's value to the organization, to maintain motivation and disincentivize attrition \cite{asch-1993}. In order to help best determine compensation, then, it behooves the military to develop methods for anticipating the effects of labor market conditions on military members' retention decisions. 
 
 <!--
 Additionally, Carrell [6] notes that military members are sensitive to local wage disparities between the government and private sector. Intuitively this makes sense, as members receive more exposure to the wage advantages and economic conditions in their local communities than national averages. 
@@ -417,7 +417,7 @@ $$ B^ky_t = y_{t-k}. $$
 
 ### Initial Exploration
 
-First, the data are examined visually. Plotting the response, total separations over all career fields, in Figure \@ref(fig:response-plot) shows significant spikes during 2005, '06, '07, and '14. We know that during these periods, special spearation incentive programs were introduced by th Air Fofce to artificially downsize the force. The effects of these periods merit investigation later on, as they could negatively affect model prediction performance. 
+First, the data are examined visually. Plotting the response, total separations over all career fields, in Figure \@ref(fig:response-plot) shows significant spikes during 2005, '06, '07, and '14. It is known that during these periods, special spearation incentive programs were introduced by th Air Fofce to artificially downsize the force. The effects of these periods merit investigation later on, as they could negatively affect model prediction performance. 
 ```{r response-plot, fig.align="center", fig.cap="Monthly Officer Separations", fig.pos="H", fig.width=5, fig.height=3.5}
 autoplot(df.ts.1[,'Total'], ylab = "Total Separations")
 ```
@@ -433,7 +433,7 @@ p
 
 ```
 
-Considering these plots, we expect that a seasonal model performs best and that we will have to perform some alteration to accomodate the outiers. To confirm, we fit na\\\"ive models to the data and examine the results. Beyond revealing seasonality and outlier effects, fitting na\\\"ive models establishes a baseline to compare against later models. Na\\\"ive models are very simplistic, so if later models perform worse or only marginally better, it implies they are not capturing much information.
+Considering these plots, it is expected that a seasonal model performs best and some alteration will have to be made to accomodate the outliers. To confirm, na\\\"ive models are fit to the data and the results are examined. Beyond revealing seasonality and outlier effects, fitting na\\\"ive models establishes a baseline to compare against later models. Na\\\"ive models are very simplistic, so if later models perform worse or only marginally better, it implies they are not capturing much information.
 
 ```{r}
 n.1 <- naive(train.ts.1[,"Total"], h = dim(val.ts.1)[1])
@@ -443,20 +443,21 @@ n.1.error <- accuracy(n.1, val.ts.1[,"Total"])
 sn.1.error <- accuracy(sn.1, val.ts.1[,"Total"])
 ```
 
-Figure \@ref(fig:n-sn-forecast) gives evidence to the negative effects of outliers, notice the large confidence intervals surrounding the na\\\"ive forecast and the 2014 spike carried through in the seasonal forecast.
+Figure \@ref(fig:n-sn-forecast) gives evidence to the negative effects of outliers. Notice the large confidence intervals surrounding the na\\\"ive forecast and the 2014 spike carried through in the seasonal forecast.
 
 ```{r n-sn-forecast, fig.align="center", fig.pos="H", fig.cap="Simple and Seasonal Na\\\"ive Forecasts", fig.width=5}
 p <- autoplot(n.1) +
   autolayer(val.ts.1[,"Total"]) +
   theme(legend.position = "none") +
-  ylab("") + 
-  xlab("")
+  labs(title = "Simple Forecasts", x = "", y = "")
+  scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
 
 q <- autoplot(sn.1) +
   autolayer(val.ts.1[,"Total"]) +
   theme(legend.position = "none") +
-  ylab("") +
-  xlab("")
+  labs(title = "Seasonal Forecasts", x = "", y = "")
+  scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
+
 
 grid.arrange(p, q, nrow=2, left = "Total Attrition", bottom = "Time")
 
@@ -477,9 +478,9 @@ kable(sn.1.error[,1:6], caption = 'Seasonal Na\\\"ive Results', digits = 3, alig
   row_spec(0, bold = TRUE)
 ```
 
-It is known that during years 2005, '06, '07, and '14 special separation programs were implemented. Given the effect those years appear to have on modeling, they must be accomodated before continuing. Before deciding how, the explicit points in question need to be identified. To help, refer to Figure \@ref(fig:response-season-plot). We note above that the spikes generally occur in November and December. However, the observations from 2005 are close enough to those from other years that they may have resulted naturally. We do not want to remove too much information from the data set, only that which is misleading. So, November and December observations from 2006, '07, and '14 are selected for replacement. 
+It is known that during years 2005, '06, '07, and '14 special separation programs were implemented. Given the effect those years appear to have on modeling, they must be accomodated before continuing. Before deciding how, the explicit points in question need to be identified. To help, refer to Figure \@ref(fig:response-season-plot). As noted above, the spikes generally occur in November and December. However, the observations from 2005 are close enough to those from other years that they may have resulted naturally. Minimal removal of information from the data set is desired, removing only that which is misleading. So, November and December observations from 2006, '07, and '14 are selected for replacement. 
 
-Given the seasonality in the data set, the replaced values should stem from matching observations in previous years, as opposed to previous observations within the same year. The outliers are replaced (or imputed) with the arithmetic mean of all years not being replaced (e.g. November 2006, '07, '14 is replaced with the mean separations in November for all other years).
+Given the seasonality in the data set, the replaced values should stem from matching observations in previous years, as opposed to previous observations within the same year. The outliers are replaced (or imputed) with the arithmetic mean of all years not being replaced (e.g. November 2006, '07, '14 are replaced with the mean separations in November for all other years).
 
 ```{r}
 # To handle these, we'll calculate the average values of all other years during 
@@ -539,7 +540,7 @@ n.2.error <- accuracy(n.2, val.ts.2)
 sn.2.error <- accuracy(sn.2, val.ts.2)
 ```
 
-Table \@ref(tab:season-rmse-compare) compares the seasonal na\\\"ive RMSEs before and after imputating the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations was useful.
+Table \@ref(tab:season-rmse-compare) compares the seasonal na\\\"ive RMSEs before and after imputing the identified outliers. The results indicate that removing and replacing the extreme values for November and December improved the model. This is further reflected by the forecast (shown in blue) in Figure \@ref(fig:sn-forecast-2), which follows the validation data (shown in orange) more closely than those in Figure \@ref(fig:n-sn-forecast). Overall, these results imply that imputation of the selected observations was useful.
 
 ```{r season-rmse-compare, fig.align="center", fig.pos="H", fig.cap="Seasonal Na\\\"ive Comparison - Before and After Imputation"}
 outlier.compare <- data_frame("Raw Data" = sn.1.error[,2],
@@ -617,7 +618,8 @@ econ.vars <- which(names(df) %in% c("Labor.Force.Participation",
 # looking for evidence of non-zero trend, seasonality, etc.
 
 autoplot(df.ts.1[,econ.vars], facets = TRUE) +
-  ylab("")
+  ylab("") +
+  scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
 ```
 
 Each of the three indicators show evidence of a trend or changing mean(i.e. are non-stationary). To handle this, the data are differenced. The resulting data are shown below in Figure \@ref(fig:econ-vars-2). 
@@ -627,7 +629,8 @@ Each of the three indicators show evidence of a trend or changing mean(i.e. are 
 econ.vars.d <- diff(df.ts.1[,econ.vars])
 
 autoplot(econ.vars.d, facets = TRUE) +
-  ylab("")
+  ylab("") +
+  scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
 
 ```
 
@@ -662,7 +665,7 @@ response.ts <- ts(df.ts.1[-1,"Total"], start = c(2004, 11), frequency = 12)
 #head(response.ts)
 ```
 
-With stationary and independent economic indicators, we can move on from regression to specification of the ARIMA model. Up to six parameters can be specified and estimated: the order of autoregression, degree of differencing, and order of the moving average ($p,d,$ and $q$, respectively) and their seasonal counterparts ($P,D,$ and $Q$). Many combinations are considered. A range is specified for each parameter, and a model is fit for every combination within the specified ranges; the model with the lowest corrected Akaike Information Criteria (AICc) is selected. For the first, and all subsequent, dynamic regression models in this work, the following ranges/values were used: 
+With stationary and independent economic indicators, model formulation can transition from regression to the ARIMA portion. Up to six parameters can be specified and estimated: the order of autoregression, degree of differencing, and order of the moving average ($p,d,$ and $q$, respectively) and their seasonal counterparts ($P,D,$ and $Q$). Many combinations are considered. A range is specified for each parameter, and a model is fit for every combination within the specified ranges; the model with the lowest corrected Akaike Information Criteria (AICc) is selected. For the first, and all subsequent, dynamic regression models in this work, the following ranges/values were used: 
 $p,q \in [0,5]$, $d,D = 0$, and $P, Q \in [0,2]$. 
 
 
@@ -715,7 +718,7 @@ kable(estimates, escape = FALSE, caption = "Estimated Coefficients - Initial Mod
 ```
 
 
-Model assessment involves analysis of the residuals. When inspecting the residuals, we are looking for evidence of any remaining autocorrelation, satisfaction of normality assumptions ($e_t \sim N(0,\sigma^2)$), and outlier effects. Figure \@ref(fig:dynreg1-resid) provides the plots used to answer those questions. The top subfigure plots the raw model residuals, and is used to identify possible trends, seasonality, or heteroscedasticity. Fortunately, none of those features are apparent. The bottom-left is used to examine significant autocorrelation in the residuals; significant correlations would indicate a possible violation of the independence of the residuals. The current model's results only show one lag-period with significant autocorrelation, which may mean that there is information unnaccounted for by the current model. Overall autocorrelation, however, appears insignificant, as further evidenced by the results of a Ljung-Box test for autocorrelation (Table \@ref(tab:dynreg1-boxtest)). The bottom-right plot shows a histogram of the residuals, comparing the raw distribution against the ideal normal. The plot shows slight skewness, but overall the data appear normal. Thus, there is little, if any, misbehavior in the model's residuals.
+Model assessment involves analysis of the residuals. Residuals are examined for evidence of remaining autocorrelation, satisfaction of normality assumptions ($e_t \sim N(0,\sigma^2)$), and outlier effects. Figure \@ref(fig:dynreg1-resid) provides the plots used to answer those questions. The top subfigure plots the raw model residuals, and is used to identify possible trends, seasonality, or heteroscedasticity. Fortunately, none of those features are apparent. The bottom-left is used to examine significant autocorrelation in the residuals; significant correlations would indicate a possible violation of the independence of the residuals. The current model's results only show one lag-period with significant autocorrelation, which may mean that there is information unnaccounted for by the current model. Overall autocorrelation, however, appears insignificant, as further evidenced by the results of a Ljung-Box test for autocorrelation (Table \@ref(tab:dynreg1-boxtest)). The bottom-right plot shows a histogram of the residuals, comparing the raw distribution against the ideal normal. The plot shows slight skewness, but overall the data appear normal. Thus, there is little, if any, misbehavior in the model's residuals.
 
 ```{r dynreg1-resid, fig.align="center", fig.pos="H", fig.cap="Initial Attrition Model - Residual Analysis", fig.height=5, fig.width=6}
 # The first thing we'll want to check, after the model summary, is how our 
@@ -756,7 +759,8 @@ autoplot(dyn.reg.1.f) +
   autolayer(dyn.reg.1$fitted) +
   autolayer(val.ts.3) +
   theme(legend.position = "none") +
-  ylab("Total Attrition")
+  ylab("Total Attrition") + 
+  scale_x_continuous(breaks = c(2005, 2007, 2009, 2011, 2013, 2015, 2017))
 
 ```
 
@@ -793,7 +797,7 @@ Unfortunately, there is not much that can be done about the first point. As ment
 
 Occasionally with time-series data, the effect of one variable on another is not be immediately observed. Consider a production firm redirecting profit towards self-investment. Ideally, this investment will lead to enhanced production capacity and higher revenue, though likely at a much later date. In the same sense, the current economic conditions could have a greater effect on attrition 12 months from now than they do today. In this section, the relationships between attrition and the lagged economic inidicators are explored.
 
-The economic data is observed monthly over 12 years, and so there are many possible lag-periods to consider. It is also possible that the best lag-period is not identical for all predictors, so several combinations of different predictors lagged to different periods should be tested. This is a huge test space. To decrease computational requirements, lag-periods are restricted to 0, 6, 12, 18, and 24 months. A separate dynamic regression model is generated for every combination of predictor and lag-period. This amounts to 125 dynamic regression models. The models are evaluated and compared on three metrics: AICc, training RMSE, and validation RMSE. Any models that peform well by comparison are inspected further. 
+The economic data is observed monthly over 12 years, and so there are many possible lag-periods to consider. It is also possible that the best lag-period is not identical for all predictors, so several combinations of different predictors lagged to different periods should be tested. This results in a very large test space. To decrease computational requirements, lag-periods are restricted to 0, 6, 12, 18, and 24 months. A separate dynamic regression model is generated for every combination of predictor and lag-period. This amounts to 125 dynamic regression models. The models are evaluated and compared on three metrics: AICc, training RMSE, and validation RMSE. Any models that peform well by comparison are inspected further. 
 
 Table \@ref(tab:lag-results-1) below summarizes the values for each performance metric. Note that the minimum value for each category are below those seen in the previous model. This suggests that lagging the model's predictors can yield better results than using current values. The lagged models are thus invesitgated in greater detail.
 
@@ -863,7 +867,7 @@ rbind(best.by.AICc, best.by.trainingRMSE, best.by.validationRMSE) %>%
 ```
 
 The last common model (24, 18, 24) has already been inspected; it is the same one in Table \@ref(tab:best-by-all-1). That leaves two models for comparison (24, 18, 6) and (24, 18, 18).
-Their coefficients are summarized below in Tables \@ref(tab:common-1) and \@ref(tab:common-2) below, respectively. Both tables show similar results as the previous model (24, 18, 24): The unemployment rate is a significant predictor, labor force particpation has a large effect but with high standard error, and labor market momentum has a small effect with a large standard error.
+Their coefficients are summarized in Tables \@ref(tab:common-1) and \@ref(tab:common-2) below, respectively. Both tables show similar results as the previous model (24, 18, 24): The unemployment rate is a significant predictor, labor force particpation has a large effect but with high standard error, and labor market momentum has a small effect with a large standard error.
 
 ```{r common-1}
 dyn.reg.3 <- readRDS("Data/dynReg3.rds")
@@ -886,7 +890,7 @@ broom::tidy(dyn.reg.6) %>%
 
 Recall in Figure \@ref(fig:heat-map-1) that labor market momentum and labor force particpation rate are moderately correlated. Investigation into labor market momentum reveals that it is a combination of many economic indicators, including labor force participation. In short, labor market momentum repeats the information represented by the other two predictors and could be introducing multicollinearity issues. Given that information and the collection of estimates discussed above, labor market momentum is removed.
 
-Lagged variable analyis is repeated with labor market momentum excluded from the list of possible predictors. 25 dynamic regression models are generated (with the identical lag periods) and are compared. This time, no model falls under the 1st quartile for all performance criteria. Comparing the top five performers for each criteria does yield results. A dynamic regression model with the unemployment rate lagged by 24 months and labor force participation rate lagged by 18 months falls into the top five performers under AICc and Training RSME. Notice that the repsective lag periods are identical to those in earlier models. Table \@ref(tab:reduced-1) summarizes the coefficient estimates.
+Lagged variable analyis is repeated with labor market momentum excluded from the list of possible predictors. 25 dynamic regression models are generated (with the identical lag periods) and compared. This time, no model falls under the 1st quartile for all performance criteria. Comparing the top five performers for each criteria does yield results. A dynamic regression model with the unemployment rate lagged by 24 months and labor force participation rate lagged by 18 months falls into the top five performers under AICc and Training RSME. Notice that the repsective lag periods are identical to those in earlier models. Table \@ref(tab:reduced-1) summarizes the coefficient estimates.
 
 ```{r reduced-1}
 dyn.reg.4 <- readRDS("Data/dynReg4.rds")
@@ -930,15 +934,15 @@ broom::tidy(dyn.reg.5) %>%
 
 ### Summary of Analysis
 
-This section analysed nine economic indicators and hundreds of models, in several iterations. The best models were identified and explored, revealing some trends and signifcant predictors. The insights gleaned from this process are summarised and discussed in the next chapter.
+This section analysed nine economic indicators and hundreds of models, in several iterations. The best models were identified and explored, revealing some trends and signifcant predictors. The insights gleaned from this process are summarized and discussed in the next chapter.
 
 \newpage
 
 # Conclusions and Insights
 
-The research sought to identify economic indicators with statistically significant effects on attrition and to specify a mathematical model with which to build reliable forecasts of attrition. Regarding the former, nine separate economic indicators were initially considered (summarized in Table \@ref(tab:econ-var)). Correlation analysis was used to identify subsets of variables exhibiting the least interdependence to avoid the effects of multicollinearity. Initial modeling found no statistically significant effects. However, subsequent attempts found that lagged economic indicators were significant. Specifically, the unemployment rate lagged by 24 months was found to be statisically signifcant in all of the top performing models. No other variables analysed (labor market momentum, labor force participation, and nonfarm job quits) showed evidence of significant effects. Regarding forecasting capacity, all of the top performing dynamic regression models explored in Chapter III exhibited lower training and validation RMSE than the na\\\"ive models. That is, the dynamic regression technique, regardless of predictor sigificance, is better adapted for forecasting attrition than simply applying previous observations forward. This work confirms results found in previous endeavors (such as Jantscher \cite{jantscher-2016}), reinforcing the relevance of the unemployment rate to attrition. This work builds on that knowledge by also providing a time line, finding evidence that the current unemployment rate significantly affects attrition two years later. 
+The research sought to identify economic indicators with statistically significant effects on attrition and to specify a mathematical model with which to build reliable forecasts of attrition. Regarding the former, nine separate economic indicators were initially considered (summarized in Table \@ref(tab:econ-var)). Correlation analysis was used to identify subsets of variables exhibiting the least interdependence to avoid the effects of multicollinearity. Initial modeling found no statistically significant effects. However, subsequent attempts found that lagged economic indicators were significant. Specifically, the unemployment rate lagged by 24 months was found to be statistically signifcant in all of the top performing models. No other variables analyzed (labor market momentum, labor force participation, and nonfarm job quits) showed evidence of significant effects. Regarding forecasting capacity, all of the top performing dynamic regression models explored in Chapter III exhibited lower training and validation RMSE than the na\\\"ive models. That is, the dynamic regression technique, regardless of predictor significance, is better adapted for forecasting attrition than simply applying previous observations forward. This work confirms results found in previous endeavors (such as Jantscher \cite{jantscher-2016}), reinforcing the relevance of the unemployment rate to attrition. This work builds on that knowledge by also providing a timeline, finding evidence that the current unemployment rate has a significant effect on attrition two years later. 
 
-Many possibilites were addressed in this work; four na\\\"ive models and 33,792 unique dynamic regression models (176 regression specifications, each with 192 ARIMA variations). By no means does this encapsulate the total set of possible models. There are many avenues left unexplored by this research. Future work in this area could, first, explore different subsets of the economic indicators identified. The initial set of economic indicators can also easily be expanded; the relevant data is freely accessible to the public. Only five unique lag-periods were investigated, and the procedure discussed could easily incorporate more vaired time lags (at the cost of more time and comupational complexity). Lastly, all data considered was aggregated to the national level and only total attrition across U.S. Air Force officers was evaluated. Future work in this area could, and should, investigate possible differences across AFSC groupings and, if possible, at a higher level of fidelity (e.g. state or county vs. national aggregates).
+Many possibilites were addressed in this work; four na\\\"ive models and 33,792 unique dynamic regression models (176 regression specifications, each with 192 ARIMA variations). By no means does this encapsulate the total set of possible models. There are many avenues left unexplored by this research. Future work in this area could, first, explore different subsets of the economic indicators identified. The initial set of economic indicators can also easily be expanded; the relevant data is freely accessible to the public. Only five unique lag-periods were investigated, and the procedure discussed could easily incorporate more vaired time lags (at the cost of more time and computational complexity). Lastly, all data considered were aggregated to the national level and only total attrition across U.S. Air Force officers was evaluated. Future work in this area could, and should, investigate possible differences across AFSC groupings and, if possible, at a higher level of fidelity (e.g. state or county vs. national aggregates).
 
 \newpage
 
